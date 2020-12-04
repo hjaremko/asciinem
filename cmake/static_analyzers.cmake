@@ -11,7 +11,7 @@ if(ENABLE_CPPCHECK)
         --enable=all
         --inline-suppr
         --inconclusive
-        -i)
+        )
   else()
     message(SEND_ERROR "cppcheck requested but executable not found")
   endif()

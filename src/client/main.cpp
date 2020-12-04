@@ -1,9 +1,10 @@
 #include <ncurses.h>
 
-int main()
+auto main() -> int
 {
     initscr();
     printw( "Hello World !!!" );
+    // todo: if macos
     refresh();
     getch();
     endwin();
