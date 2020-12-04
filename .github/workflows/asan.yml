@@ -1,4 +1,4 @@
-name: Build
+name: Address Sanitizer
 
 on: [ push ]
 
@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04, windows-latest ]
+        os: [ ubuntu-20.04 ]
 
     steps:
       - name: Chceckout code
@@ -16,10 +16,6 @@ jobs:
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install Conan
-        if: runner.os == 'Windows'
-        run: pip install conan
-      - name: Install Conan
-        if: runner.os != 'Windows'
         run: sudo pip install conan
       - name: Create build dir
         run: mkdir build
@@ -27,19 +23,12 @@ jobs:
         uses: actions/cache@v2
         with:
           path: build
-          key: ${{ runner.os }}-build-${{ hashFiles('*') }}
-          restore-keys: ${{ runner.os }}-build-
+          key: ${{ runner.os }}-asan-${{ hashFiles('*') }}
+          restore-keys: ${{ runner.os }}-asan-
       - name: Load CMake
-        if: runner.os == 'Linux'
         run: |
           cd build
-          cmake -G Ninja ..
-          cmake --build .
-      - name: Build
-        if: runner.os != 'Linux'
-        run: |
-          cd build
-          cmake ..
+          cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZER_ADDRESS=1
           cmake --build .
       - name: Run tests
         run: |

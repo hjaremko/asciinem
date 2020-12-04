@@ -1,4 +1,4 @@
-name: Build
+name: Linters
 
 on: [ push ]
 
@@ -21,19 +21,27 @@ jobs:
       - name: Install Conan
         if: runner.os != 'Windows'
         run: sudo pip install conan
+      - name: Conan test
+        run: conan
+      - name: Install cppcheck and clang-tidy
+        if: runner.os == 'Linux'
+        run: sudo apt-get install cppcheck clang-tidy -y
+      - name: Install cppcheck
+        if: runner.os == 'macOS'
+        run: brew install cppcheck && xcode-select --install
       - name: Create build dir
         run: mkdir build
       - name: Cache CMake files
         uses: actions/cache@v2
         with:
           path: build
-          key: ${{ runner.os }}-build-${{ hashFiles('*') }}
-          restore-keys: ${{ runner.os }}-build-
+          key: ${{ runner.os }}-tidy-${{ hashFiles('*') }}
+          restore-keys: ${{ runner.os }}-tidy-
       - name: Load CMake
         if: runner.os == 'Linux'
         run: |
           cd build
-          cmake -G Ninja ..
+          cmake -G Ninja .. -DENABLE_CLANG_TIDY=1 -DENABLE_CPPCHECK=1
           cmake --build .
       - name: Build
         if: runner.os != 'Linux'
