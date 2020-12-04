@@ -16,10 +16,10 @@ macro(run_conan)
   conan_cmake_run(
     REQUIRES
     ${CONAN_EXTRA_REQUIRES}
-    catch2/2.13.0
-    fmt/7.0.3
-    spdlog/1.7.0
-    asio/1.17.0
+    catch2/2.13.3
+    fmt/7.1.2
+    spdlog/1.8.1
+    asio/1.18.0
     ncurses/6.2
     OPTIONS
     ${CONAN_EXTRA_OPTIONS}

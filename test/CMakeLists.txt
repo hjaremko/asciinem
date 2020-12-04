@@ -1,28 +1,3 @@
-#cmake_minimum_required(VERSION 3.10)
-#project(asciinem-test)
-#
-#if (CMAKE_COMPILER_IS_GNUCXX)
-#    set(CMAKE_CXX_FLAGS "--coverage")
-#endif ()
-#
-#add_library(Catch2::Catch IMPORTED INTERFACE)
-#set_property(TARGET Catch2::Catch PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${CATCH_INCLUDE_DIR}")
-#
-#set(TEST_TARGET_SOURCES
-##        ${FMT_SOURCE_DIR}/format.cc
-##        ${FMT_SOURCE_DIR}/os.cc
-#        )
-#
-#set(TEST_SOURCES
-#        ${TEST_TARGET_SOURCES}
-#        main.cpp
-#        )
-#
-#add_executable(${PROJECT_NAME} ${TEST_SOURCES})
-#target_link_libraries(${PROJECT_NAME} Catch2::Catch)
-#target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-
-# automatically enable catch2 to generate ctest targets
 if (CONAN_CATCH2_ROOT_DEBUG)
     include(${CONAN_CATCH2_ROOT_DEBUG}/lib/cmake/Catch2/Catch.cmake)
 else ()
