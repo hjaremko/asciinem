@@ -1,8 +1,8 @@
-#include <fmt/core.h>
-#include <iostream>
+#include <spdlog/spdlog.h>
 
 auto main() -> int
 {
-    fmt::print( "Hello, server!\n" );
+    spdlog::info( "Asciinem Server starting!" );
+
     return 0;
 }

@@ -3,6 +3,9 @@ project(asciinem-server LANGUAGES CXX VERSION 1.0.0)
 include_directories(${PROJECT_ROOT}/include/server/)
 
 set(TARGET_SOURCES
+        network/asio_connection.cpp
+        network/asio_tcp_server.cpp
+        network/asio_listener.cpp
         )
 
 add_executable(${PROJECT_NAME}

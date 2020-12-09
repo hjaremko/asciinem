@@ -8,13 +8,15 @@ include_directories(${PROJECT_ROOT}/include/server)
 include_directories(${PROJECT_ROOT}/include/client)
 
 add_library(catch_main STATIC catch_main.cpp)
-target_link_libraries(catch_main PUBLIC CONAN_PKG::catch2)
 target_link_libraries(catch_main PUBLIC CONAN_PKG::catch2 CONAN_PKG::spdlog CONAN_PKG::asio CONAN_PKG::gtest)
 target_link_libraries(catch_main PRIVATE project_options)
 
 add_executable(server_tests
-        server/tests.cpp
-        server/clock_tests.cpp
+        server/network/clock_tests.cpp
+        server/network/listener_tests.cpp
+        ${PROJECT_ROOT}/src/server/network/asio_connection.cpp
+        ${PROJECT_ROOT}/src/server/network/asio_tcp_server.cpp
+        ${PROJECT_ROOT}/src/server/network/asio_listener.cpp
         )
 target_link_libraries(server_tests PRIVATE project_warnings project_options catch_main)
 
@@ -77,4 +79,3 @@ catch_discover_tests(
         -s
         --reporter=xml
         --out=relaxed_constexpr.xml)
-
