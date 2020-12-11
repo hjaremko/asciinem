@@ -1,0 +1,164 @@
+name: Sanitizers
+
+on: [ push ]
+
+jobs:
+  asan:
+    name: Address Sanitizer
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04 ]
+
+    steps:
+      - name: Chceckout code
+        uses: actions/checkout@v2
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Install Conan
+        run: sudo pip install conan
+      - name: Create build dir
+        run: mkdir build
+      - name: Cache CMake files
+        uses: actions/cache@v2
+        with:
+          path: build
+          key: ${{ runner.os }}-asan-${{ hashFiles('*') }}
+          restore-keys: ${{ runner.os }}-asan-
+      - name: Load CMake
+        run: |
+          cd build
+          cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZER_ADDRESS=1
+          cmake --build .
+      - name: Run tests
+        run: |
+          cd build
+          ctest
+
+  lsan:
+    name: Leak Sanitizer
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04 ]
+
+    steps:
+      - name: Chceckout code
+        uses: actions/checkout@v2
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Install Conan
+        run: sudo pip install conan
+      - name: Create build dir
+        run: mkdir build
+      - name: Cache CMake files
+        uses: actions/cache@v2
+        with:
+          path: build
+          key: ${{ runner.os }}-lsan-${{ hashFiles('*') }}
+          restore-keys: ${{ runner.os }}-lsan-
+      - name: Load CMake
+        run: |
+          cd build
+          cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZER_LEAK=1
+          cmake --build .
+      - name: Run tests
+        run: |
+          cd build
+          ctest
+
+  msan:
+    name: Memory Sanitizer
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04 ]
+
+    steps:
+      - name: Chceckout code
+        uses: actions/checkout@v2
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Install Conan
+        run: sudo pip install conan
+      - name: Create build dir
+        run: mkdir build
+      - name: Cache CMake files
+        uses: actions/cache@v2
+        with:
+          path: build
+          key: ${{ runner.os }}-msan-${{ hashFiles('*') }}
+          restore-keys: ${{ runner.os }}-msan-
+      - name: Load CMake
+        run: |
+          cd build
+          cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZER_MEMORY=1
+          cmake --build .
+      - name: Run tests
+        run: |
+          cd build
+          ctest
+
+  tsan:
+    name: Thread Sanitizer
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04 ]
+
+    steps:
+      - name: Chceckout code
+        uses: actions/checkout@v2
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Install Conan
+        run: sudo pip install conan
+      - name: Create build dir
+        run: mkdir build
+      - name: Cache CMake files
+        uses: actions/cache@v2
+        with:
+          path: build
+          key: ${{ runner.os }}-tsan-${{ hashFiles('*') }}
+          restore-keys: ${{ runner.os }}-tsan-
+      - name: Load CMake
+        run: |
+          cd build
+          cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZER_THREAD=1
+          cmake --build .
+      - name: Run tests
+        run: |
+          cd build
+          ctest
+
+  ubsan:
+    name: Undefined Behavior Sanitizer
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04 ]
+
+    steps:
+      - name: Chceckout code
+        uses: actions/checkout@v2
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Install Conan
+        run: sudo pip install conan
+      - name: Create build dir
+        run: mkdir build
+      - name: Cache CMake files
+        uses: actions/cache@v2
+        with:
+          path: build
+          key: ${{ runner.os }}-ubsan-${{ hashFiles('*') }}
+          restore-keys: ${{ runner.os }}-ubsan-
+      - name: Load CMake
+        run: |
+          cd build
+          cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZER_UNDEFINED_BEHAVIOR=1
+          cmake --build .
+      - name: Run tests
+        run: |
+          cd build
+          ctest
