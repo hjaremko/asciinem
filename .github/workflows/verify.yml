@@ -1,4 +1,4 @@
-name: Memory Sanitizer
+name: Verify
 
 on: [ push ]
 
@@ -17,20 +17,24 @@ jobs:
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install Conan
         run: sudo pip install conan
+      - name: Install cppcheck and clang-tidy
+        run: sudo apt-get install cppcheck clang-tidy -y
       - name: Create build dir
         run: mkdir build
       - name: Cache CMake files
         uses: actions/cache@v2
         with:
           path: build
-          key: ${{ runner.os }}-msan-${{ hashFiles('*') }}
-          restore-keys: ${{ runner.os }}-msan-
-      - name: Load CMake
+          key: ${{ runner.os }}-tidy-${{ hashFiles('*') }}
+          restore-keys: ${{ runner.os }}-tidy-
+      - name: Build
         run: |
           cd build
-          cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZER_MEMORY=1
+          cmake -G Ninja .. -DENABLE_CLANG_TIDY=1 -DENABLE_CPPCHECK=1
           cmake --build .
       - name: Run tests
         run: |
           cd build
           ctest
+
+# todo: verify formatting
