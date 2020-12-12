@@ -1,5 +1,7 @@
 project(asciinem-server LANGUAGES CXX VERSION 1.0.0)
 
+include_directories(${PROJECT_ROOT}/include/server/)
+
 set(TARGET_SOURCES
         )
 
