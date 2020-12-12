@@ -22,6 +22,7 @@ macro(run_conan)
     asio/1.18.0
     ncurses/6.2
     gtest/1.10.0
+    sqlite3/3.34.0
     OPTIONS
     ${CONAN_EXTRA_OPTIONS}
     BASIC_SETUP
