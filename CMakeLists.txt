@@ -19,6 +19,7 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+set(PROJECT_ROOT ${PROJECT_SOURCE_DIR})
 
 add_library(project_options INTERFACE)
 target_compile_features(project_options INTERFACE cxx_std_17)
