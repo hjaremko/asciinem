@@ -33,7 +33,9 @@ void asio_connection::send_data( const types::msg& msg )
     asio::async_write(
         socket_,
         asio::buffer( msg ),
-        std::bind( &asio_connection::handle_write, shared_from_this() ) );
+        [ this_ptr = shared_from_this() ]( auto /*unused*/, auto /*unused*/ ) {
+            this_ptr->handle_write();
+        } );
 }
 
 auto asio_connection::socket() -> asio::ip::tcp::socket&
