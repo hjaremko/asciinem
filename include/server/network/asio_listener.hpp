@@ -28,11 +28,6 @@ public:
     void start_listening() override;
     void stop_listening() override;
 
-    [[nodiscard]] auto context() -> asio::io_context&
-    {
-        return io_context_;
-    }
-
 private:
     void start_listening_();
     void stop_listening_();

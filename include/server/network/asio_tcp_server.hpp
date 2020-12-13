@@ -19,7 +19,7 @@ public:
 
 private:
     void start_accept();
-    void handle_accept( asio_connection::pointer new_connection,
+    void handle_accept( const asio_connection::pointer& new_connection,
                         const asio::error_code& error );
 
     types::port port_;

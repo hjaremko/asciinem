@@ -54,4 +54,5 @@ TEST_CASE( "Receive confirmation message test", "[network], [listener]" )
     ss.write( buf.data(), len );
     spdlog::info( "Got: {}", ss.str() );
     REQUIRE( ss.str() == "confirm!" );
+    l.stop_listening();
 }

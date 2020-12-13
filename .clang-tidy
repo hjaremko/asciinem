@@ -1,7 +1,5 @@
 ---
-Checks:            '*,-fuchsia-*,-google-*,-zircon-*,-abseil-*,-llvm-*,-llvmlibc-*,-readability-implicit-bool-conversion,-misc-non-private-member-variables-in-classes'
-WarningsAsErrors:  '1'
+Checks:            '*,-fuchsia-*,-google-*,-zircon-*,-abseil-*,-llvm-*,-llvmlibc-*,-readability-implicit-bool-conversion,-misc-non-private-member-variables-in-classes,-cppcoreguidelines-pro-type-vararg,-hicpp-vararg'
+WarningsAsErrors:  '*'
 HeaderFilterRegex: ''
-FormatStyle:       none
-
-
+FormatStyle:       'file'
