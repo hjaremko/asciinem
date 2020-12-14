@@ -27,6 +27,8 @@ TEST_CASE( "Receive confirmation message test", "[network], [listener]" )
     using asio::ip::tcp;
     using namespace testing;
 
+    spdlog::default_logger_raw()->set_level( spdlog::level::debug );
+
     auto manager_mock = connection_manager_mock {};
     EXPECT_CALL( manager_mock, add_client ).Times( AtLeast( 1 ) );
 
@@ -36,23 +38,10 @@ TEST_CASE( "Receive confirmation message test", "[network], [listener]" )
     auto l = asio_listener { port, manager_mock };
 
     auto io_context = asio::io_context {};
-    auto resolver = tcp::resolver { io_context };
-    auto endpoints = resolver.resolve( localhost, std::to_string( port ) );
-    auto socket = tcp::socket { io_context };
+    auto client = make_connection( io_context, localhost, port );
+    auto actual = client->receive_data();
+    const auto* expected = "confirm!";
 
-    asio::connect( socket, endpoints );
-
-    constexpr auto buffer_size = 128;
-    auto buf = std::array<char, buffer_size> { {} };
-    auto error = asio::error_code {};
-
-    auto len = static_cast<long long int>(
-        socket.read_some( asio::buffer( buf ), error ) );
-
-    spdlog::info( "Read {} bytes", len );
-    auto ss = std::stringstream {};
-    ss.write( buf.data(), len );
-    spdlog::info( "Got: {}", ss.str() );
-    REQUIRE( ss.str() == "confirm!" );
+    REQUIRE( actual == expected );
     l.stop_listening();
 }

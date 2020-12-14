@@ -17,6 +17,9 @@ public:
     using pointer = std::shared_ptr<asio_connection>;
 
     explicit asio_connection( asio::io_context& io_context );
+    asio_connection( asio::io_context& io_context,
+                     const types::ip& ip,
+                     types::port port );
 
     auto id() -> types::id override;
     auto ip() -> types::ip override;
@@ -33,6 +36,10 @@ private:
 
 auto make_connection( asio::io_context& io_context )
     -> asio_connection::pointer;
+
+auto make_connection( asio::io_context& io_context,
+                      const types::ip& ip,
+                      types::port port ) -> asio_connection::pointer;
 
 } // namespace asciinem::server::network
 
