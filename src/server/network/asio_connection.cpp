@@ -11,6 +11,16 @@ asio_connection::asio_connection( asio::io_context& io_context )
 {
 }
 
+asio_connection::asio_connection( asio::io_context& io_context,
+                                  const types::ip& ip,
+                                  types::port port )
+    : socket_( io_context )
+{
+    auto resolver = asio::ip::tcp::resolver { io_context };
+    auto endpoints = resolver.resolve( ip, std::to_string( port ) );
+    asio::connect( socket_, endpoints );
+}
+
 auto asio_connection::id() -> types::id
 {
     return 0; // todo
@@ -23,7 +33,35 @@ auto asio_connection::ip() -> types::ip
 
 auto asio_connection::receive_data() -> types::msg
 {
-    return "none"; // todo
+    auto array_to_str = []( const auto& buffer, auto size ) {
+        auto ss = std::stringstream {};
+        ss.write( buffer.data(), static_cast<long>( size ) );
+        return ss.str();
+    };
+
+    constexpr const auto buffer_size = 128;
+    using buffer_type = std::array<char, buffer_size>;
+
+    auto receive_from_socket =
+        [ this ]() -> std::pair<buffer_type, std::size_t> {
+        auto buffer = buffer_type { {} };
+        auto error = asio::error_code {};
+
+        auto len = static_cast<long long int>(
+            socket_.read_some( asio::buffer( buffer ), error ) );
+
+        return { buffer, len };
+    };
+
+    auto [ buffer, bytes ] = receive_from_socket();
+    auto received_message = array_to_str( buffer, bytes );
+
+    spdlog::debug(
+        "Connection {} received {} bytes from {}", id(), bytes, ip() );
+    spdlog::debug(
+        "Connection {} received message: '{}'", id(), received_message );
+
+    return received_message;
 }
 
 void asio_connection::send_data( const types::msg& msg )
@@ -53,12 +91,19 @@ void asio_connection::send_confirmation()
 
 void asio_connection::handle_write()
 {
-    spdlog::debug( "Sent data to connection id: {} , ip: {}", id(), ip() );
+    spdlog::debug( "Sent data to connection id: {}, ip: {}", id(), ip() );
 }
 
 auto make_connection( asio::io_context& io_context ) -> asio_connection::pointer
 {
     return std::make_shared<asio_connection>( io_context );
+}
+
+auto make_connection( asio::io_context& io_context,
+                      const types::ip& ip,
+                      types::port port ) -> asio_connection::pointer
+{
+    return std::make_shared<asio_connection>( io_context, ip, port );
 }
 
 } // namespace asciinem::server::network

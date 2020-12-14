@@ -1,5 +1,5 @@
-#ifndef ASCIINEM_ASIO_TCP_SERVER_HPP
-#define ASCIINEM_ASIO_TCP_SERVER_HPP
+#ifndef ASCIINEM_ASIO_SERVER_HPP
+#define ASCIINEM_ASIO_SERVER_HPP
 
 #include "asio_connection.hpp"
 #include "interfaces/connection_manager.hpp"
@@ -32,4 +32,4 @@ private:
 
 } // namespace asciinem::server::network
 
-#endif // ASCIINEM_ASIO_TCP_SERVER_HPP
+#endif // ASCIINEM_ASIO_SERVER_HPP

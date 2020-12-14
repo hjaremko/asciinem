@@ -1,7 +1,7 @@
 #ifndef ASCIINEM_ASIO_LISTENER_HPP
 #define ASCIINEM_ASIO_LISTENER_HPP
 
-#include "asio_tcp_server.hpp"
+#include "asio_server.hpp"
 #include "interfaces/client_connection.hpp"
 #include "interfaces/connection_manager.hpp"
 #include "interfaces/listener.hpp"

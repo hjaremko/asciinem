@@ -15,7 +15,7 @@ add_executable(server_tests
         server/network/clock_tests.cpp
         server/network/listener_tests.cpp
         ${PROJECT_ROOT}/src/server/network/asio_connection.cpp
-        ${PROJECT_ROOT}/src/server/network/asio_tcp_server.cpp
+        ${PROJECT_ROOT}/src/server/network/asio_server.cpp
         ${PROJECT_ROOT}/src/server/network/asio_listener.cpp
         )
 target_link_libraries(server_tests PRIVATE project_warnings project_options catch_main)
