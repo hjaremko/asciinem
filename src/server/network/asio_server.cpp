@@ -15,7 +15,7 @@ asio_server::asio_server( types::port port,
 
 void asio_server::start_accept()
 {
-    auto new_connection = make_connection( io_context_ );
+    auto new_connection = make_connection( io_context_, id_pool_.next_id() );
 
     acceptor_.async_accept( new_connection->socket(),
                             [ this, new_connection ]( auto error_code ) {

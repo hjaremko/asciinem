@@ -2,6 +2,7 @@
 #define ASCIINEM_CLIENT_CONNECTION_HPP
 
 #include "network/types.hpp"
+#include "queue.hpp"
 
 #include <memory>
 
@@ -26,6 +27,7 @@ public:
     virtual auto ip() -> types::ip = 0;
     virtual auto receive_data() -> types::msg = 0;
     virtual void send_data( const types::msg& msg ) = 0;
+    virtual void disconnect() = 0;
 };
 
 } // namespace asciinem::server::network

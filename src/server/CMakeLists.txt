@@ -7,6 +7,7 @@ set(TARGET_SOURCES
         network/asio_server.cpp
         network/asio_listener.cpp
         network/message_queue.cpp
+        network/asio_manager.cpp
         )
 
 add_executable(${PROJECT_NAME}

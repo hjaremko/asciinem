@@ -24,8 +24,7 @@ public:
 
     virtual void add_client( client_connection::pointer ) = 0;
     virtual void remove_client( types::id client_id ) = 0;
-    virtual void broadcast() = 0;
-    virtual auto poll_clients() -> std::deque<types::msg> = 0;
+    [[nodiscard]] virtual auto connected_players() const -> int = 0;
 };
 
 } // namespace asciinem::server::network

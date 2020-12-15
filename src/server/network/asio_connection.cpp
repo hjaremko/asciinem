@@ -6,24 +6,31 @@
 namespace asciinem::server::network
 {
 
-asio_connection::asio_connection( asio::io_context& io_context )
-    : socket_( io_context )
+asio_connection::asio_connection( asio::io_context& io_context, types::id id )
+    : socket_( io_context ), id_( id )
 {
+    spdlog::trace( "New connection created {}", id_ );
 }
 
 asio_connection::asio_connection( asio::io_context& io_context,
                                   const types::ip& ip,
-                                  types::port port )
-    : socket_( io_context )
+                                  types::port port,
+                                  types::id id )
+    : socket_( io_context ), id_( id )
 {
     auto resolver = asio::ip::tcp::resolver { io_context };
     auto endpoints = resolver.resolve( ip, std::to_string( port ) );
     asio::connect( socket_, endpoints );
 }
 
+asio_connection::~asio_connection()
+{
+    disconnect_();
+}
+
 auto asio_connection::id() -> types::id
 {
-    return 0; // todo
+    return id_;
 }
 
 auto asio_connection::ip() -> types::ip
@@ -49,6 +56,12 @@ auto asio_connection::receive_data() -> types::msg
 
         auto len = static_cast<long long int>(
             socket_.read_some( asio::buffer( buffer ), error ) );
+
+        if ( error )
+        {
+            spdlog::warn( "Connection {} error: {}", id(), error.message() );
+            throw std::runtime_error { error.message() };
+        }
 
         return { buffer, len };
     };
@@ -94,16 +107,30 @@ void asio_connection::handle_write()
     spdlog::debug( "Sent data to connection id: {}, ip: {}", id(), ip() );
 }
 
-auto make_connection( asio::io_context& io_context ) -> asio_connection::pointer
+void asio_connection::disconnect()
 {
-    return std::make_shared<asio_connection>( io_context );
+    disconnect_();
+}
+
+void asio_connection::disconnect_()
+{
+    auto ec = asio::error_code {};
+    socket_.shutdown( asio::ip::tcp::socket::shutdown_both, ec );
+    spdlog::debug( "Client {} disconnected!", id_ );
+}
+
+auto make_connection( asio::io_context& io_context, types::id id )
+    -> asio_connection::pointer
+{
+    return std::make_shared<asio_connection>( io_context, id );
 }
 
 auto make_connection( asio::io_context& io_context,
                       const types::ip& ip,
-                      types::port port ) -> asio_connection::pointer
+                      types::port port,
+                      types::id id ) -> asio_connection::pointer
 {
-    return std::make_shared<asio_connection>( io_context, ip, port );
+    return std::make_shared<asio_connection>( io_context, ip, port, id );
 }
 
 } // namespace asciinem::server::network
