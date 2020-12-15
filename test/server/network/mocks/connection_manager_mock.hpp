@@ -25,6 +25,7 @@ public:
                  poll_clients,
                  (),
                  () );
+    MOCK_METHOD( int, connected_players, (), ( const, override ) );
 };
 
 #endif // ASCIINEM_CONNECTION_MANAGER_MOCK_HPP

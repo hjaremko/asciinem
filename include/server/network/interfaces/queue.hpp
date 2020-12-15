@@ -3,12 +3,16 @@
 
 #include "network/types.hpp"
 
+#include <memory>
+
 namespace asciinem::server::network
 {
 
-class queue
+class queue : public std::enable_shared_from_this<queue>
 {
 public:
+    using pointer = std::shared_ptr<queue>;
+
     queue() = default;
     queue( const queue& ) = default;
     queue( queue&& ) noexcept = default;

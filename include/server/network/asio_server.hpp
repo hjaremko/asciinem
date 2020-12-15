@@ -2,6 +2,7 @@
 #define ASCIINEM_ASIO_SERVER_HPP
 
 #include "asio_connection.hpp"
+#include "id_pool.hpp"
 #include "interfaces/connection_manager.hpp"
 #include "types.hpp"
 
@@ -28,6 +29,7 @@ private:
         io_context_, asio::ip::tcp::endpoint( asio::ip::tcp::v4(), port_ )
     };
     connection_manager& manager_;
+    id_pool id_pool_;
 };
 
 } // namespace asciinem::server::network
