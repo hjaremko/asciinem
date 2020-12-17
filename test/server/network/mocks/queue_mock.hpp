@@ -1,7 +1,6 @@
 #ifndef ASCIINEM_QUEUE_MOCK_HPP
 #define ASCIINEM_QUEUE_MOCK_HPP
 
-//#include "network/interfaces/client_connection.hpp"
 #include "network/interfaces/queue.hpp"
 #include "network/types.hpp"
 

@@ -1,17 +1,24 @@
 #include "network/asio_manager.hpp"
 
+#include "network/clock_observer.hpp"
+#include "network/interfaces/subject.hpp"
+
 #include <spdlog/spdlog.h>
 
 namespace asciinem::server::network
 {
 
-asio_manager::asio_manager( queue::pointer dl, queue::pointer up )
-    : downlink_( std::move( dl ) ), uplink_( std::move( up ) )
+asio_manager::asio_manager( queue::pointer dl, queue::pointer up, subject& c )
+    : downlink_( std::move( dl ) ), uplink_( std::move( up ) ),
+      observer_( make_clock_observer() )
 {
+    c.attach( observer_ );
 }
 
 asio_manager::~asio_manager()
 {
+    auto l = std::lock_guard<std::mutex> { mutex_ };
+
     for ( auto& [ c, poller ] : clients_ )
     {
         c->disconnect();
@@ -21,7 +28,7 @@ asio_manager::~asio_manager()
 
 void asio_manager::add_client( client_connection::pointer client )
 {
-    auto l = std::unique_lock<std::mutex> { mutex_ };
+    auto l = std::lock_guard<std::mutex> { mutex_ };
 
     auto poller = poll_client( client );
 
@@ -36,7 +43,7 @@ void asio_manager::add_client( client_connection::pointer client )
 
 void asio_manager::remove_client( types::id client_id )
 {
-    auto l = std::unique_lock<std::mutex> { mutex_ };
+    auto l = std::lock_guard<std::mutex> { mutex_ };
 
     spdlog::debug( "Removing client: {}", client_id );
 
@@ -81,6 +88,36 @@ auto asio_manager::poll_client( const client_connection::pointer& c )
 auto asio_manager::connected_players() const -> int
 {
     return static_cast<int>( clients_.size() );
+}
+
+auto asio_manager::make_clock_observer() const -> clock_observer::pointer
+{
+    return std::make_shared<clock_observer>( "Manager Clock Observer",
+                                             [ this ]() { broadcast_next(); } );
+}
+
+void asio_manager::broadcast( const types::msg& msg ) const
+{
+    auto l = std::lock_guard<std::mutex> { mutex_ };
+
+    spdlog::debug( "Broadcasting message '{}'", msg );
+
+    for ( const auto& client : clients_ )
+    {
+        client.first->send_data( msg );
+    }
+}
+
+void asio_manager::broadcast_next() const
+{
+    if ( uplink_->empty() )
+    {
+        spdlog::trace( "Nothing to broadcast." );
+        return;
+    }
+
+    auto msg = uplink_->pop();
+    broadcast( msg );
 }
 
 } // namespace asciinem::server::network
