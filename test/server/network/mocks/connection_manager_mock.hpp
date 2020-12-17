@@ -20,12 +20,15 @@ public:
                  remove_client,
                  ( asciinem::server::network::types::id ),
                  () );
-    MOCK_METHOD( void, broadcast, (), () );
     MOCK_METHOD( std::deque<asciinem::server::network::types::msg>,
                  poll_clients,
                  (),
                  () );
     MOCK_METHOD( int, connected_players, (), ( const, override ) );
+    MOCK_METHOD( void,
+                 broadcast,
+                 ( const asciinem::server::network::types::msg& ),
+                 ( const, override ) );
 };
 
 #endif // ASCIINEM_CONNECTION_MANAGER_MOCK_HPP
