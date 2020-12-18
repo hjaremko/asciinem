@@ -1,8 +1,8 @@
 #ifndef ASCIINEM_QUEUE_MOCK_HPP
 #define ASCIINEM_QUEUE_MOCK_HPP
 
-#include "network/interfaces/queue.hpp"
-#include "network/types.hpp"
+#include "server/network/interfaces/queue.hpp"
+#include "server/network/types.hpp"
 
 #include "gmock/gmock.h"
 

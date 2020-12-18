@@ -1,12 +1,12 @@
 #ifndef ASCIINEM_SERVER_ASIO_NETWORK_HPP
 #define ASCIINEM_SERVER_ASIO_NETWORK_HPP
 
-#include "network/interfaces/connection_manager.hpp"
-#include "network/interfaces/listener.hpp"
-#include "network/interfaces/network_module.hpp"
-#include "network/interfaces/queue.hpp"
-#include "network/interfaces/subject.hpp"
-#include "network/types.hpp"
+#include "server/network/interfaces/connection_manager.hpp"
+#include "server/network/interfaces/listener.hpp"
+#include "server/network/interfaces/network_module.hpp"
+#include "server/network/interfaces/queue.hpp"
+#include "server/network/interfaces/subject.hpp"
+#include "server/network/types.hpp"
 
 namespace asciinem::server::network
 {

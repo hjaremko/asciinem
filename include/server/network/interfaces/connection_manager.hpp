@@ -2,7 +2,7 @@
 #define ASCIINEM_CONNECTION_MANAGER_HPP
 
 #include "client_connection.hpp"
-#include "network/types.hpp"
+#include "server/network/types.hpp"
 
 #include <deque>
 

@@ -1,6 +1,11 @@
 project(asciinem-client LANGUAGES CXX VERSION 1.0.0)
 
+include_directories(${PROJECT_ROOT}/include/)
+
 set(TARGET_SOURCES
+        network/asio_network_module.cpp
+        ${PROJECT_ROOT}/src/server/network/message_queue.cpp
+        ${PROJECT_ROOT}/src/server/network/asio_connection.cpp
         )
 
 add_executable(${PROJECT_NAME}
@@ -14,5 +19,6 @@ target_link_libraries(
         project_warnings
         CONAN_PKG::fmt
         CONAN_PKG::spdlog
+        CONAN_PKG::asio
         CONAN_PKG::ncurses
 )

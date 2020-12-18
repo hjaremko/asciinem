@@ -1,10 +1,10 @@
 #ifndef ASCIINEM_SERVER_ASIO_FACTORY_HPP
 #define ASCIINEM_SERVER_ASIO_FACTORY_HPP
 
-#include "network/asio_listener.hpp"
-#include "network/asio_manager.hpp"
-#include "network/interfaces/network_factory.hpp"
-#include "network/message_queue.hpp"
+#include "server/network/asio_listener.hpp"
+#include "server/network/asio_manager.hpp"
+#include "server/network/interfaces/network_factory.hpp"
+#include "server/network/message_queue.hpp"
 
 #include <memory>
 

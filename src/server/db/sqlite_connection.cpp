@@ -1,4 +1,4 @@
-#include "db/sqlite_connection.hpp"
+#include "server/db/sqlite_connection.hpp"
 
 namespace
 {

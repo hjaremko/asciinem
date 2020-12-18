@@ -1,9 +1,9 @@
 #ifndef ASCIINEM_CONNECTION_MANAGER_MOCK_HPP
 #define ASCIINEM_CONNECTION_MANAGER_MOCK_HPP
 
-#include "network/interfaces/client_connection.hpp"
-#include "network/interfaces/connection_manager.hpp"
-#include "network/types.hpp"
+#include "server/network/interfaces/client_connection.hpp"
+#include "server/network/interfaces/connection_manager.hpp"
+#include "server/network/types.hpp"
 
 #include "gmock/gmock.h"
 #include <deque>

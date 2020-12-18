@@ -1,5 +1,5 @@
-#include "db/database.hpp"
-#include "db/sqlite_connection.hpp"
+#include "server/db/database.hpp"
+#include "server/db/sqlite_connection.hpp"
 
 #include <catch2/catch.hpp>
 #include <filesystem>
