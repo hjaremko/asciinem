@@ -1,7 +1,7 @@
 #ifndef ASCIINEM_SUBJECT_HPP
 #define ASCIINEM_SUBJECT_HPP
 
-#include "network/interfaces/observer.hpp"
+#include "server/network/interfaces/observer.hpp"
 
 #include <list>
 #include <memory>

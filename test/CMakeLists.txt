@@ -4,8 +4,7 @@ else ()
     include(${CONAN_CATCH2_ROOT}/lib/cmake/Catch2/Catch.cmake)
 endif ()
 
-include_directories(${PROJECT_ROOT}/include/server)
-include_directories(${PROJECT_ROOT}/include/client)
+include_directories(${PROJECT_ROOT}/include)
 
 add_library(catch_main STATIC catch_main.cpp)
 target_link_libraries(catch_main PUBLIC CONAN_PKG::catch2 CONAN_PKG::spdlog CONAN_PKG::asio CONAN_PKG::gtest CONAN_PKG::sqlite3)

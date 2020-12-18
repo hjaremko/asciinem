@@ -1,7 +1,7 @@
 #ifndef ASCIINEM_ID_POOL_HPP
 #define ASCIINEM_ID_POOL_HPP
 
-#include "network/types.hpp"
+#include "server/network/types.hpp"
 
 namespace asciinem::server::network
 {

@@ -1,7 +1,7 @@
 #ifndef ASCIINEM_QUEUE_HPP
 #define ASCIINEM_QUEUE_HPP
 
-#include "network/types.hpp"
+#include "server/network/types.hpp"
 
 #include <memory>
 

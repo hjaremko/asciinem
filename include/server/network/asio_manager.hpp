@@ -3,7 +3,7 @@
 
 #include "interfaces/connection_manager.hpp"
 #include "interfaces/queue.hpp"
-#include "network/clock_observer.hpp"
+#include "server/network/clock_observer.hpp"
 
 #include <future>
 #include <list>

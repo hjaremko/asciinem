@@ -1,18 +1,14 @@
-#ifndef ASCIINEM_SERVER_NETWORK_MODULE_HPP
-#define ASCIINEM_SERVER_NETWORK_MODULE_HPP
+#ifndef ASCIINEM_CLIENT_NETWORK_MODULE_HPP
+#define ASCIINEM_CLIENT_NETWORK_MODULE_HPP
 
-#include "server/network/types.hpp"
+#include "client/network/types.hpp"
 
-#include <memory>
-
-namespace asciinem::server::network
+namespace asciinem::client::network
 {
 
 class network_module
 {
 public:
-    using pointer = std::unique_ptr<network_module>;
-
     network_module() = default;
     network_module( const network_module& ) = default;
     network_module( network_module&& ) noexcept = default;
@@ -25,6 +21,6 @@ public:
     virtual void queue_message( const types::msg& ) = 0;
 };
 
-} // namespace asciinem::server::network
+} // namespace asciinem::client::network
 
-#endif // ASCIINEM_SERVER_NETWORK_MODULE_HPP
+#endif // ASCIINEM_CLIENT_NETWORK_MODULE_HPP

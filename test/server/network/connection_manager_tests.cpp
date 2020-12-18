@@ -1,9 +1,9 @@
 #include "mocks/client_connection_mock.hpp"
 #include "mocks/clock_mock.hpp"
 #include "mocks/queue_mock.hpp"
-#include "network/asio_connection.hpp"
-#include "network/asio_listener.hpp"
-#include "network/asio_manager.hpp"
+#include "server/network/asio_connection.hpp"
+#include "server/network/asio_listener.hpp"
+#include "server/network/asio_manager.hpp"
 
 #include <catch2/catch.hpp>
 

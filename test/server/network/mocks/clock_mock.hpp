@@ -1,7 +1,7 @@
 #ifndef ASCIINEM_CLOCK_MOCK_HPP
 #define ASCIINEM_CLOCK_MOCK_HPP
 
-#include "network/interfaces/subject.hpp"
+#include "server/network/interfaces/subject.hpp"
 
 #include "gmock/gmock.h"
 

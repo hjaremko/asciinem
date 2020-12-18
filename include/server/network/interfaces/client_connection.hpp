@@ -1,7 +1,7 @@
 #ifndef ASCIINEM_CLIENT_CONNECTION_HPP
 #define ASCIINEM_CLIENT_CONNECTION_HPP
 
-#include "network/types.hpp"
+#include "server/network/types.hpp"
 #include "queue.hpp"
 
 #include <memory>

@@ -1,4 +1,4 @@
-#include "util.hpp"
+#include "server/util.hpp"
 
 namespace asciinem::server
 {

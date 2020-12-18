@@ -1,7 +1,7 @@
-#include "network/asio_manager.hpp"
+#include "server/network/asio_manager.hpp"
 
-#include "network/clock_observer.hpp"
-#include "network/interfaces/subject.hpp"
+#include "server/network/clock_observer.hpp"
+#include "server/network/interfaces/subject.hpp"
 
 #include <spdlog/spdlog.h>
 

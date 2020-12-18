@@ -1,4 +1,4 @@
-#include "network/message_queue.hpp"
+#include "server/network/message_queue.hpp"
 
 #include <catch2/catch.hpp>
 #include <future>

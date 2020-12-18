@@ -1,4 +1,4 @@
-#include "network/clock.hpp"
+#include "server/network/clock.hpp"
 
 #include <catch2/catch.hpp>
 
