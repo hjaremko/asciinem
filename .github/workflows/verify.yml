@@ -17,20 +17,20 @@ jobs:
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install Conan
         run: sudo pip install conan
-      - name: Install cppcheck and clang-tidy
-        run: sudo apt-get install cppcheck clang-tidy -y
+      - name: Install clang-tidy
+        run: sudo apt-get install clang-tidy -y
       - name: Create build dir
-        run: mkdir build
+        run: mkdir -p build
       - name: Cache CMake files
         uses: actions/cache@v2
         with:
           path: build
-          key: ${{ runner.os }}-tidy-${{ hashFiles('*') }}
-          restore-keys: ${{ runner.os }}-tidy-
+          key: ${{ runner.os }}-verify-${{ hashFiles('*') }}
+          restore-keys: ${{ runner.os }}-verify-
       - name: Build
         run: |
           cd build
-          cmake -G Ninja .. -DENABLE_CLANG_TIDY=1 -DENABLE_CPPCHECK=1
+          cmake -G Ninja .. -DENABLE_CLANG_TIDY=1
           cmake --build .
       - name: Run tests
         run: |

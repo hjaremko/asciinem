@@ -7,8 +7,8 @@ namespace asciinem::server::network
 
 asio_server::asio_server( types::port port,
                           asio::io_context& io_context,
-                          connection_manager& manager )
-    : port_( port ), io_context_( io_context ), manager_( manager )
+                          connection_manager::pointer manager )
+    : port_( port ), io_context_( io_context ), manager_( std::move( manager ) )
 {
     start_accept();
 }
@@ -31,7 +31,7 @@ void asio_server::handle_accept( const asio_connection::pointer& new_connection,
         spdlog::info( "Accepted connection from {}.", new_connection->ip() );
 
         new_connection->send_confirmation();
-        manager_.add_client( new_connection );
+        manager_->add_client( new_connection );
     }
 
     start_accept();

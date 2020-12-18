@@ -1,7 +1,7 @@
-#include "network/asio_listener.hpp"
-#include "network/asio_manager.hpp"
+#include "network/asio_factory.hpp"
 #include "network/clock.hpp"
-#include "network/message_queue.hpp"
+#include "network/interfaces/network_factory.hpp"
+#include "network/server_config.hpp"
 
 #include <iostream>
 
@@ -13,20 +13,16 @@ auto main() -> int
     spdlog::info( "Asciinem Server starting!" );
 
     constexpr auto clock_interval = 1500;
-    constexpr auto dummy_data_amount = 100;
-    auto clock = network::clock<clock_interval> {};
-    auto dl = std::make_shared<network::message_queue>();
-    auto ul = std::make_shared<network::message_queue>();
+    auto clock = network::make_clock<clock_interval>();
 
+    auto network = network::create_network(
+        network::default_config, network::asio_factory::instance(), clock );
+
+    constexpr auto dummy_data_amount = 100;
     for ( int i = 1; i <= dummy_data_amount; ++i )
     {
-        ul->push( std::to_string( i ) );
+        network->queue_message( std::to_string( i ) );
     }
-
-    // todo: extract io context?
-    constexpr auto port = 5555;
-    auto conman = network::asio_manager { dl, ul, clock };
-    auto l = network::asio_listener( port, conman );
 
     std::cin.get();
 

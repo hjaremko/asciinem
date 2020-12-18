@@ -39,10 +39,15 @@ public:
         subject::notify();
     }
 
+    void stop()
+    {
+        running_.store( false );
+    }
+
 private:
     void running_function()
     {
-        spdlog::debug( "Starting server clock..." );
+        spdlog::info( "Starting server clock..." );
 
         while ( running_.load() )
         {
@@ -51,13 +56,19 @@ private:
                 std::chrono::milliseconds( Interval ) );
         }
 
-        spdlog::debug( "Stopping server clock..." );
+        spdlog::info( "Stopping server clock..." );
     }
 
     std::atomic<long long> tick_ {};
     std::atomic_bool running_ { true };
     std::thread thread_;
 };
+
+template <int Interval>
+auto make_clock()
+{
+    return std::make_shared<clock<Interval>>();
+}
 
 } // namespace asciinem::server::network
 
