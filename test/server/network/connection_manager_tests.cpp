@@ -23,7 +23,7 @@ TEST_CASE( "Manager add/remove client test", "[network][manager]" )
     constexpr auto port = 5555;
     const auto localhost = std::string { "127.0.0.1" };
 
-    auto m = asio_manager { dl, up, clock };
+    auto m = std::make_shared<asio_manager>( dl, up, clock );
     auto l = asio_listener { port, m };
 
     auto io_context = asio::io_context {};
@@ -52,7 +52,7 @@ TEST_CASE( "Manager should broadcast to all connections", "[network][manager]" )
     constexpr auto port = 5555;
     const auto localhost = std::string { "127.0.0.1" };
 
-    auto m = asio_manager { dl, up, clock };
+    auto m = std::make_shared<asio_manager>( dl, up, clock );
     auto l = asio_listener { port, m };
 
     auto io_context = asio::io_context {};
@@ -70,7 +70,7 @@ TEST_CASE( "Manager should broadcast to all connections", "[network][manager]" )
 
     std::this_thread::sleep_for( 1s );
 
-    m.broadcast( "expected" );
+    m->broadcast( "expected" );
 
     std::this_thread::sleep_for( 5s );
 }

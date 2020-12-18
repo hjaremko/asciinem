@@ -17,18 +17,23 @@ asio_manager::asio_manager( queue::pointer dl, queue::pointer up, subject& c )
 
 asio_manager::~asio_manager()
 {
-    auto l = std::lock_guard<std::mutex> { mutex_ };
+//    spdlog::trace(
+//        "Manager destructor waiting on a connection manager mutex..." );
+//    auto l = std::lock_guard<std::recursive_mutex> { mutex_ };
 
     for ( auto& [ c, poller ] : clients_ )
     {
         c->disconnect();
         poller.join();
     }
+
+    spdlog::info( "Connection Manager shut down" );
 }
 
 void asio_manager::add_client( client_connection::pointer client )
 {
-    auto l = std::lock_guard<std::mutex> { mutex_ };
+    spdlog::trace( "Waiting on a connection manager mutex..." );
+    auto l = std::lock_guard<std::recursive_mutex> { mutex_ };
 
     auto poller = poll_client( client );
 
@@ -43,7 +48,8 @@ void asio_manager::add_client( client_connection::pointer client )
 
 void asio_manager::remove_client( types::id client_id )
 {
-    auto l = std::lock_guard<std::mutex> { mutex_ };
+    spdlog::trace( "Remove client waiting on a connection manager mutex..." );
+    auto l = std::lock_guard<std::recursive_mutex> { mutex_ };
 
     spdlog::debug( "Removing client: {}", client_id );
 
@@ -63,7 +69,7 @@ auto asio_manager::poll_client( const client_connection::pointer& c )
 {
     auto poller = [ this, dl = downlink_->shared_from_this() ](
                       const client_connection::pointer& client ) {
-        spdlog::debug( "Polling client id {}", client->id() );
+        spdlog::info( "Polling client id {}", client->id() );
 
         while ( true )
         {
@@ -78,8 +84,9 @@ auto asio_manager::poll_client( const client_connection::pointer& c )
             }
         }
 
-        spdlog::debug( "Stopped polling client id {}", client->id() );
+        spdlog::info( "Stopped polling client id {}", client->id() );
         remove_client( client->id() );
+        spdlog::info( "Poller id {} thread ended", client->id() );
     };
 
     return std::thread( poller, ( c ) );
@@ -98,7 +105,8 @@ auto asio_manager::make_clock_observer() const -> clock_observer::pointer
 
 void asio_manager::broadcast( const types::msg& msg ) const
 {
-    auto l = std::lock_guard<std::mutex> { mutex_ };
+    spdlog::trace( "Waiting on a connection manager mutex..." );
+    auto l = std::lock_guard<std::recursive_mutex> { mutex_ };
 
     spdlog::debug( "Broadcasting message '{}'", msg );
 
@@ -112,7 +120,7 @@ void asio_manager::broadcast_next() const
 {
     if ( uplink_->empty() )
     {
-        spdlog::trace( "Nothing to broadcast." );
+        spdlog::warn( "Nothing to broadcast." );
         return;
     }
 

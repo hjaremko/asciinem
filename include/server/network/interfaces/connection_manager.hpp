@@ -12,6 +12,8 @@ namespace asciinem::server::network
 class connection_manager
 {
 public:
+    using pointer = std::shared_ptr<connection_manager>;
+
     connection_manager() = default;
     connection_manager( const connection_manager& ) = default;
     connection_manager( connection_manager&& ) noexcept = default;

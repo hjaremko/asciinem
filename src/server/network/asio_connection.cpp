@@ -69,7 +69,7 @@ auto asio_connection::receive_data() -> types::msg
     auto [ buffer, bytes ] = receive_from_socket();
     auto received_message = array_to_str( buffer, bytes );
 
-    spdlog::debug(
+    spdlog::trace(
         "Connection {} received {} bytes from {}", id(), bytes, ip() );
     spdlog::debug(
         "Connection {} received message: '{}'", id(), received_message );
@@ -96,7 +96,7 @@ auto asio_connection::socket() -> asio::ip::tcp::socket&
 
 void asio_connection::send_confirmation()
 {
-    spdlog::info( "Sending confirmation message to {}", ip() );
+    spdlog::debug( "Sending confirmation message to {}", ip() );
 
     auto message_ = std::string { "confirm!" };
     send_data( message_ );
@@ -114,9 +114,10 @@ void asio_connection::disconnect()
 
 void asio_connection::disconnect_()
 {
+    spdlog::info( "Shutting down client {}", id_ );
+
     auto ec = asio::error_code {};
     socket_.shutdown( asio::ip::tcp::socket::shutdown_both, ec );
-    spdlog::debug( "Client {} disconnected!", id_ );
 }
 
 auto make_connection( asio::io_context& io_context, types::id id )

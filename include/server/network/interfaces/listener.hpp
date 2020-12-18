@@ -1,12 +1,16 @@
 #ifndef ASCIINEM_LISTENER_HPP
 #define ASCIINEM_LISTENER_HPP
 
+#include <memory>
+
 namespace asciinem::server::network
 {
 
 class listener
 {
 public:
+    using pointer = std::unique_ptr<listener>;
+
     listener() = default;
     listener( const listener& ) = default;
     listener( listener&& ) noexcept = default;

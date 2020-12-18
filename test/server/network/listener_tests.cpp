@@ -8,7 +8,7 @@ using namespace asciinem::server::network;
 
 TEST_CASE( "Listener start/stop test", "[network], [listener]" )
 {
-    auto manager_mock = connection_manager_mock {};
+    auto manager_mock = std::make_shared<connection_manager_mock>();
 
     constexpr auto port = 5556;
 
@@ -29,8 +29,8 @@ TEST_CASE( "Receive confirmation message test", "[network], [listener]" )
 
     spdlog::default_logger_raw()->set_level( spdlog::level::debug );
 
-    auto manager_mock = connection_manager_mock {};
-    EXPECT_CALL( manager_mock, add_client ).Times( AtLeast( 1 ) );
+    auto manager_mock = std::make_shared<connection_manager_mock>();
+    EXPECT_CALL( *manager_mock, add_client ).Times( AtLeast( 1 ) );
 
     constexpr auto port = 5555;
     const auto localhost = std::string { "127.0.0.1" };

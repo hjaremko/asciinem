@@ -14,9 +14,10 @@ namespace asciinem::server::network
 class asio_server
 {
 public:
-    [[maybe_unused]] explicit asio_server( types::port port,
-                                           asio::io_context& io_context,
-                                           connection_manager& manager );
+    [[maybe_unused]] explicit asio_server(
+        types::port port,
+        asio::io_context& io_context,
+        connection_manager::pointer manager );
 
 private:
     void start_accept();
@@ -28,7 +29,7 @@ private:
     asio::ip::tcp::acceptor acceptor_ {
         io_context_, asio::ip::tcp::endpoint( asio::ip::tcp::v4(), port_ )
     };
-    connection_manager& manager_;
+    connection_manager::pointer manager_;
     id_pool id_pool_;
 };
 

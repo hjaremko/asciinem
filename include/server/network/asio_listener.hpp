@@ -17,7 +17,8 @@ namespace asciinem::server::network
 class asio_listener : public listener
 {
 public:
-    asio_listener( types::port port, connection_manager& manager );
+    asio_listener( types::port port,
+                   const connection_manager::pointer& manager );
 
     asio_listener( const asio_listener& ) = delete;
     asio_listener( asio_listener&& ) noexcept = delete;

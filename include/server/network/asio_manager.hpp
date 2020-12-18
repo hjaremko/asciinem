@@ -39,7 +39,7 @@ private:
     [[nodiscard]] auto make_clock_observer() const -> clock_observer::pointer;
     void broadcast_next() const;
 
-    mutable std::mutex mutex_;
+    mutable std::recursive_mutex mutex_;
     std::list<connection_poller_pair> clients_;
     queue::pointer downlink_;
     queue::pointer uplink_;
