@@ -3,6 +3,7 @@ project(asciinem-server LANGUAGES CXX VERSION 1.0.0)
 include_directories(${PROJECT_ROOT}/include/server/)
 
 set(TARGET_SOURCES
+        util.cpp
         network/asio_connection.cpp
         network/asio_server.cpp
         network/asio_listener.cpp
@@ -23,4 +24,5 @@ target_link_libraries(
         CONAN_PKG::spdlog
         CONAN_PKG::asio
         CONAN_PKG::sqlite3
+        CONAN_PKG::cxxopts
 )

@@ -48,7 +48,6 @@ inline auto create_network( const server_config& config,
     auto manager = factory.make_manager( dl, ul, clock );
 
     return std::make_unique<asio_network>(
-        config.ip,
         config.port,
         dl,
         ul,
