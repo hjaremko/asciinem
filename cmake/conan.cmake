@@ -23,6 +23,7 @@ macro(run_conan)
     ncurses/6.2
     gtest/1.10.0
     sqlite3/3.34.0
+    cxxopts/2.2.1
     OPTIONS
     ${CONAN_EXTRA_OPTIONS}
     BASIC_SETUP

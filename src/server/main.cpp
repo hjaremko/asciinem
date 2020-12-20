@@ -1,22 +1,25 @@
 #include "network/asio_factory.hpp"
 #include "network/clock.hpp"
-#include "network/interfaces/network_factory.hpp"
-#include "network/server_config.hpp"
+#include "util.hpp"
 
 #include <iostream>
 
-auto main() -> int
+auto main( int argc, char** argv ) -> int
 {
     using namespace asciinem::server;
 
-    spdlog::default_logger_raw()->set_level( spdlog::level::info );
+    auto cli_options_result = parse_command_line( argc, argv );
+    auto log_level = get_log_level( cli_options_result );
+    auto port = get_port( cli_options_result );
+
+    spdlog::default_logger_raw()->set_level( log_level );
     spdlog::info( "Asciinem Server starting!" );
 
     constexpr auto clock_interval = 1500;
     auto clock = network::make_clock<clock_interval>();
 
     auto network = network::create_network(
-        network::default_config, network::asio_factory::instance(), clock );
+        { port }, network::asio_factory::instance(), clock );
 
     constexpr auto dummy_data_amount = 100;
     for ( int i = 1; i <= dummy_data_amount; ++i )
