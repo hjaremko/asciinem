@@ -1,8 +1,8 @@
 #ifndef ASCIINEM_CLIENT_CONNECTION_HPP
 #define ASCIINEM_CLIENT_CONNECTION_HPP
 
-#include "server/network/types.hpp"
 #include "queue.hpp"
+#include "server/network/types.hpp"
 
 #include <memory>
 
@@ -23,7 +23,7 @@ public:
 
     virtual ~client_connection() = default;
 
-    virtual auto id() -> types::id = 0;
+    virtual auto id() -> types::id& = 0;
     virtual auto ip() -> types::ip = 0;
     virtual auto receive_data() -> types::msg = 0;
     virtual void send_data( const types::msg& msg ) = 0;

@@ -2,6 +2,21 @@
 
 #include <spdlog/spdlog.h>
 
+namespace
+{
+
+auto send_login_request(
+    const asciinem::server::network::client_connection::pointer& conn,
+    const std::string& login ) -> std::string
+{
+    spdlog::info( "Logging in with login {}...", login );
+
+    conn->send_data( login );
+    return conn->receive_data();
+}
+
+} // namespace
+
 namespace asciinem::client::network
 {
 
@@ -31,14 +46,18 @@ void asio_network_module::queue_message( const types::msg& msg )
     ul.push( msg );
 }
 
-auto asio_network_module::establish( const types::ip& ip, types::port port )
-    -> bool
+auto asio_network_module::establish( const types::ip& ip,
+                                     types::port port,
+                                     const std::string& login ) -> bool
 {
     spdlog::info( "Connecting to {}:{}...", ip, port );
 
     try
     {
-        auto c = server::network::make_connection( io_context, ip, port, 0 );
+        auto c =
+            server::network::make_connection( io_context, ip, port, login );
+
+        spdlog::info( "Waiting for confirmation message..." );
         auto ack = c->receive_data();
 
         if ( ack != "confirm!" )
@@ -47,11 +66,24 @@ auto asio_network_module::establish( const types::ip& ip, types::port port )
             return false;
         }
 
+        auto response = send_login_request( c, login );
+        spdlog::info( "Server response: {}", response );
+
+        if ( response != "OK" )
+        {
+            spdlog::error( "Login failed." );
+            c->disconnect();
+            return false;
+        }
+
         connection = c;
     }
+    //    catch ( login_failed_exception )
+    //    {
+    //    }
     catch ( std::exception& )
     {
-        spdlog::warn( "Failed connecting to server {}:{}", ip, port );
+        spdlog::error( "Failed connecting to server {}:{}", ip, port );
         return false;
     }
 

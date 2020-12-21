@@ -2,12 +2,13 @@
 
 #include <asio.hpp>
 #include <spdlog/spdlog.h>
+#include <utility>
 
 namespace asciinem::server::network
 {
 
 asio_connection::asio_connection( asio::io_context& io_context, types::id id )
-    : socket_( io_context ), id_( id )
+    : socket_( io_context ), id_( std::move( id ) )
 {
     spdlog::trace( "New connection created {}", id_ );
 }
@@ -16,7 +17,7 @@ asio_connection::asio_connection( asio::io_context& io_context,
                                   const types::ip& ip,
                                   types::port port,
                                   types::id id )
-    : socket_( io_context ), id_( id )
+    : socket_( io_context ), id_( std::move( id ) )
 {
     auto resolver = asio::ip::tcp::resolver { io_context };
     auto endpoints = resolver.resolve( ip, std::to_string( port ) );
@@ -28,7 +29,7 @@ asio_connection::~asio_connection()
     disconnect_();
 }
 
-auto asio_connection::id() -> types::id
+auto asio_connection::id() -> types::id&
 {
     return id_;
 }
@@ -79,7 +80,7 @@ auto asio_connection::receive_data() -> types::msg
 
 void asio_connection::send_data( const types::msg& msg )
 {
-    spdlog::debug( "Sending '{}' to {}", msg, ip() );
+    spdlog::debug( "Sending '{}' to {} at {}", msg, id(), ip() );
 
     asio::async_write(
         socket_,
@@ -104,7 +105,6 @@ void asio_connection::send_confirmation()
 
 void asio_connection::handle_write()
 {
-    spdlog::debug( "Sent data to connection id: {}, ip: {}", id(), ip() );
 }
 
 void asio_connection::disconnect()
@@ -120,7 +120,7 @@ void asio_connection::disconnect_()
     socket_.shutdown( asio::ip::tcp::socket::shutdown_both, ec );
 }
 
-auto make_connection( asio::io_context& io_context, types::id id )
+auto make_connection( asio::io_context& io_context, const types::id& id )
     -> asio_connection::pointer
 {
     return std::make_shared<asio_connection>( io_context, id );
@@ -129,7 +129,7 @@ auto make_connection( asio::io_context& io_context, types::id id )
 auto make_connection( asio::io_context& io_context,
                       const types::ip& ip,
                       types::port port,
-                      types::id id ) -> asio_connection::pointer
+                      const types::id& id ) -> asio_connection::pointer
 {
     return std::make_shared<asio_connection>( io_context, ip, port, id );
 }

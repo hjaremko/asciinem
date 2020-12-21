@@ -7,7 +7,7 @@ namespace asciinem::server::network::types
 {
 
 using msg = std::string;
-using id = int;
+using id = std::string;
 using ip = std::string;
 using port = unsigned short;
 

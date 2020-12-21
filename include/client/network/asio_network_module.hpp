@@ -13,6 +13,8 @@ namespace asciinem::client::network
 class asio_network_module : public network_module
 {
 public:
+    using connection_ptr = server::network::client_connection::pointer;
+
     asio_network_module() = default;
     asio_network_module( const asio_network_module& ) = delete;
     asio_network_module( asio_network_module&& ) noexcept = delete;
@@ -25,7 +27,7 @@ public:
 
     auto poll_message() -> types::msg override;
     void queue_message( const types::msg& msg ) override;
-    auto establish( const types::ip& ip, types::port port ) -> bool;
+    auto establish( const types::ip&, types::port, const std::string& ) -> bool;
     // todo: queue should throw when network module is destroyed, use observer
 
 private:
@@ -35,7 +37,7 @@ private:
     server::network::message_queue dl;
     server::network::message_queue ul;
     asio::io_context io_context;
-    server::network::client_connection::pointer connection;
+    connection_ptr connection;
     std::atomic_bool running_ { true };
     std::optional<std::thread> sending_thread_;
     std::optional<std::thread> receiving_thread_;

@@ -28,6 +28,7 @@ public:
     virtual void remove_client( types::id client_id ) = 0;
     [[nodiscard]] virtual auto connected_players() const -> int = 0;
     virtual void broadcast( const types::msg& msg ) const = 0;
+    virtual auto is_logged( const std::string& ) const -> bool = 0;
 };
 
 } // namespace asciinem::server::network

@@ -27,7 +27,7 @@ public:
     auto operator=( asio_connection&& ) noexcept -> asio_connection& = default;
     ~asio_connection() override;
 
-    auto id() -> types::id override;
+    auto id() -> types::id& override;
     auto ip() -> types::ip override;
     auto receive_data() -> types::msg override;
     void send_data( const types::msg& ) override;
@@ -40,16 +40,16 @@ private:
     void disconnect_();
 
     asio::ip::tcp::socket socket_;
-    int id_ { 0 };
+    types::id id_ { 0 };
 };
 
-auto make_connection( asio::io_context&, types::id )
+auto make_connection( asio::io_context&, const types::id& )
     -> asio_connection::pointer;
 
 auto make_connection( asio::io_context&,
                       const types::ip&,
                       types::port,
-                      types::id ) -> asio_connection::pointer;
+                      const types::id& ) -> asio_connection::pointer;
 
 } // namespace asciinem::server::network
 

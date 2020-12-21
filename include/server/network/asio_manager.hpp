@@ -34,6 +34,7 @@ public:
     auto poll_client( const client_connection::pointer& c ) -> std::thread;
     [[nodiscard]] auto connected_players() const -> int override;
     void broadcast( const types::msg& msg ) const override;
+    auto is_logged( const std::string& login ) const -> bool override;
 
 private:
     [[nodiscard]] auto make_clock_observer() const -> clock_observer::pointer;
