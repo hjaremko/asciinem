@@ -38,9 +38,11 @@ TEST_CASE( "Receive confirmation message test", "[network], [listener]" )
     auto l = asio_listener { port, manager_mock };
 
     auto io_context = asio::io_context {};
-    auto client = make_connection( io_context, localhost, port, 0 );
+    auto client = make_connection( io_context, localhost, port, "client" );
     auto actual = client->receive_data();
     const auto* expected = "confirm!";
+
+    client->disconnect();
 
     REQUIRE( actual == expected );
     l.stop_listening();

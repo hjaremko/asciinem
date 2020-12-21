@@ -1,9 +1,6 @@
 #include "server/network/asio_manager.hpp"
 
-#include "server/network/clock_observer.hpp"
 #include "server/network/interfaces/subject.hpp"
-
-#include <spdlog/spdlog.h>
 
 namespace asciinem::server::network
 {
@@ -108,7 +105,7 @@ void asio_manager::broadcast( const types::msg& msg ) const
     spdlog::trace( "Waiting on a connection manager mutex..." );
     auto l = std::lock_guard<std::recursive_mutex> { mutex_ };
 
-    spdlog::debug( "Broadcasting message '{}'", msg );
+    spdlog::trace( "Broadcasting message '{}'", msg );
 
     for ( const auto& client : clients_ )
     {
@@ -126,6 +123,15 @@ void asio_manager::broadcast_next() const
 
     auto msg = uplink_->pop();
     broadcast( msg );
+}
+
+auto asio_manager::is_logged( const std::string& login ) const -> bool
+{
+    return std::find_if( std::begin( clients_ ),
+                         std::end( clients_ ),
+                         [ & ]( const auto& c ) {
+                             return c.first->id() == login;
+                         } ) != std::end( clients_ );
 }
 
 } // namespace asciinem::server::network

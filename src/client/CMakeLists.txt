@@ -4,6 +4,7 @@ include_directories(${PROJECT_ROOT}/include/)
 
 set(TARGET_SOURCES
         network/asio_network_module.cpp
+        ${PROJECT_ROOT}/src/client/util.cpp
         ${PROJECT_ROOT}/src/server/network/message_queue.cpp
         ${PROJECT_ROOT}/src/server/network/asio_connection.cpp
         )
@@ -21,4 +22,5 @@ target_link_libraries(
         CONAN_PKG::spdlog
         CONAN_PKG::asio
         CONAN_PKG::ncurses
+        CONAN_PKG::cxxopts
 )

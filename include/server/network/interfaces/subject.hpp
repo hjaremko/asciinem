@@ -24,7 +24,7 @@ public:
     virtual void attach( const observer::pointer& o )
     {
         std::lock_guard<std::mutex> lock { mutex_ };
-        spdlog::debug( "Attaching new observer: {}", o->name() );
+        spdlog::trace( "Attaching new observer: {}", o->name() );
 
         observers_.push_back( o );
     };
@@ -32,7 +32,7 @@ public:
     virtual void detach( const observer::pointer& o )
     {
         std::lock_guard<std::mutex> lock { mutex_ };
-        spdlog::debug( "Detaching observer: {}", o->name() );
+        spdlog::trace( "Detaching observer: {}", o->name() );
 
         observers_.remove_if( [ &o ]( auto x ) { return x.get() == o.get(); } );
     };
@@ -40,11 +40,11 @@ public:
     virtual void notify()
     {
         std::lock_guard<std::mutex> lock { mutex_ };
-        spdlog::debug( "Notifying {} observers", observers_.size() );
+        spdlog::trace( "Notifying {} observers", observers_.size() );
 
         for ( auto& o : observers_ )
         {
-            spdlog::debug( "Notifying {}", o->name() );
+            spdlog::trace( "Notifying {}", o->name() );
             o->update();
         }
     }

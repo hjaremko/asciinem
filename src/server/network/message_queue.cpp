@@ -13,14 +13,14 @@ auto message_queue::pop() -> types::msg
     auto popped = queue_.front();
     queue_.pop_front();
 
-    spdlog::debug( "Popped element: {}", popped );
+    spdlog::trace( "Popped element: {}", popped );
 
     return popped;
 }
 
 auto message_queue::pop_wait() -> types::msg
 {
-    spdlog::debug( "Waiting on a element in the queue..." );
+    spdlog::trace( "Waiting on a element in the queue..." );
 
     while ( empty() )
     {
@@ -33,7 +33,7 @@ void message_queue::push( types::msg msg )
 {
     auto lock = std::lock_guard<std::mutex> { mutex_ };
 
-    spdlog::debug( "Pushed element: {}", msg );
+    spdlog::trace( "Pushed element: {}", msg );
 
     queue_.emplace_back( std::move( msg ) );
 }

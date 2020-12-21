@@ -11,11 +11,8 @@ class id_pool
 public:
     [[nodiscard]] auto next_id() noexcept -> types::id
     {
-        return id_++;
+        return "null";
     }
-
-private:
-    types::id id_ { 0 };
 };
 
 } // namespace asciinem::server::network

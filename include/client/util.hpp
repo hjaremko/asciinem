@@ -6,14 +6,17 @@
 #include <cxxopts.hpp>
 #include <spdlog/spdlog.h>
 
-namespace asciinem::server
+namespace asciinem::client
 {
 
 auto parse_command_line( int argc, char** argv ) -> cxxopts::ParseResult;
 auto get_log_level( const cxxopts::ParseResult& result )
     -> spdlog::level::level_enum;
-auto get_port( const cxxopts::ParseResult& result ) -> network::types::port;
+auto get_port( const cxxopts::ParseResult& result )
+    -> server::network::types::port;
+auto get_ip( const cxxopts::ParseResult& result ) -> server::network::types::ip;
+auto get_login( const cxxopts::ParseResult& result ) -> std::string;
 
-} // namespace asciinem::server
+} // namespace asciinem::client
 
 #endif // ASCIINEM_SERVER_UTIL_HPP
