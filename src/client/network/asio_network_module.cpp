@@ -1,5 +1,8 @@
 #include "client/network/asio_network_module.hpp"
 
+#include "server/network/server_config.hpp"
+#include "server/serializer.hpp"
+
 #include <spdlog/spdlog.h>
 
 namespace
@@ -38,7 +41,14 @@ asio_network_module::~asio_network_module()
 
 auto asio_network_module::poll_message() -> types::msg
 {
-    return dl.pop_wait();
+    auto data = dl.pop();
+    data.pop_back();
+    return data;
+}
+
+auto asio_network_module::has_message_available() -> bool
+{
+    return !dl.empty();
 }
 
 void asio_network_module::queue_message( const types::msg& msg )
@@ -60,7 +70,7 @@ auto asio_network_module::establish( const types::ip& ip,
         spdlog::info( "Waiting for confirmation message..." );
         auto ack = c->receive_data();
 
-        if ( ack != "confirm!" )
+        if ( ack != "confirm!\x7f" )
         {
             spdlog::error( "Invalid confirmation message: {}", ack );
             return false;
@@ -69,7 +79,7 @@ auto asio_network_module::establish( const types::ip& ip,
         auto response = send_login_request( c, login );
         spdlog::info( "Server response: {}", response );
 
-        if ( response != "OK" )
+        if ( response != "OK\x7f" )
         {
             spdlog::error( "Login failed." );
             c->disconnect();
@@ -93,6 +103,40 @@ auto asio_network_module::establish( const types::ip& ip,
     return true;
 }
 
+auto asio_network_module::split_merged_packets( const std::string& data )
+    -> std::vector<std::string>
+{
+    using server::network::server_config;
+
+    auto buffer = std::stringstream { data };
+    auto packets = std::vector<std::string> {};
+
+    for ( auto line = std::string {};
+          std::getline( buffer, line, server_config::PACKET_DELIM ); )
+    {
+        packets.push_back( connection->id() + " " + line );
+    }
+
+    return packets;
+}
+
+auto asio_network_module::get_most_recent_packet( const std::string& data )
+    -> std::optional<std::string>
+{
+
+    auto packets = split_merged_packets( data );
+
+    if ( auto p = std::find_if( std::rbegin( packets ),
+                                std::rend( packets ),
+                                server::serializer::is_complete );
+         p != std::rend( packets ) )
+    {
+        return *p;
+    }
+
+    return std::nullopt;
+}
+
 void asio_network_module::start_receiving()
 {
     auto poller = [ this ]() {
@@ -103,9 +147,14 @@ void asio_network_module::start_receiving()
             try
             {
                 auto received = connection->receive_data();
-                dl.push( received );
+                auto packet = get_most_recent_packet( received );
+
+                if ( packet.has_value() )
+                {
+                    dl.push( *packet );
+                }
             }
-            catch ( std::exception& e )
+            catch ( std::exception& )
             {
                 break;
             }
@@ -129,7 +178,7 @@ void asio_network_module::start_sending()
             {
                 connection->send_data( ul.pop_wait() );
             }
-            catch ( std::exception& e )
+            catch ( std::exception& )
             {
                 break;
             }

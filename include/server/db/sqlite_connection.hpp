@@ -3,7 +3,7 @@
 
 #include "query_result_type.hpp"
 
-#include <iostream>
+#include <optional>
 #include <spdlog/spdlog.h>
 #include <sqlite3.h>
 #include <string>

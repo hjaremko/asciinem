@@ -75,7 +75,7 @@ auto asio_manager::poll_client( const client_connection::pointer& c )
                 auto received = client->receive_data();
                 dl->push( received );
             }
-            catch ( std::exception& e )
+            catch ( std::exception& )
             {
                 break;
             }

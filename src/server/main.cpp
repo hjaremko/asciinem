@@ -1,10 +1,12 @@
-#include "server/network/asio_listener.hpp"
-#include "server/network/asio_manager.hpp"
-#include "server/network/clock.hpp"
 #include "server/network/asio_factory.hpp"
+#include "server/network/clock.hpp"
+#include "server/network_service_mediator.hpp"
+#include "server/service/game_service.hpp"
 #include "server/util.hpp"
 
 #include <iostream>
+
+using namespace asciinem;
 
 auto main( int argc, char** argv ) -> int
 {
@@ -17,17 +19,16 @@ auto main( int argc, char** argv ) -> int
     spdlog::default_logger_raw()->set_level( log_level );
     spdlog::info( "Asciinem Server starting!" );
 
-    constexpr auto clock_interval = 1500;
+    constexpr auto clock_interval = 10;
     auto clock = network::make_clock<clock_interval>();
 
     auto network = network::create_network(
         { port }, network::asio_factory::instance(), clock );
 
-    constexpr auto dummy_data_amount = 100;
-    for ( int i = 1; i <= dummy_data_amount; ++i )
-    {
-        network->queue_message( std::to_string( i ) );
-    }
+    auto gm = domain::game_manager {};
+    auto gs = service::game_service { gm };
+
+    auto mediator = network_service_mediator { *clock, *network, gs };
 
     std::cin.get();
 

@@ -2,6 +2,7 @@
 #define ASCIINEM_QUERY_RESULT_TYPE_HPP
 
 #include <iostream>
+#include <optional>
 #include <set>
 #include <spdlog/spdlog.h>
 #include <unordered_set>

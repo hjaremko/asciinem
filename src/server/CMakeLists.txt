@@ -30,4 +30,5 @@ target_link_libraries(
         CONAN_PKG::asio
         CONAN_PKG::sqlite3
         CONAN_PKG::cxxopts
+        CONAN_PKG::cereal
 )

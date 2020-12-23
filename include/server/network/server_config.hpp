@@ -9,6 +9,7 @@ namespace asciinem::server::network
 struct server_config // NOLINT
 {
     types::port port;
+    static constexpr const auto PACKET_DELIM = '\x80';
 };
 
 } // namespace asciinem::server::network

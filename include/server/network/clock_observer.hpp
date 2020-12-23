@@ -5,6 +5,7 @@
 
 #include <functional>
 
+// todo: move to common
 namespace asciinem::server::network
 {
 
@@ -33,6 +34,13 @@ private:
     std::string name_;
     std::function<void()> fun_;
 };
+
+template <class F>
+inline auto make_clock_observer( std::string name, F&& fun )
+{
+    return std::make_shared<clock_observer>( std::move( name ),
+                                             std::forward<F>( fun ) );
+}
 
 } // namespace asciinem::server::network
 

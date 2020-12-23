@@ -28,12 +28,17 @@ public:
 
     auto poll_message() -> types::msg override
     {
-        return dl_->pop_wait();
+        return dl_->pop();
     }
 
     void queue_message( const types::msg& msg ) override
     {
         ul_->push( msg );
+    }
+
+    [[nodiscard]] auto has_message_available() const -> bool override
+    {
+        return !dl_->empty();
     }
 
 private:

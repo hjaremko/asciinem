@@ -23,6 +23,7 @@ public:
 
     virtual auto poll_message() -> types::msg = 0;
     virtual void queue_message( const types::msg& ) = 0;
+    [[nodiscard]] virtual auto has_message_available() const -> bool = 0;
 };
 
 } // namespace asciinem::server::network

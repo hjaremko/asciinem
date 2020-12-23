@@ -1,6 +1,7 @@
 #include "server/network/asio_connection.hpp"
 
 #include <asio.hpp>
+#include <server/network/server_config.hpp>
 #include <spdlog/spdlog.h>
 #include <utility>
 
@@ -47,7 +48,7 @@ auto asio_connection::receive_data() -> types::msg
         return ss.str();
     };
 
-    constexpr const auto buffer_size = 128;
+    constexpr const auto buffer_size = 2048;
     using buffer_type = std::array<char, buffer_size>;
 
     auto receive_from_socket =
@@ -80,11 +81,13 @@ auto asio_connection::receive_data() -> types::msg
 
 void asio_connection::send_data( const types::msg& msg )
 {
+    using server::network::server_config;
+
     spdlog::debug( "Sending '{}' to {} at {}", msg, id(), ip() );
 
     asio::async_write(
         socket_,
-        asio::buffer( msg ),
+        asio::buffer( msg + server_config::PACKET_DELIM ),
         [ this_ptr = shared_from_this() ]( auto /*unused*/, auto /*unused*/ ) {
             this_ptr->handle_write();
         } );
