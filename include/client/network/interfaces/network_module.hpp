@@ -18,6 +18,7 @@ public:
     virtual ~network_module() = default;
 
     virtual auto poll_message() -> types::msg = 0;
+    virtual auto has_message_available() -> bool = 0;
     virtual void queue_message( const types::msg& ) = 0;
 };
 

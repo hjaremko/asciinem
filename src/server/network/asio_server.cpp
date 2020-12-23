@@ -15,7 +15,7 @@ asio_server::asio_server( types::port port,
 
 void asio_server::start_accept()
 {
-    auto new_connection = make_connection( io_context_, "not yet connected" );
+    auto new_connection = make_connection( io_context_, "" );
 
     acceptor_.async_accept( new_connection->socket(),
                             [ this, new_connection ]( auto error_code ) {
@@ -32,6 +32,7 @@ void asio_server::handle_accept( const asio_connection::pointer& new_connection,
 
         new_connection->send_confirmation();
         auto login = new_connection->receive_data();
+        login.pop_back();
 
         if ( manager_->is_logged( login ) )
         {

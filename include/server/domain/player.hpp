@@ -6,7 +6,9 @@
 #include "item.hpp"
 #include "weapon.hpp"
 
+#include <optional>
 #include <set>
+
 namespace asciinem::server::domain
 {
 

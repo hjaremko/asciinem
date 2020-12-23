@@ -27,6 +27,7 @@ public:
     ~asio_network_module() override;
 
     auto poll_message() -> types::msg override;
+    auto has_message_available() -> bool override;
     void queue_message( const types::msg& msg ) override;
     auto establish( const types::ip&, types::port, const std::string& ) -> bool;
     // todo: queue should throw when network module is destroyed, use observer
@@ -34,6 +35,10 @@ public:
 private:
     void start_receiving();
     void start_sending();
+    auto get_most_recent_packet( const std::string& data )
+        -> std::optional<std::string>;
+    auto split_merged_packets( const std::string& data )
+        -> std::vector<std::string>;
 
     server::network::message_queue dl;
     server::network::message_queue ul;

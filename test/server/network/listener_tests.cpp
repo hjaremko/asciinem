@@ -40,6 +40,7 @@ TEST_CASE( "Receive confirmation message test", "[network], [listener]" )
     auto io_context = asio::io_context {};
     auto client = make_connection( io_context, localhost, port, "client" );
     auto actual = client->receive_data();
+    actual.pop_back();
     const auto* expected = "confirm!";
 
     client->disconnect();
