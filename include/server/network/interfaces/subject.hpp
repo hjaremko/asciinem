@@ -15,10 +15,10 @@ class subject
 public:
     using pointer = std::shared_ptr<subject>;
 
-    subject( const subject& ) = default;
-    subject( subject&& ) noexcept = default;
-    auto operator=( const subject& ) -> subject& = default;
-    auto operator=( subject&& ) noexcept -> subject& = default;
+    subject( const subject& ) = delete;
+    subject( subject&& ) noexcept = delete;
+    auto operator=( const subject& ) -> subject& = delete;
+    auto operator=( subject&& ) noexcept -> subject& = delete;
     virtual ~subject() = default;
 
     virtual void attach( const observer::pointer& o )

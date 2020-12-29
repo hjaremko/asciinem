@@ -6,6 +6,7 @@
 #include "server/network/message_queue.hpp"
 
 #include <asio.hpp>
+#include <optional>
 
 namespace asciinem::client::network
 {

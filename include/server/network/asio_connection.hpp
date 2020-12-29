@@ -24,7 +24,7 @@ public:
     asio_connection( const asio_connection& ) = delete;
     asio_connection( asio_connection&& ) noexcept = default;
     auto operator=( const asio_connection& ) -> asio_connection& = delete;
-    auto operator=( asio_connection&& ) noexcept -> asio_connection& = default;
+    auto operator=( asio_connection&& ) noexcept -> asio_connection& = delete;
     ~asio_connection() override;
 
     auto id() -> types::id& override;
