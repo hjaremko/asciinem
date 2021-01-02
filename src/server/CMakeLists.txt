@@ -4,6 +4,11 @@ include_directories(${PROJECT_ROOT}/include/)
 
 set(TARGET_SOURCES
         util.cpp
+        domain/armor.cpp
+        domain/entity.cpp
+        domain/item.cpp
+        domain/player.cpp
+        domain/weapon.cpp
         network/asio_connection.cpp
         network/asio_server.cpp
         network/asio_listener.cpp
