@@ -1,5 +1,7 @@
 #include "client/util.hpp"
 
+#include <random>
+
 namespace asciinem::client
 {
 
@@ -63,7 +65,21 @@ auto get_ip( const cxxopts::ParseResult& result ) -> server::network::types::ip
 
 auto get_login( const cxxopts::ParseResult& result ) -> std::string
 {
-    return result[ "login" ].as<std::string>();
+    try
+    {
+        return result[ "login" ].as<std::string>();
+    }
+    catch ( ... )
+    {
+        constexpr auto max_guest_id = 2000;
+        auto dev = std::random_device {};
+        auto rng = std::mt19937 { dev() };
+        auto dist = std::uniform_int_distribution<std::mt19937::result_type> {
+            1, max_guest_id
+        };
+
+        return "guest" + std::to_string( dist( rng ) );
+    }
 }
 
 } // namespace asciinem::client
