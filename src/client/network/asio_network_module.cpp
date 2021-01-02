@@ -69,8 +69,9 @@ auto asio_network_module::establish( const types::ip& ip,
 
         spdlog::info( "Waiting for confirmation message..." );
         auto ack = c->receive_data();
+        ack.pop_back();
 
-        if ( ack != "confirm!\x7f" )
+        if ( ack != "confirm!" )
         {
             spdlog::error( "Invalid confirmation message: {}", ack );
             return false;
@@ -78,8 +79,9 @@ auto asio_network_module::establish( const types::ip& ip,
 
         auto response = send_login_request( c, login );
         spdlog::info( "Server response: {}", response );
+        response.pop_back();
 
-        if ( response != "OK\x7f" )
+        if ( response != "OK" )
         {
             spdlog::error( "Login failed." );
             c->disconnect();
