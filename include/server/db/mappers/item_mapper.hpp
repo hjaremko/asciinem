@@ -91,36 +91,20 @@ public:
     [[nodiscard]] auto record_to_item( types::record record )
         -> domain::item::pointer
     {
-        auto id =
-            std::find_if( std::begin( record ),
-                          std::end( record ),
-                          []( const auto& p ) { return p.first == "item_id"; } )
+        auto get_column_value = [ &record ]( const auto& col ) {
+            return std::find_if(
+                       std::begin( record ),
+                       std::end( record ),
+                       [ col ]( const auto& p ) { return p.first == col; } )
                 ->second;
-        auto name =
-            std::find_if( std::begin( record ),
-                          std::end( record ),
-                          []( const auto& p ) { return p.first == "name"; } )
-                ->second;
-        auto value =
-            std::find_if( std::begin( record ),
-                          std::end( record ),
-                          []( const auto& p ) { return p.first == "value"; } )
-                ->second;
-        auto level =
-            std::find_if( std::begin( record ),
-                          std::end( record ),
-                          []( const auto& p ) { return p.first == "level"; } )
-                ->second;
-        auto defense =
-            std::find_if( std::begin( record ),
-                          std::end( record ),
-                          []( const auto& p ) { return p.first == "defense"; } )
-                ->second;
-        auto attack =
-            std::find_if( std::begin( record ),
-                          std::end( record ),
-                          []( const auto& p ) { return p.first == "attack"; } )
-                ->second;
+        };
+
+        auto id = get_column_value( "item_id" );
+        auto name = get_column_value( "name" );
+        auto value = get_column_value( "value" );
+        auto level = get_column_value( "level" );
+        auto defense = get_column_value( "defense" );
+        auto attack = get_column_value( "attack" );
 
         if ( defense )
         {
@@ -131,6 +115,7 @@ public:
                 std::stoi( *level ),
                 std::stoi( *defense ) );
         }
+
         if ( attack )
         {
             return std::make_shared<domain::weapon>(
@@ -140,6 +125,7 @@ public:
                 std::stoi( *level ),
                 std::stoi( *attack ) );
         }
+
         return std::make_shared<domain::item>( std::stoi( *id ),
                                                *name,
                                                double( std::stoi( *value ) ) /

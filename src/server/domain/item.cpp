@@ -11,7 +11,7 @@ item::item( int id, std::string name, double value, int level )
 {
 }
 
-auto item::get_name() const -> const std::string&
+auto item::get_name() const -> std::string
 {
     return name_;
 }

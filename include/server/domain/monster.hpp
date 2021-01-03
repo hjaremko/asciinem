@@ -18,8 +18,8 @@ public:
              move_strategy::pointer strategy =
                  std::make_shared<random_move_strategy>() );
 
-    auto get_attack() -> int override;
-    auto get_defense() -> int override;
+    [[nodiscard]] auto get_attack() const -> int override;
+    [[nodiscard]] auto get_defense() const -> int override;
 
     void set_strategy( const move_strategy::pointer& strategy );
 

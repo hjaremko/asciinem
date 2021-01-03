@@ -13,8 +13,10 @@ player::player( const std::string& name,
                 double amount,
                 std::set<item::pointer> backpack,
                 unsigned int backpack_capacity,
-                weapon::pointer weapon,
-                armor::pointer armor )
+                item::pointer weapon,
+                item::pointer armor )
+    //                weapon::pointer weapon,
+    //                armor::pointer armor )
     : entity( name, position, health, level ), money_( money( amount ) ),
       backpack_( std::move( backpack ) ),
       backpack_capacity_( backpack_capacity ), weapon_( std::move( weapon ) ),
@@ -75,16 +77,18 @@ void player::use( const armor::pointer& armor )
     }
 }
 
-auto player::get_attack() -> int
+auto player::get_attack() const -> int
 {
-    return this->get_level() + ( weapon_ ? weapon_->get_attack() : 0 );
+    //    return this->get_level() + ( weapon_ ? weapon_->get_attack() : 0 );
+    return this->get_level() + ( weapon_ ? 1 : 0 );
 }
 
-auto player::get_defense() -> int
+auto player::get_defense() const -> int
 {
     const double half = 0.5;
     return static_cast<int>( half * this->get_level() +
-                             ( armor_ ? armor_->get_defense() : 0 ) );
+                             ( armor_ ? 1 : 0 ) );
+//                             ( armor_ ? armor_->get_defense() : 0 ) );
 }
 
 auto player::get_backpack_capacity() const -> unsigned int
@@ -97,17 +101,19 @@ void player::set_backpack_capacity( unsigned int backpackCapacity )
     backpack_capacity_ = backpackCapacity;
 }
 
-auto player::get_weapon() const -> weapon::pointer
+// auto player::get_weapon() const -> weapon::pointer
+auto player::get_weapon() const -> item::pointer
 {
     return weapon_;
 }
 
-auto player::get_armor() const -> armor::pointer
+// auto player::get_armor() const -> armor::pointer
+auto player::get_armor() const -> item::pointer
 {
     return armor_;
 }
 
-auto player::get_backpack() const -> const std::set<item::pointer>&
+auto player::get_backpack() const -> std::set<item::pointer>
 {
     return backpack_;
 }

@@ -48,7 +48,7 @@ auto asio_connection::receive_data() -> types::msg
         return ss.str();
     };
 
-    constexpr const auto buffer_size = 2048;
+    constexpr const auto buffer_size = 2048 * 8;
     using buffer_type = std::array<char, buffer_size>;
 
     auto receive_from_socket =

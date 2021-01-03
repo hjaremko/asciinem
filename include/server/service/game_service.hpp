@@ -39,7 +39,7 @@ public:
 
     void logout( const std::string& login )
     {
-        auto player = game_.find_entity( login );
+        auto player = game_.get_state().find_player( login );
         game_.remove_player( player );
         // save_to_db( player );
     }

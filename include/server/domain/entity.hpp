@@ -15,8 +15,8 @@ public:
     entity() = default;
     virtual ~entity() = default;
 
-    virtual auto get_attack() -> int = 0;
-    virtual auto get_defense() -> int = 0;
+    [[nodiscard]] virtual auto get_attack() const -> int = 0;
+    [[nodiscard]] virtual auto get_defense() const -> int = 0;
     void die();
 
     [[nodiscard]] auto get_name() const -> std::string;
@@ -48,7 +48,6 @@ public:
 protected:
     entity( std::string name, position_type position, int health, int level );
 
-private:
     std::string name_;
     position_type position_;
     int health_ { 0 };
