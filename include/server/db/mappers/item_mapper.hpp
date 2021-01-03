@@ -75,11 +75,6 @@ public:
             "DELETE FROM items WHERE item_id = {};", item.get_id() );
         db_.run_query( delete_item );
 
-        //        const auto delete_from_backpack_query = fmt::format(
-        //            "DELETE FROM backpacks WHERE item_id = {};", item.get_id()
-        //            );
-        //        db_.run_query( delete_from_backpack_query );
-
         return true;
     }
 

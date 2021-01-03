@@ -1,6 +1,7 @@
 #ifndef ASCIINEM_SERVER_PLAYER_MAPPER_H
 #define ASCIINEM_SERVER_PLAYER_MAPPER_H
 
+#include "backpack_mapper.hpp"
 #include "item_mapper.hpp"
 #include "server/domain/player.hpp"
 
@@ -62,15 +63,9 @@ public:
                   : "NULL" ) );
         db_.run_query( insert_query );
 
-        for ( const auto& i : player.get_backpack() )
-        {
-            const auto query =
-                fmt::format( "INSERT INTO backpacks (player_login, item_id) "
-                             "VALUES ({}, {});",
-                             player.get_name(),
-                             i->get_id() );
-            //            db_.run_query( query ); //todo
-        }
+        auto bm = backpack_mapper( db_ );
+        bm.insert_player_backpack( player.get_name(), player.get_backpack() );
+
         return true;
     }
 
@@ -94,36 +89,18 @@ public:
                          player.get_name() );
         db_.run_query( update_query );
 
-        auto query =
-            fmt::format( "DELETE FROM backpacks WHERE player_login = \"{}\";",
-                         player.get_name() );
-        //        db_.run_query( query ); //todo
-
-        for ( const auto& i : player.get_backpack() )
-        {
-            query =
-                fmt::format( "INSERT OR IGNORE INTO backpacks (player_login, "
-                             "item_id) VALUES (\"{}\", {});",
-                             player.get_name(),
-                             i->get_id() );
-            //            db_.run_query( query ); //todo
-        }
+        auto bm = backpack_mapper( db_ );
+        bm.remove_all_for_player( player.get_name() );
+        bm.insert_player_backpack( player.get_name(), player.get_backpack() );
 
         return true;
     }
 
-    auto remove( const domain::player& player ) -> bool
+    auto remove( const domain::player& player ) -> void
     {
-        //        const auto delete_items_query =
-        //            "DELETE FROM backpacks WHERE player_login = " +
-        //            player.get_name() +
-        //            ";";
-        //        db_.run_query( delete_items_query );
-
         const auto delete_player_query = fmt::format(
             "DELETE FROM players WHERE login = \"{}\";", player.get_name() );
         db_.run_query( delete_player_query );
-        return true;
     }
 
     [[nodiscard]] auto record_to_player( types::record record ) const
@@ -190,6 +167,9 @@ public:
             armor = std::dynamic_pointer_cast<domain::armor>(
                 im.record_to_item( im.find_by_id( std::stoi( *armor_id ) ) ) );
         }
+
+        auto bm = backpack_mapper( db_ );
+        auto b = bm.get_backpack_for_player( *name );
 
         return std::make_shared<domain::player>(
             *name,

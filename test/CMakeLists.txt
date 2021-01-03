@@ -16,6 +16,7 @@ add_executable(server_tests
         server/network/queue_tests.cpp
         server/network/connection_manager_tests.cpp
         server/db/sqlite_tests.cpp
+        server/db/mappers/backpack_mapper_test.cpp
         server/db/mappers/player_mapper_test.cpp
         server/db/mappers/item_mapper_test.cpp
         server/domain/player_tests.cpp
