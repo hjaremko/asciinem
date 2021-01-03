@@ -1,6 +1,7 @@
 #include "server/network/asio_manager.hpp"
 
 #include "server/network/interfaces/subject.hpp"
+#include "server/service/request.hpp"
 
 namespace asciinem::server::network
 {
@@ -14,9 +15,9 @@ asio_manager::asio_manager( queue::pointer dl, queue::pointer up, subject& c )
 
 asio_manager::~asio_manager()
 {
-//    spdlog::trace(
-//        "Manager destructor waiting on a connection manager mutex..." );
-//    auto l = std::lock_guard<std::recursive_mutex> { mutex_ };
+    //    spdlog::trace(
+    //        "Manager destructor waiting on a connection manager mutex..." );
+    //    auto l = std::lock_guard<std::recursive_mutex> { mutex_ };
 
     for ( auto& [ c, poller ] : clients_ )
     {
@@ -32,6 +33,7 @@ void asio_manager::add_client( client_connection::pointer client )
     spdlog::trace( "Waiting on a connection manager mutex..." );
     auto l = std::lock_guard<std::recursive_mutex> { mutex_ };
 
+    auto login = client->id();
     auto poller = poll_client( client );
 
     spdlog::debug(
@@ -41,6 +43,8 @@ void asio_manager::add_client( client_connection::pointer client )
         std::make_pair( std::move( client ), std::move( poller ) ) );
 
     spdlog::debug( "Connected clients: {}", connected_players() );
+
+    this->downlink_->push( service::request::make_login_request( login ) );
 }
 
 void asio_manager::remove_client( types::id client_id )
@@ -55,10 +59,13 @@ void asio_manager::remove_client( types::id client_id )
         std::end( clients_ ),
         [ client_id ]( const auto& c ) { return c.first->id() == client_id; } );
 
+    auto login = to_remove->first->id();
     to_remove->second.detach(); // todo: ugly
     clients_.erase( to_remove );
 
     spdlog::debug( "Connected clients: {}", connected_players() );
+
+    this->downlink_->push( service::request::make_logout_request( login ) );
 }
 
 auto asio_manager::poll_client( const client_connection::pointer& c )

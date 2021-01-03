@@ -18,12 +18,12 @@ void entity::die()
     health_ = 0;
 }
 
-auto entity::get_name() const -> const std::string&
+auto entity::get_name() const -> std::string
 {
     return name_;
 }
 
-auto entity::get_position() const -> const std::pair<int, int>&
+auto entity::get_position() const -> position_type
 {
     return position_;
 }
@@ -43,7 +43,7 @@ void entity::set_name( const std::string& name )
     name_ = name;
 }
 
-void entity::set_position( const std::pair<int, int>& position )
+void entity::set_position( const position_type& position )
 {
     position_ = position;
 }

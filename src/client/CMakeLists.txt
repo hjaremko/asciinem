@@ -7,6 +7,7 @@ set(TARGET_SOURCES
         ${PROJECT_ROOT}/src/client/util.cpp
         ${PROJECT_ROOT}/src/server/network/message_queue.cpp
         ${PROJECT_ROOT}/src/server/network/asio_connection.cpp
+        ${PROJECT_ROOT}/src/server/domain/entity.cpp
         )
 
 add_executable(${PROJECT_NAME}

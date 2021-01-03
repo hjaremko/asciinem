@@ -8,7 +8,7 @@ namespace asciinem::server::domain
 {
 
 player::player( const std::string& name,
-                const std::pair<int, int>& position,
+                const entity::position_type& position,
                 int health,
                 int level,
                 std::set<item::pointer> backpack,
