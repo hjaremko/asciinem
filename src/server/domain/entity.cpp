@@ -58,4 +58,15 @@ void entity::level_up()
     level_++;
 }
 
+auto entity::operator==( const entity& rhs ) const -> bool
+{
+    return name_ == rhs.name_ && position_ == rhs.position_ &&
+           health_ == rhs.health_ && level_ == rhs.level_;
+}
+
+auto entity::operator!=( const entity& rhs ) const -> bool
+{
+    return !( rhs == *this );
+}
+
 } // namespace asciinem::server::domain

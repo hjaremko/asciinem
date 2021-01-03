@@ -5,8 +5,8 @@
 namespace asciinem::server::domain
 {
 
-item::item( std::string name, int value, int level )
-    : name_( std::move( name ) ), value_( value ), level_( level )
+item::item( int id, std::string name, int value, int level )
+    : id_( id ), name_( std::move( name ) ), value_( value ), level_( level )
 {
 }
 
@@ -50,6 +50,10 @@ auto operator==( const item& lhs, const item& rhs ) -> bool
 auto operator!=( const item& lhs, const item& rhs ) -> bool
 {
     return !( rhs == lhs );
+}
+auto item::get_id() const -> int
+{
+    return id_;
 }
 
 } // namespace asciinem::server::domain

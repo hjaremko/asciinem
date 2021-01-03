@@ -10,10 +10,15 @@ namespace asciinem::server::domain
 player::player( const std::string& name,
                 const std::pair<int, int>& position,
                 int health,
+                int level,
                 std::set<item::pointer> backpack,
-                unsigned int backpack_capacity )
-    : entity( name, position, health, 1 ), backpack_( std::move( backpack ) ),
-      backpack_capacity_( backpack_capacity )
+                unsigned int backpack_capacity,
+                weapon::pointer weapon,
+                armor::pointer armor )
+    : entity( name, position, health, level ),
+      backpack_( std::move( backpack ) ),
+      backpack_capacity_( backpack_capacity ), weapon_( std::move( weapon ) ),
+      armor_( std::move( armor ) )
 {
 }
 
@@ -45,9 +50,9 @@ void player::use( const weapon::pointer& weapon )
         if ( this->has( *weapon ) )
         {
             this->take_from_backpack( weapon );
-            if ( weapon_.has_value() )
+            if ( weapon_ )
             {
-                this->add_to_backpack( weapon_.value() );
+                this->add_to_backpack( weapon_ );
             }
         }
         weapon_ = weapon;
@@ -61,9 +66,9 @@ void player::use( const armor::pointer& armor )
         if ( this->has( *armor ) )
         {
             this->take_from_backpack( armor );
-            if ( armor_.has_value() )
+            if ( armor_ )
             {
-                this->add_to_backpack( armor_.value() );
+                this->add_to_backpack( armor_ );
             }
         }
         armor_ = armor;
@@ -72,14 +77,51 @@ void player::use( const armor::pointer& armor )
 
 auto player::get_attack() -> int
 {
-    return this->get_level() +
-           ( weapon_.has_value() ? weapon_.value()->get_attack() : 0 );
+    return this->get_level() + ( weapon_ ? weapon_->get_attack() : 0 );
 }
 
 auto player::get_defense() -> int
 {
-    return this->get_level() +
-           ( armor_.has_value() ? armor_.value()->get_defense() : 0 );
+    return this->get_level() + ( armor_ ? armor_->get_defense() : 0 );
+}
+
+auto player::get_backpack_capacity() const -> unsigned int
+{
+    return backpack_capacity_;
+}
+
+void player::set_backpack_capacity( unsigned int backpackCapacity )
+{
+    backpack_capacity_ = backpackCapacity;
+}
+
+auto player::get_weapon() const -> weapon::pointer
+{
+    return weapon_;
+}
+
+auto player::get_armor() const -> armor::pointer
+{
+    return armor_;
+}
+
+auto player::get_backpack() const -> const std::set<item::pointer>&
+{
+    return backpack_;
+}
+
+auto player::operator==( const player& rhs ) const -> bool
+{
+    return static_cast<const entity&>( *this ) ==
+               static_cast<const entity&>( rhs ) &&
+           coins == rhs.coins && backpack_ == rhs.backpack_ &&
+           backpack_capacity_ == rhs.backpack_capacity_ &&
+           weapon_ == rhs.weapon_ && armor_ == rhs.armor_;
+}
+
+auto player::operator!=( const player& rhs ) const -> bool
+{
+    return !( rhs == *this );
 }
 
 } // namespace asciinem::server::domain

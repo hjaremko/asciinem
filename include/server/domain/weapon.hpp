@@ -13,7 +13,8 @@ class weapon : public item
 public:
     using pointer = std::shared_ptr<weapon>;
 
-    explicit weapon( std::string name, int value, int level, int attack );
+    explicit weapon(
+        int id, std::string name, int value, int level, int attack );
 
     [[nodiscard]] auto get_attack() const -> int;
     void set_attack( int attack );
