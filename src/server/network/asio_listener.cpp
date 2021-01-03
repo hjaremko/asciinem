@@ -3,7 +3,8 @@
 namespace asciinem::server::network
 {
 
-asio_listener::asio_listener( types::port port, const connection_manager::pointer& manager )
+asio_listener::asio_listener( types::port port,
+                              const connection_manager::pointer& manager )
     : port_( port ), tcp_server_( port_, io_context_, manager )
 {
     start_listening_();

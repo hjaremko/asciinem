@@ -16,12 +16,12 @@ monster::monster( std::string name,
 {
 }
 
-auto monster::get_attack() -> int
+auto monster::get_attack() const -> int
 {
     return this->get_level();
 }
 
-auto monster::get_defense() -> int
+auto monster::get_defense() const -> int
 {
     const double half = 0.5;
     return static_cast<int>( half * this->get_level() );

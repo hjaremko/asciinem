@@ -151,12 +151,15 @@ public:
                                        } )
                              ->second;
 
-        domain::weapon::pointer weapon = nullptr;
+        auto weapon = domain::item::pointer {};
+
         if ( weapon_id )
         {
             auto im = item_mapper( db_ );
-            weapon = std::dynamic_pointer_cast<domain::weapon>(
-                im.record_to_item( im.find_by_id( std::stoi( *weapon_id ) ) ) );
+            weapon =
+                //                std::dynamic_pointer_cast<domain::weapon>(
+                im.record_to_item(
+                    im.find_by_id( std::stoi( *weapon_id ) ) ); //);
         }
 
         auto armor_id = std::find_if( std::begin( record ),
@@ -166,12 +169,15 @@ public:
                                       } )
                             ->second;
 
-        domain::armor::pointer armor = nullptr;
+        auto armor = domain::item::pointer {};
+
         if ( armor_id )
         {
             auto im = item_mapper( db_ );
-            armor = std::dynamic_pointer_cast<domain::armor>(
-                im.record_to_item( im.find_by_id( std::stoi( *armor_id ) ) ) );
+            armor =
+                //                std::dynamic_pointer_cast<domain::armor>(
+                im.record_to_item( im.find_by_id( std::stoi( *armor_id ) ) );
+            //                );
         }
 
         auto bm = backpack_mapper( db_ );

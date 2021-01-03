@@ -1,10 +1,7 @@
 #include "client/network/asio_network_module.hpp"
 #include "client/util.hpp"
-#include "server/domain/game_state.hpp"
-#include "server/serializer.hpp"
-
-#include <iostream>
-#include <ncurses.h>
+#include "client/view/consoles/ncurses.hpp"
+#include "client/view/main_window.hpp"
 
 auto make_move_request( char input ) -> std::string
 {
@@ -31,44 +28,33 @@ auto make_move_request( char input ) -> std::string
     return "invalid";
 }
 
-void print_entity( const asciinem::server::domain::entity::pointer& e )
-{
-    constexpr auto stats_offset = 10;
-    auto [ x, y ] = e->get_position();
-
-    mvprintw( y - 1, x, e->get_name().c_str() );
-    mvprintw( y - 1, x + stats_offset, "%d/100", e->get_health() );
-    mvprintw( y - 2, x + stats_offset, "Lv %d", e->get_level() );
-    mvprintw( y, x, "\\o/" );
-}
-
+template <class T>
 void init_basic_gui( asciinem::client::network::network_module& net,
-                     const std::string& login )
+                     const std::string& login,
+                     asciinem::client::view::main_window<T>& view )
 {
     using namespace std::chrono_literals;
 
-    initscr();
-    timeout( 1 );
-    noecho();
-
     while ( true )
     {
+        auto state = asciinem::server::domain::game_state {};
+        auto msg = std::string {};
+
         while ( net.has_message_available() )
         {
-            auto msg = net.poll_message();
-            auto state = asciinem::server::serializer::deserialize<
-                asciinem::server::domain::game_state>( msg );
-
-            clear();
-
-            for ( const auto& e : state.get_entities() )
-            {
-                print_entity( e );
-            }
+            msg = net.poll_message();
         }
 
-        refresh();
+        if ( !msg.empty() )
+        {
+            state = asciinem::server::serializer::deserialize<
+                asciinem::server::domain::game_state>( msg );
+
+            view.draw( state );
+        }
+
         auto input = getch();
+        refresh();
 
         if ( input == 'q' )
         {
@@ -85,8 +71,6 @@ void init_basic_gui( asciinem::client::network::network_module& net,
 
         std::this_thread::sleep_for( 1ms );
     }
-
-    endwin();
 }
 
 auto main( int argc, char** argv ) -> int
@@ -106,8 +90,9 @@ auto main( int argc, char** argv ) -> int
         auto net = network::asio_network_module {};
         net.establish( server_ip, server_port, login );
 
-        // -----------------------------------------------------------------------
-        init_basic_gui( net, login );
+        // ---------------------------------------------------------------------
+        auto view = view::main_window<view::console::ncurses> { login };
+        init_basic_gui( net, login, view );
     }
     catch ( std::exception& e )
     {

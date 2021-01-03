@@ -8,6 +8,11 @@ set(TARGET_SOURCES
         ${PROJECT_ROOT}/src/server/network/message_queue.cpp
         ${PROJECT_ROOT}/src/server/network/asio_connection.cpp
         ${PROJECT_ROOT}/src/server/domain/entity.cpp
+        ${PROJECT_ROOT}/src/server/domain/player.cpp
+        ${PROJECT_ROOT}/src/server/domain/item.cpp
+        ${PROJECT_ROOT}/src/server/domain/weapon.cpp
+        ${PROJECT_ROOT}/src/server/domain/armor.cpp
+        ${PROJECT_ROOT}/src/server/domain/util/money.cpp
         )
 
 add_executable(${PROJECT_NAME}

@@ -7,7 +7,13 @@ endif ()
 include_directories(${PROJECT_ROOT}/include)
 
 add_library(catch_main STATIC catch_main.cpp)
-target_link_libraries(catch_main PUBLIC CONAN_PKG::catch2 CONAN_PKG::spdlog CONAN_PKG::asio CONAN_PKG::gtest CONAN_PKG::sqlite3)
+target_link_libraries(catch_main PUBLIC
+        CONAN_PKG::catch2
+        CONAN_PKG::spdlog
+        CONAN_PKG::asio
+        CONAN_PKG::gtest
+        CONAN_PKG::sqlite3
+        CONAN_PKG::cereal)
 target_link_libraries(catch_main PRIVATE project_options)
 
 add_executable(server_tests

@@ -28,13 +28,12 @@ money::operator double() const
 
 money::operator int() const
 {
-    return static_cast<int>(m_money_);
+    return static_cast<int>( m_money_ );
 }
 
 void money::FIX()
 {
-    m_money_ =
-        ( m_money_ > 0.0 ? floor( m_money_) : ceil( m_money_) );
+    m_money_ = ( m_money_ > 0.0 ? floor( m_money_ ) : ceil( m_money_ ) );
 }
 
 auto money::operator+=( const money& m ) -> money&
@@ -84,6 +83,7 @@ auto operator*( const money& m, double d ) -> money
     temp.FIX();
     return temp;
 }
+
 auto operator*( double d, const money& m ) -> money
 {
     return ( m * d );

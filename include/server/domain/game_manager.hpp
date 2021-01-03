@@ -4,6 +4,8 @@
 #include "game_state.hpp"
 #include "player.hpp"
 
+#include <algorithm>
+
 namespace asciinem::server::domain
 {
 
@@ -18,7 +20,7 @@ public:
     void move_player( const std::string& login,
                       const entity::position_type& offset )
     {
-        auto player = find_entity( login );
+        auto player = current_state_.find_player( login );
         auto pos = player->get_position();
 
         pos.first += offset.first;
@@ -32,25 +34,21 @@ public:
         current_state_.get_entities().insert( player );
     }
 
-    void remove_player( const entity::pointer& player )
+    void remove_player( const player::pointer& player )
     {
-        current_state_.get_entities().erase( player );
-    }
+        auto& entities = current_state_.get_entities();
 
-    auto find_entity( const std::string& name ) -> entity::pointer
-    {
-        auto entities = current_state_.get_entities();
-        auto entity_it = std::find_if(
-            std::begin( entities ),
-            std::end( entities ),
-            [ name ]( const auto& e ) { return e->get_name() == name; } );
-
-        if ( entity_it == std::end( entities ) )
+        for ( auto it = entities.begin(); it != entities.end(); )
         {
-            throw std::runtime_error( "No such entity: " + name );
+            if ( ( *it )->get_name() == player->get_name() )
+            {
+                it = entities.erase( it );
+            }
+            else
+            {
+                ++it;
+            }
         }
-
-        return *entity_it;
     }
 
 private:
