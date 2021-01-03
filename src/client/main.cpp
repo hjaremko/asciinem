@@ -31,6 +31,17 @@ auto make_move_request( char input ) -> std::string
     return "invalid";
 }
 
+void print_entity( const asciinem::server::domain::entity::pointer& e )
+{
+    constexpr auto stats_offset = 10;
+    auto [ x, y ] = e->get_position();
+
+    mvprintw( y - 1, x, e->get_name().c_str() );
+    mvprintw( y - 1, x + stats_offset, "%d/100", e->get_health() );
+    mvprintw( y - 2, x + stats_offset, "Lv %d", e->get_level() );
+    mvprintw( y, x, "\\o/" );
+}
+
 void init_basic_gui( asciinem::client::network::network_module& net,
                      const std::string& login )
 {
@@ -50,14 +61,13 @@ void init_basic_gui( asciinem::client::network::network_module& net,
 
             clear();
 
-            for ( auto [ name, pos ] : state.players_positions_ )
+            for ( const auto& e : state.get_entities() )
             {
-                mvprintw( pos.first - 1, pos.second, name.c_str() );
-                mvprintw( pos.first, pos.second, "\\o/" );
+                print_entity( e );
             }
         }
-        refresh();
 
+        refresh();
         auto input = getch();
 
         if ( input == 'q' )
@@ -73,7 +83,7 @@ void init_basic_gui( asciinem::client::network::network_module& net,
                 login + " " + make_move_request( static_cast<char>( input ) ) );
         }
 
-        std::this_thread::sleep_for( 2ms );
+        std::this_thread::sleep_for( 1ms );
     }
 
     endwin();

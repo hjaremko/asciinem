@@ -30,6 +30,20 @@ public:
 
         spdlog::info( "Received request {} from {}", command, login );
 
+        if ( command == "login;" )
+        {
+            return request { [ this, login = login ]() {
+                game_.login( login );
+            } };
+        }
+
+        if ( command == "logout;" )
+        {
+            return request { [ this, login = login ]() {
+                game_.logout( login );
+            } };
+        }
+
         if ( command == "move_up;" )
         {
             return request { [ this, login = login ]() {
