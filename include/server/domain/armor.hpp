@@ -13,7 +13,8 @@ class armor : public item
 public:
     using pointer = std::shared_ptr<armor>;
 
-    explicit armor( std::string name, int value, int level, int defense );
+    explicit armor(
+        int id, std::string name, int value, int level, int defense );
 
     [[nodiscard]] auto get_defense() const -> int;
     void set_defense( int defense );

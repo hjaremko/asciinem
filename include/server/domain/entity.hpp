@@ -20,6 +20,9 @@ public:
 
     void level_up();
 
+    auto operator==( const entity& rhs ) const -> bool;
+    auto operator!=( const entity& rhs ) const -> bool;
+
 protected:
     entity( std::string name,
             std::pair<int, int> position,

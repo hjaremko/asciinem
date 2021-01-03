@@ -4,8 +4,8 @@
 namespace asciinem::server::domain
 {
 
-weapon::weapon( std::string name, int value, int level, int attack )
-    : item( std::move( name ), value, level ), attack_( attack )
+weapon::weapon( int id, std::string name, int value, int level, int attack )
+    : item( id, std::move( name ), value, level ), attack_( attack )
 {
 }
 

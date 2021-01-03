@@ -4,8 +4,8 @@
 namespace asciinem::server::domain
 {
 
-armor::armor( std::string name, int value, int level, int defense )
-    : item( std::move( name ), value, level ), defense_( defense )
+armor::armor( int id, std::string name, int value, int level, int defense )
+    : item( id, std::move( name ), value, level ), defense_( defense )
 {
 }
 
