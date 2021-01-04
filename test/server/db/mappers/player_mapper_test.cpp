@@ -22,7 +22,7 @@ void cleanup_db_file( const std::string& path )
 
 } // namespace
 
-TEST_CASE( "Create table players", "[db]" )
+TEST_CASE( "Create table players", "[server][db]" )
 {
     const auto db_name = "player_tests"s;
     const auto db_path = db_name + ".db";
@@ -31,8 +31,8 @@ TEST_CASE( "Create table players", "[db]" )
     db::player_mapper { db };
 
     const auto* query =
-        "INSERT INTO players (login, pos_x, pos_y, health, level, "
-        "backpack_capacity) VALUES (\"test\", 0, 0 , 1, 1, 1);";
+        "INSERT INTO players (login, pos_x, pos_y, health, level, money, "
+        "backpack_capacity) VALUES (\"test\", 0, 0 , 1, 1, 1, 1);";
     auto result = db.run_query( query );
 
     REQUIRE( !result.has_value() );
@@ -46,7 +46,7 @@ TEST_CASE( "Create table players", "[db]" )
     cleanup_db_file( db_path );
 }
 
-TEST_CASE( "Update table players", "[db]" )
+TEST_CASE( "Update table players", "[server][db]" )
 {
     const auto db_name = "player_tests"s;
     const auto db_path = db_name + ".db";
@@ -55,8 +55,8 @@ TEST_CASE( "Update table players", "[db]" )
     auto pm = db::player_mapper { db };
 
     const auto* query =
-        "INSERT INTO players (login, pos_x, pos_y, health, level, "
-        "backpack_capacity) VALUES (\"test\", 0, 0 , 1, 1, 1);";
+        "INSERT INTO players (login, pos_x, pos_y, health, level, money, "
+        "backpack_capacity) VALUES (\"test\", 0, 0 , 1, 1, 1, 1);";
     db.run_query( query );
 
     query = "SELECT * FROM players;";

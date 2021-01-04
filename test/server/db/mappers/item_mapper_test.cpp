@@ -21,7 +21,7 @@ void cleanup_db_file( const std::string& path )
 
 } // namespace
 
-TEST_CASE( "Create table items", "[db]" )
+TEST_CASE( "Create table items", "[server][db]" )
 {
     const auto db_name = "item_tests"s;
     const auto db_path = db_name + ".db";
@@ -43,7 +43,7 @@ TEST_CASE( "Create table items", "[db]" )
     cleanup_db_file( db_path );
 }
 
-TEST_CASE( "Update table items", "[db]" )
+TEST_CASE( "Update table items", "[server][db]" )
 {
     const auto db_name = "item_tests"s;
     const auto db_path = db_name + ".db";

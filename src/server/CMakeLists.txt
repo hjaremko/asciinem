@@ -9,6 +9,7 @@ set(TARGET_SOURCES
         domain/item.cpp
         domain/player.cpp
         domain/weapon.cpp
+        domain/util/money.cpp
         network/asio_connection.cpp
         network/asio_server.cpp
         network/asio_listener.cpp
