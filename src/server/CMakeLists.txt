@@ -7,6 +7,7 @@ set(TARGET_SOURCES
         domain/armor.cpp
         domain/entity.cpp
         domain/item.cpp
+        domain/location.cpp
         domain/monster.cpp
         domain/player.cpp
         domain/weapon.cpp

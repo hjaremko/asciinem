@@ -19,6 +19,7 @@ add_executable(server_tests
         server/db/mappers/backpack_mapper_test.cpp
         server/db/mappers/player_mapper_test.cpp
         server/db/mappers/item_mapper_test.cpp
+        server/domain/location_tests.cpp
         server/domain/player_tests.cpp
         server/domain/monster_tests.cpp
         ${PROJECT_ROOT}/src/server/network/asio_connection.cpp
@@ -30,6 +31,7 @@ add_executable(server_tests
         ${PROJECT_ROOT}/src/server/domain/armor.cpp
         ${PROJECT_ROOT}/src/server/domain/entity.cpp
         ${PROJECT_ROOT}/src/server/domain/item.cpp
+        ${PROJECT_ROOT}/src/server/domain/location.cpp
         ${PROJECT_ROOT}/src/server/domain/monster.cpp
         ${PROJECT_ROOT}/src/server/domain/player.cpp
         ${PROJECT_ROOT}/src/server/domain/weapon.cpp
