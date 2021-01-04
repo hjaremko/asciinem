@@ -13,7 +13,10 @@ public:
     using position_type = std::pair<int, int>;
 
     entity() = default;
+    virtual ~entity() = default;
 
+    virtual auto get_attack() -> int = 0;
+    virtual auto get_defense() -> int = 0;
     void die();
 
     [[nodiscard]] auto get_name() const -> std::string;

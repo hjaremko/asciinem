@@ -38,8 +38,8 @@ public:
     void use( const weapon::pointer& weapon );
     void use( const armor::pointer& armor );
 
-    auto get_attack() -> int;
-    auto get_defense() -> int;
+    auto get_attack() -> int override;
+    auto get_defense() -> int override;
     [[nodiscard]] auto get_money() const -> money;
     [[nodiscard]] auto get_backpack_capacity() const -> unsigned int;
     [[nodiscard]] auto get_weapon() const -> weapon::pointer;

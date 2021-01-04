@@ -7,8 +7,11 @@ set(TARGET_SOURCES
         domain/armor.cpp
         domain/entity.cpp
         domain/item.cpp
+        domain/monster.cpp
         domain/player.cpp
         domain/weapon.cpp
+        domain/strategies/random_move_strategy.cpp
+        domain/strategies/still_strategy.cpp
         domain/util/money.cpp
         network/asio_connection.cpp
         network/asio_server.cpp
