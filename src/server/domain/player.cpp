@@ -6,16 +6,16 @@
 
 namespace asciinem::server::domain
 {
-
 player::player( const std::string& name,
                 const entity::position_type& position,
                 int health,
                 int level,
+                double amount,
                 std::set<item::pointer> backpack,
                 unsigned int backpack_capacity,
                 weapon::pointer weapon,
                 armor::pointer armor )
-    : entity( name, position, health, level ),
+    : entity( name, position, health, level ), money_( money( amount ) ),
       backpack_( std::move( backpack ) ),
       backpack_capacity_( backpack_capacity ), weapon_( std::move( weapon ) ),
       armor_( std::move( armor ) )
@@ -114,7 +114,7 @@ auto player::operator==( const player& rhs ) const -> bool
 {
     return static_cast<const entity&>( *this ) ==
                static_cast<const entity&>( rhs ) &&
-           coins == rhs.coins && backpack_ == rhs.backpack_ &&
+           money_ == rhs.money_ && backpack_ == rhs.backpack_ &&
            backpack_capacity_ == rhs.backpack_capacity_ &&
            weapon_ == rhs.weapon_ && armor_ == rhs.armor_;
 }
@@ -122,6 +122,16 @@ auto player::operator==( const player& rhs ) const -> bool
 auto player::operator!=( const player& rhs ) const -> bool
 {
     return !( rhs == *this );
+}
+
+auto player::get_money() const -> money
+{
+    return money_;
+}
+
+void player::set_money( double amount )
+{
+    money_ = money( amount );
 }
 
 } // namespace asciinem::server::domain

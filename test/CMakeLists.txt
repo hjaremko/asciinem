@@ -31,6 +31,7 @@ add_executable(server_tests
         ${PROJECT_ROOT}/src/server/domain/item.cpp
         ${PROJECT_ROOT}/src/server/domain/player.cpp
         ${PROJECT_ROOT}/src/server/domain/weapon.cpp
+        ${PROJECT_ROOT}/src/server/domain/util/money.cpp
         )
 target_link_libraries(server_tests PRIVATE project_warnings project_options catch_main)
 

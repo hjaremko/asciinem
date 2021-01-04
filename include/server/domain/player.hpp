@@ -4,6 +4,7 @@
 #include "armor.hpp"
 #include "entity.hpp"
 #include "item.hpp"
+#include "util/money.hpp"
 #include "weapon.hpp"
 
 #include <optional>
@@ -21,6 +22,7 @@ public:
             const entity::position_type& position,
             int health,
             int level,
+            double amount,
             std::set<item::pointer> backpack,
             unsigned int backpack_capacity,
             weapon::pointer weapon = nullptr,
@@ -38,15 +40,18 @@ public:
 
     auto get_attack() -> int;
     auto get_defense() -> int;
+    [[nodiscard]] auto get_money() const -> money;
     [[nodiscard]] auto get_backpack_capacity() const -> unsigned int;
     [[nodiscard]] auto get_weapon() const -> weapon::pointer;
     [[nodiscard]] auto get_armor() const -> armor::pointer;
+
     [[nodiscard]] auto get_backpack() const -> const std::set<item::pointer>&;
 
+    void set_money( double amount );
     void set_backpack_capacity( unsigned int backpackCapacity );
 
 private:
-    int coins = 0; // todo change to money pattern
+    money money_;
     std::set<item::pointer> backpack_;
     unsigned int backpack_capacity_;
     weapon::pointer weapon_;

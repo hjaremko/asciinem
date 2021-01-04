@@ -30,52 +30,54 @@ public:
         db_.run_query( create_query );
     };
 
-    auto update_impl( const domain::item& item ) -> bool
+    auto update_impl( const domain::item& item ) -> void
     {
         const auto update_query = fmt::format(
             "UPDATE items SET name = \"{}\", value = {}, level = {}, "
             "defense = 0, attack = 0 WHERE item_id = {}",
             item.get_name(),
-            item.get_value(),
+            int( item.get_value() ),
             item.get_level(),
             item.get_id() );
         db_.run_query( update_query );
-
-        return true;
     }
 
-    auto update( const domain::item& item ) -> bool
+    auto update( const domain::item& item ) -> void
     {
-        return update_impl( item );
+        update_impl( item );
     }
 
-    auto update( const domain::weapon& weapon ) -> bool
+    auto update( const domain::weapon& weapon ) -> void
     {
         update_impl( weapon );
         db_.run_query(
-            fmt::format( "UPDATE items SET attack = {} WHERE item_id = {}",
+            fmt::format( "UPDATE items SET name = {}, value = {}, level = {}, "
+                         "attack = {} WHERE item_id = {}",
+                         weapon.get_name(),
+                         int( weapon.get_value() ),
+                         weapon.get_level(),
                          weapon.get_attack(),
                          weapon.get_id() ) );
-        return true;
     }
 
-    auto update( const domain::armor& armor ) -> bool
+    auto update( const domain::armor& armor ) -> void
     {
         update_impl( armor );
         db_.run_query(
-            fmt::format( "UPDATE items SET defense = {} WHERE item_id = {}",
+            fmt::format( "UPDATE items SET name = {}, value = {}, level = {}, "
+                         "defense = {} WHERE item_id = {}",
+                         armor.get_name(),
+                         int( armor.get_value() ),
+                         armor.get_level(),
                          armor.get_defense(),
                          armor.get_id() ) );
-        return true;
     }
 
-    auto remove( const domain::item& item ) -> bool
+    auto remove( const domain::item& item ) -> void
     {
         const auto delete_item = fmt::format(
             "DELETE FROM items WHERE item_id = {};", item.get_id() );
         db_.run_query( delete_item );
-
-        return true;
     }
 
     auto find_by_id( int item_id ) -> types::record
@@ -122,22 +124,27 @@ public:
 
         if ( defense )
         {
-            return std::make_shared<domain::armor>( std::stoi( *id ),
-                                                    *name,
-                                                    std::stoi( *value ),
-                                                    std::stoi( *level ),
-                                                    std::stoi( *defense ) );
+            return std::make_shared<domain::armor>(
+                std::stoi( *id ),
+                *name,
+                double( std::stoi( *value ) ) / domain::money::SCALE(),
+                std::stoi( *level ),
+                std::stoi( *defense ) );
         }
         if ( attack )
         {
-            return std::make_shared<domain::weapon>( std::stoi( *id ),
-                                                     *name,
-                                                     std::stoi( *value ),
-                                                     std::stoi( *level ),
-                                                     std::stoi( *attack ) );
+            return std::make_shared<domain::weapon>(
+                std::stoi( *id ),
+                *name,
+                double( std::stoi( *value ) ) / domain::money::SCALE(),
+                std::stoi( *level ),
+                std::stoi( *attack ) );
         }
-        return std::make_shared<domain::item>(
-            std::stoi( *id ), *name, std::stoi( *value ), std::stoi( *level ) );
+        return std::make_shared<domain::item>( std::stoi( *id ),
+                                               *name,
+                                               double( std::stoi( *value ) ) /
+                                                   domain::money::SCALE(),
+                                               std::stoi( *level ) );
     }
 
 private:

@@ -14,7 +14,7 @@ public:
     using pointer = std::shared_ptr<armor>;
 
     explicit armor(
-        int id, std::string name, int value, int level, int defense );
+        int id, std::string name, double value, int level, int defense );
 
     [[nodiscard]] auto get_defense() const -> int;
     void set_defense( int defense );

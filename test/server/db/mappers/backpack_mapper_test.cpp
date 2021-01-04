@@ -23,7 +23,7 @@ void cleanup_db_file( const std::string& path )
 
 } // namespace
 
-TEST_CASE( "Create table backpacks", "[db]" )
+TEST_CASE( "Create table backpacks", "[server][db]" )
 {
     const auto db_name = "backpack_test"s;
     const auto db_path = db_name + ".db";
@@ -47,7 +47,7 @@ TEST_CASE( "Create table backpacks", "[db]" )
     cleanup_db_file( db_path );
 }
 
-TEST_CASE( "Create and read backpack", "[db]" )
+TEST_CASE( "Create and read backpack", "[server][db]" )
 {
     const auto db_name = "player_tests"s;
     const auto db_path = db_name + ".db";
@@ -57,8 +57,8 @@ TEST_CASE( "Create and read backpack", "[db]" )
     auto bm = db::backpack_mapper { db };
 
     const auto* query =
-        "INSERT INTO players (login, pos_x, pos_y, health, level, "
-        "backpack_capacity) VALUES (\"test_user\", 0, 0 , 1, 1, 1);";
+        "INSERT INTO players (login, pos_x, pos_y, health, level, money, "
+        "backpack_capacity) VALUES (\"test_user\", 0, 0 , 1, 1, 1, 1);";
     db.run_query( query );
 
     query = "INSERT INTO items (item_id, name, value, level, defense, "

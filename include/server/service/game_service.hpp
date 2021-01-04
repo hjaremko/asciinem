@@ -30,6 +30,7 @@ public:
             domain::entity::position_type { 5, 5 },
             100,
             1,
+            0.,
             std::set<domain::item::pointer> {},
             2 );
 

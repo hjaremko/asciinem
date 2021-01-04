@@ -4,6 +4,7 @@
 #include "backpack_mapper.hpp"
 #include "item_mapper.hpp"
 #include "server/domain/player.hpp"
+#include "server/domain/util/money.hpp"
 
 #include <fmt/format.h>
 #include <memory>
@@ -26,7 +27,8 @@ public:
                                   "pos_x INT NOT NULL,"
                                   "pos_y INT NOT NULL,"
                                   "health INT NOT NULL,"
-                                  "level INT NOT NULL," // todo add coins
+                                  "level INT NOT NULL,"
+                                  "money INT NOT NULL,"
                                   "backpack_capacity INT NOT NULL,"
                                   "weapon_id INTEGER,"
                                   "armor_id INTEGER,"
@@ -42,11 +44,12 @@ public:
         db.run_query( create_query );
     };
 
-    auto insert( const domain::player& player ) -> bool
+    auto insert( const domain::player& player ) -> void
     {
         const auto insert_query = fmt::format(
             "INSERT INTO players (login, pos_x, pos_y, health, level, "
-            "backpack_capacity, weapon_id, armor_id) VALUES (\"{}\", {}, {}, "
+            "money, backpack_capacity, weapon_id, armor_id) VALUES (\"{}\", "
+            "{}, {}, "
             "{}, "
             "{}, {}, {}, {});",
             player.get_name(),
@@ -54,6 +57,7 @@ public:
             player.get_position().second,
             player.get_health(),
             player.get_level(),
+            int( player.get_money() ),
             player.get_backpack_capacity(),
             ( player.get_weapon()
                   ? fmt::to_string( player.get_weapon()->get_id() )
@@ -65,35 +69,32 @@ public:
 
         auto bm = backpack_mapper( db_ );
         bm.insert_player_backpack( player.get_name(), player.get_backpack() );
-
-        return true;
     }
 
-    auto update( const domain::player& player ) -> bool
+    auto update( const domain::player& player ) -> void
     {
-        const auto update_query =
-            fmt::format( "UPDATE players SET pos_x = {}, pos_y = {}, "
-                         "health = {}, level = {}, backpack_capacity = {}, "
-                         "weapon_id = {}, armor_id = {} WHERE login = \"{}\"; ",
-                         player.get_position().first,
-                         player.get_position().second,
-                         player.get_health(),
-                         player.get_level(),
-                         player.get_backpack_capacity(),
-                         ( player.get_weapon()
-                               ? fmt::to_string( player.get_weapon()->get_id() )
-                               : "NULL" ),
-                         ( player.get_armor()
-                               ? fmt::to_string( player.get_armor()->get_id() )
-                               : "NULL" ),
-                         player.get_name() );
+        const auto update_query = fmt::format(
+            "UPDATE players SET pos_x = {}, pos_y = {}, "
+            "health = {}, level = {}, money = {}, backpack_capacity = {}, "
+            "weapon_id = {}, armor_id = {} WHERE login = \"{}\"; ",
+            player.get_position().first,
+            player.get_position().second,
+            player.get_health(),
+            player.get_level(),
+            int( player.get_money() ),
+            player.get_backpack_capacity(),
+            ( player.get_weapon()
+                  ? fmt::to_string( player.get_weapon()->get_id() )
+                  : "NULL" ),
+            ( player.get_armor()
+                  ? fmt::to_string( player.get_armor()->get_id() )
+                  : "NULL" ),
+            player.get_name() );
         db_.run_query( update_query );
 
         auto bm = backpack_mapper( db_ );
         bm.remove_all_for_player( player.get_name() );
         bm.insert_player_backpack( player.get_name(), player.get_backpack() );
-
-        return true;
     }
 
     auto remove( const domain::player& player ) -> void
@@ -130,6 +131,11 @@ public:
             std::find_if( std::begin( record ),
                           std::end( record ),
                           []( const auto& p ) { return p.first == "level"; } )
+                ->second;
+        auto money =
+            std::find_if( std::begin( record ),
+                          std::end( record ),
+                          []( const auto& p ) { return p.first == "money"; } )
                 ->second;
         auto backpack_capacity =
             std::find_if(
@@ -176,6 +182,7 @@ public:
             std::make_pair( std::stoi( *pos_x ), std::stoi( *pos_y ) ),
             std::stoi( *health ),
             std::stoi( *level ),
+            double( std::stoi( *money ) ) / domain::money::SCALE(),
             std::set<domain::item::pointer> {},
             std::stoi( *backpack_capacity ),
             weapon,
