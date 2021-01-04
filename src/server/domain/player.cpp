@@ -82,7 +82,9 @@ auto player::get_attack() -> int
 
 auto player::get_defense() -> int
 {
-    return this->get_level() + ( armor_ ? armor_->get_defense() : 0 );
+    const double half = 0.5;
+    return static_cast<int>( half * this->get_level() +
+                             ( armor_ ? armor_->get_defense() : 0 ) );
 }
 
 auto player::get_backpack_capacity() const -> unsigned int

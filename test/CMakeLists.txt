@@ -20,6 +20,7 @@ add_executable(server_tests
         server/db/mappers/player_mapper_test.cpp
         server/db/mappers/item_mapper_test.cpp
         server/domain/player_tests.cpp
+        server/domain/monster_tests.cpp
         ${PROJECT_ROOT}/src/server/network/asio_connection.cpp
         ${PROJECT_ROOT}/src/server/network/asio_server.cpp
         ${PROJECT_ROOT}/src/server/network/asio_listener.cpp
@@ -29,9 +30,11 @@ add_executable(server_tests
         ${PROJECT_ROOT}/src/server/domain/armor.cpp
         ${PROJECT_ROOT}/src/server/domain/entity.cpp
         ${PROJECT_ROOT}/src/server/domain/item.cpp
+        ${PROJECT_ROOT}/src/server/domain/monster.cpp
         ${PROJECT_ROOT}/src/server/domain/player.cpp
         ${PROJECT_ROOT}/src/server/domain/weapon.cpp
         ${PROJECT_ROOT}/src/server/domain/util/money.cpp
+        ${PROJECT_ROOT}/src/server/domain/strategies/still_strategy.cpp
         )
 target_link_libraries(server_tests PRIVATE project_warnings project_options catch_main)
 
