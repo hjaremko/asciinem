@@ -1,8 +1,8 @@
 #include "server/domain/monster.hpp"
+#include "server/domain/strategies/still_strategy.hpp"
 
 #include <catch2/catch.hpp>
 #include <memory>
-#include <server/domain/strategies/still_strategy.hpp>
 
 using namespace asciinem::server::domain;
 
