@@ -9,6 +9,7 @@
 #include <cereal/types/unordered_set.hpp>
 #include <cereal/types/utility.hpp>
 #include <cereal/types/variant.hpp>
+#include <spdlog/spdlog.h>
 
 namespace asciinem::server::domain
 {

@@ -3,6 +3,7 @@
 
 #include "server/domain/entity.hpp"
 
+#include <client/controller/user_input.hpp>
 #include <ncurses.h>
 
 namespace asciinem::client::view::console
@@ -54,6 +55,11 @@ struct ncurses
             getmaxyx( ptr, y, x );
 
             return { x / 2, y / 2 };
+        }
+
+        [[nodiscard]] auto get_char() const -> user_input
+        {
+            return cast_to_user_input( wgetch( ptr ) );
         }
 
         WINDOW* ptr;
@@ -116,6 +122,11 @@ struct ncurses
         -> window_pointer
     {
         return std::make_unique<raw_window>( y, x, height, width );
+    }
+
+    static auto get_char() -> user_input
+    {
+        return cast_to_user_input( wgetch( stdscr ) );
     }
 };
 

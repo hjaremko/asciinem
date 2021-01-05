@@ -2,75 +2,7 @@
 #include "client/util.hpp"
 #include "client/view/util.hpp"
 
-auto make_move_request( char input ) -> std::string
-{
-    if ( input == 'w' )
-    {
-        return "move_up;";
-    }
-
-    if ( input == 's' )
-    {
-        return "move_down;";
-    }
-
-    if ( input == 'a' )
-    {
-        return "move_left;";
-    }
-
-    if ( input == 'd' )
-    {
-        return "move_right;";
-    }
-
-    return "invalid";
-}
-
-template <class T>
-void init_basic_gui( asciinem::client::network::network_module& net,
-                     const std::string& login,
-                     asciinem::client::view::main_window<T>& view )
-{
-    using namespace std::chrono_literals;
-
-    while ( true )
-    {
-        auto state = asciinem::server::domain::game_state {};
-        auto msg = std::string {};
-
-        while ( net.has_message_available() )
-        {
-            msg = net.poll_message();
-        }
-
-        if ( !msg.empty() )
-        {
-            state = asciinem::server::serializer::deserialize<
-                asciinem::server::domain::game_state>( msg );
-
-            view.draw( state );
-        }
-
-        auto input = getch();
-        asciinem::client::view::terminal_handler::refresh();
-
-        if ( input == 'q' )
-        {
-            spdlog::info( "Quitting." );
-            break;
-        }
-
-        if ( input != ERR )
-        {
-            spdlog::trace( "Pressed '{}'", input );
-            net.queue_message(
-                login + " " + make_move_request( static_cast<char>( input ) ) );
-        }
-
-        std::this_thread::sleep_for( 1ms );
-    }
-}
+#include <client/controller/game_controller.hpp>
 
 auto main( int argc, char** argv ) -> int
 {
@@ -91,7 +23,8 @@ auto main( int argc, char** argv ) -> int
 
         // ---------------------------------------------------------------------
         auto view = view::make_main_window( login );
-        init_basic_gui( net, login, view );
+        auto controller = game_controller( net, view, login );
+        controller.run();
     }
     catch ( std::exception& e )
     {
