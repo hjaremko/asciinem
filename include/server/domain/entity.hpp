@@ -28,18 +28,12 @@ public:
     void set_position( const position_type& position );
     void set_health( int health );
 
-    auto is_dead() const -> bool;
+    [[nodiscard]] auto is_dead() const -> bool;
     virtual void level_up();
     virtual void get_hurt( int damage );
 
     template <class Archive>
-    void save( Archive& ar ) const
-    {
-        ar( name_, position_, health_, level_ );
-    }
-
-    template <class Archive>
-    void load( Archive& ar )
+    void serialize( Archive& ar )
     {
         ar( name_, position_, health_, level_ );
     }

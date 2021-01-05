@@ -21,15 +21,9 @@ public:
     void set_attack( int attack );
 
     template <class Archive>
-    void save( Archive& ar ) const
+    void serialize( Archive& ar )
     {
-        ar( id_, name_, value_, level_, attack_ );
-    }
-
-    template <class Archive>
-    void load( Archive& ar )
-    {
-        ar( id_, name_, value_, level_, attack_ );
+        ar( cereal::virtual_base_class<item>( this ), attack_ );
     }
 
 private:
@@ -37,5 +31,7 @@ private:
 };
 
 } // namespace asciinem::server::domain
+
+CEREAL_REGISTER_TYPE( asciinem::server::domain::weapon )
 
 #endif // ASCIINEM_SERVER_WEAPON_H

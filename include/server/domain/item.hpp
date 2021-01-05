@@ -3,6 +3,7 @@
 
 #include "util/money.hpp"
 
+#include <cereal/types/polymorphic.hpp>
 #include <memory>
 #include <string>
 
@@ -20,7 +21,7 @@ public:
     item( item&& ) noexcept = delete;
     auto operator=( const item& ) -> item& = default;
     auto operator=( item&& ) noexcept -> item& = delete;
-    ~item() = default;
+    virtual ~item() = default;
 
     [[nodiscard]] auto get_name() const -> std::string;
     [[nodiscard]] auto get_value() const -> money;
@@ -36,13 +37,7 @@ public:
     friend auto operator!=( const item& lhs, const item& rhs ) -> bool;
 
     template <class Archive>
-    void save( Archive& ar ) const
-    {
-        ar( id_, name_, value_, level_ );
-    }
-
-    template <class Archive>
-    void load( Archive& ar )
+    void serialize( Archive& ar )
     {
         ar( id_, name_, value_, level_ );
     }
@@ -55,5 +50,7 @@ protected:
 };
 
 } // namespace asciinem::server::domain
+
+CEREAL_REGISTER_TYPE( asciinem::server::domain::item )
 
 #endif // ASCIINEM_SERVER_ITEM_H

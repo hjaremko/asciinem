@@ -40,13 +40,7 @@ public:
     auto operator/=( double ) -> money&;
 
     template <class Archive>
-    void save( Archive& ar ) const
-    {
-        ar( m_money_ );
-    }
-
-    template <class Archive>
-    void load( Archive& ar )
+    void serialize( Archive& ar )
     {
         ar( m_money_ );
     }
