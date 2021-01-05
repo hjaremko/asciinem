@@ -7,6 +7,7 @@
 #include "util/money.hpp"
 #include "weapon.hpp"
 
+#include <cereal/types/polymorphic.hpp>
 #include <cereal/types/set.hpp>
 #include <optional>
 #include <set>
@@ -97,5 +98,7 @@ private:
 };
 
 } // namespace asciinem::server::domain
+
+CEREAL_REGISTER_TYPE( asciinem::server::domain::player );
 
 #endif // ASCIINEM_SEVER_PLAYER_H
