@@ -41,7 +41,7 @@ public:
         }
         catch ( std::exception& e )
         {
-            spdlog::error( "Deserialization error: {}", e.what() );
+            spdlog::warn( "Deserialization error: {}", e.what() );
         }
 
         return tmp;

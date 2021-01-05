@@ -52,6 +52,11 @@ public:
         game_.move_player( login, { 1, 0 } );
     }
 
+    void tick()
+    {
+        game_.tick();
+    }
+
 private:
     domain::game_manager& game_;
 };

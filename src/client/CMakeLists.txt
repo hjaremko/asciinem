@@ -13,6 +13,7 @@ set(TARGET_SOURCES
         ${PROJECT_ROOT}/src/server/domain/weapon.cpp
         ${PROJECT_ROOT}/src/server/domain/armor.cpp
         ${PROJECT_ROOT}/src/server/domain/util/money.cpp
+        ${PROJECT_ROOT}/src/server/domain/monster.cpp
         )
 
 add_executable(${PROJECT_NAME}

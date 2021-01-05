@@ -2,13 +2,14 @@
 #define ASCIINEM_SERVER_GAME_STATE_HPP
 
 #include "entity.hpp"
+#include "monster.hpp"
 #include "player.hpp"
 
 #include <cereal/types/memory.hpp>
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/unordered_set.hpp>
 #include <cereal/types/utility.hpp>
-#include <cereal/types/variant.hpp>
+#include <utility>
 #include <spdlog/spdlog.h>
 
 namespace asciinem::server::domain
@@ -17,28 +18,39 @@ namespace asciinem::server::domain
 class game_state
 {
 public:
-    using entities_type = std::unordered_set<player::pointer>;
+    using players_type = std::unordered_set<player::pointer>;
+    using monsters_type = std::unordered_set<monster::pointer>;
 
     template <class Archive>
     void save( Archive& ar ) const
     {
-        ar( entities_ );
+        ar( entities_, monsters_ );
     }
 
     template <class Archive>
     void load( Archive& ar )
     {
-        ar( entities_ );
+        ar( entities_, monsters_ );
     }
 
-    auto get_entities() -> entities_type&
+    auto get_entities() -> players_type&
     {
         return entities_;
     }
 
-    [[nodiscard]] auto get_entities() const -> entities_type
+    [[nodiscard]] auto get_entities() const -> players_type
     {
         return entities_;
+    }
+
+    auto get_monsters() -> monsters_type&
+    {
+        return monsters_;
+    }
+
+    [[nodiscard]] auto get_monsters() const -> monsters_type
+    {
+        return monsters_;
     }
 
     [[nodiscard]] auto find_player( const std::string& name ) const
@@ -54,15 +66,30 @@ public:
         if ( entity_it == std::end( entities_ ) )
         {
             auto msg = fmt::format( "No such entity: {}", name );
-            spdlog::error( msg );
+            spdlog::warn( msg );
             return nullptr;
         }
 
         return *entity_it;
     }
 
+    void spawn_monsters()
+    {
+        constexpr auto amount = 1;
+
+        for ( int i = 0; i < amount; ++i )
+        {
+            monsters_.insert(
+                std::make_shared<monster>( "mob " + std::to_string( i ),
+                                           entity::position_type { 10, 10 },
+                                           150,
+                                           2 ) );
+        }
+    }
+
 private:
-    entities_type entities_;
+    players_type entities_;
+    monsters_type monsters_;
 };
 
 } // namespace asciinem::server::domain

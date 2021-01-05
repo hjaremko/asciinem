@@ -58,7 +58,32 @@ public:
         player_mapper_.update( *player );
     }
 
+    void tick()
+    {
+        ++ticks_;
+
+        if ( ticks_ % 10 == 0 )
+        {
+            update_monsters();
+        }
+
+        if ( ticks_ % 1000 == 0 )
+        {
+            current_state_.spawn_monsters();
+        }
+    }
+
 private:
+    void update_monsters()
+    {
+        for ( const auto& m : current_state_.get_monsters() )
+        {
+            auto [ mx, my ] = m->move();
+            auto [ x, y ] = m->get_position();
+            m->set_position( { x + mx, y + my } );
+        }
+    }
+
     using db_server = db::sqlite_connection;
     using db_type = db::database<db_server>;
 
@@ -67,6 +92,7 @@ private:
     db::item_mapper<db_type> item_mapper_ { db_ };
     db::player_mapper<db_type> player_mapper_ { db_ };
     //    db::backpack_mapper<db_type> backpack_mapper_ { db_ };
+    unsigned long long ticks_ { 0 };
 };
 
 } // namespace asciinem::server::domain
