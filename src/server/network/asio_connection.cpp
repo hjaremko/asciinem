@@ -83,7 +83,7 @@ void asio_connection::send_data( const types::msg& msg )
 {
     using server::network::server_config;
 
-    spdlog::debug( "Sending '{}' to {} at {}", msg, id(), ip() );
+    spdlog::trace( "Sending '{}' to {} at {}", msg, id(), ip() );
 
     asio::async_write(
         socket_,

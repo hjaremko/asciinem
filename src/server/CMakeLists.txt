@@ -20,6 +20,7 @@ set(TARGET_SOURCES
         network/asio_listener.cpp
         network/message_queue.cpp
         network/asio_manager.cpp
+        db/sqlite_connection.cpp
         )
 
 add_executable(${PROJECT_NAME}

@@ -102,10 +102,15 @@ public:
         auto result = db_.run_query( find_query );
         if ( result.has_value() )
         {
+            spdlog::debug( "Found player {} in the database!", login );
             auto record = *result->begin();
             return record_to_player( record );
         }
-        return std::make_shared<domain::player>(login);
+
+        spdlog::debug( "Player {} logged for the first time!", login );
+        auto player = std::make_shared<domain::player>( login );
+        insert( *player );
+        return player;
     }
 
     auto remove( const domain::player& player ) -> void
