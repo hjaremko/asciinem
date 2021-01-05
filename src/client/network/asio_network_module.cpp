@@ -78,8 +78,8 @@ auto asio_network_module::establish( const types::ip& ip,
         }
 
         auto response = send_login_request( c, login );
-        spdlog::info( "Server response: {}", response );
         response.pop_back();
+        spdlog::info( "Server response: {}", response );
 
         if ( response != "OK" )
         {
@@ -93,9 +93,10 @@ auto asio_network_module::establish( const types::ip& ip,
     //    catch ( login_failed_exception )
     //    {
     //    }
-    catch ( std::exception& )
+    catch ( std::exception& e )
     {
-        spdlog::error( "Failed connecting to server {}:{}", ip, port );
+        spdlog::error(
+            "Failed connecting to server {}:{}. Reason: ", ip, port, e.what() );
         return false;
     }
 
@@ -116,7 +117,7 @@ auto asio_network_module::split_merged_packets( const std::string& data )
     for ( auto line = std::string {};
           std::getline( buffer, line, server_config::PACKET_DELIM ); )
     {
-        packets.push_back( connection->id() + " " + line );
+        packets.push_back( line );
     }
 
     return packets;
@@ -125,7 +126,6 @@ auto asio_network_module::split_merged_packets( const std::string& data )
 auto asio_network_module::get_most_recent_packet( const std::string& data )
     -> std::optional<std::string>
 {
-
     auto packets = split_merged_packets( data );
 
     if ( auto p = std::find_if( std::rbegin( packets ),
@@ -162,7 +162,7 @@ void asio_network_module::start_receiving()
             }
         }
 
-        spdlog::info( "Server disconnected." );
+        spdlog::info( "Disconnected from server" );
         // todo: notify observer
     };
 

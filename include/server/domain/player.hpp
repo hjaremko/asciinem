@@ -100,6 +100,6 @@ private:
 
 } // namespace asciinem::server::domain
 
-CEREAL_REGISTER_TYPE( asciinem::server::domain::player );
+CEREAL_REGISTER_TYPE( asciinem::server::domain::player )
 
 #endif // ASCIINEM_SEVER_PLAYER_H
