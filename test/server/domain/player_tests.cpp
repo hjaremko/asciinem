@@ -29,7 +29,7 @@ TEST_CASE( "Backpack capacity", "[server][domain]" )
     REQUIRE_FALSE( p.has( *i_2 ) );
 }
 
-//TEST_CASE( "Player's armor", "[server][domain]" )
+// TEST_CASE( "Player's armor", "[server][domain]" )
 //{
 //    auto i_1 = std::make_shared<armor>( 1, "test1", 1, 1, 1 );
 //    auto i_2 = std::make_shared<armor>( 2, "test2", 1, 1, 2 );
@@ -58,7 +58,7 @@ TEST_CASE( "Backpack capacity", "[server][domain]" )
 //    REQUIRE( p.get_defense() == i_2->get_defense() );
 //}
 //
-//TEST_CASE( "Player's weapon", "[domain]" )
+// TEST_CASE( "Player's weapon", "[domain]" )
 //{
 //    auto i_1 = std::make_shared<weapon>( 1, "test1", 1, 1, 1 );
 //    auto i_2 = std::make_shared<weapon>( 2, "test2", 1, 1, 2 );
@@ -80,9 +80,20 @@ TEST_CASE( "Backpack capacity", "[server][domain]" )
 //    REQUIRE( p.get_defense() == 0 );
 //    REQUIRE( p.get_attack() == p.get_level() + i_2->get_attack() );
 //
-//    // the weapon doesn't change because i_3 has higher level than the players'
-//    p.use( i_3 );
-//    REQUIRE_FALSE( p.has( *i_2 ) );
-//    REQUIRE( p.get_defense() == 0 );
-//    REQUIRE( p.get_attack() == p.get_level() + i_2->get_attack() );
+//    // the weapon doesn't change because i_3 has higher level than the
+//    players' p.use( i_3 ); REQUIRE_FALSE( p.has( *i_2 ) ); REQUIRE(
+//    p.get_defense() == 0 ); REQUIRE( p.get_attack() == p.get_level() +
+//    i_2->get_attack() );
 //}
+
+TEST_CASE( "Player getting hur", "[server][domain]" )
+{
+    auto p = player( "name", { 1, 1 }, 100, 1, 1, {}, 0 ); // NOLINT
+    p.get_hurt( 10 );                                      // NOLINT
+
+    REQUIRE_FALSE( p.is_dead() );
+    REQUIRE( p.get_health() == 90 );
+
+    p.get_hurt( 100 ); // NOLINT
+    REQUIRE( p == player( "name" ) );
+}

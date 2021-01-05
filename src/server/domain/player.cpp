@@ -92,10 +92,9 @@ auto player::get_attack() const -> int
 
 auto player::get_defense() const -> int
 {
-    const double half = 0.5;
-    return static_cast<int>( half * this->get_level() +
+    return static_cast<int>( 0.5 * this->get_level() + // NOLINT
                              ( armor_ ? 1 : 0 ) );
-//                             ( armor_ ? armor_->get_defense() : 0 ) );
+    //                             ( armor_ ? armor_->get_defense() : 0 ) );
 }
 
 auto player::get_backpack_capacity() const -> unsigned int
@@ -154,6 +153,15 @@ void player::level_up()
     entity::level_up();
     backpack_capacity_++;
     money_ += money( 100. );
+}
+
+void player::get_hurt( int damage )
+{
+    entity::get_hurt( damage );
+    if ( is_dead() )
+    {
+        *this = player( name_ );
+    }
 }
 
 } // namespace asciinem::server::domain

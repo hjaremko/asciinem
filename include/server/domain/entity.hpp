@@ -18,7 +18,6 @@ public:
 
     [[nodiscard]] virtual auto get_attack() const -> int = 0;
     [[nodiscard]] virtual auto get_defense() const -> int = 0;
-    void die();
 
     [[nodiscard]] auto get_name() const -> std::string;
     [[nodiscard]] auto get_position() const -> position_type;
@@ -29,7 +28,9 @@ public:
     void set_position( const position_type& position );
     void set_health( int health );
 
+    auto is_dead() const -> bool;
     virtual void level_up();
+    virtual void get_hurt( int damage );
 
     template <class Archive>
     void save( Archive& ar ) const
