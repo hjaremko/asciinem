@@ -32,12 +32,12 @@ location::location( const std::string& map_filename,
     mapFileout.close();
 }
 
-auto location::get_map() -> std::vector<std::string>
+auto location::get_map() const -> std::vector<std::string>
 {
     return map_;
 }
 
-auto location::get_collision_map() -> std::vector<std::vector<bool>>&
+auto location::get_collision_map() const -> std::vector<std::vector<bool>>
 {
     return collision_map_;
 }
