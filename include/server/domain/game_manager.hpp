@@ -67,9 +67,9 @@ public:
             update_monsters();
         }
 
-        if ( ticks_ % 1000 == 0 )
+        if ( ticks_ % 1000 == 0 && current_state_.get_monsters().size() < 3 )
         {
-            current_state_.spawn_monsters();
+            current_state_.spawn_monster();
         }
     }
 

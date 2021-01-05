@@ -9,8 +9,8 @@
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/unordered_set.hpp>
 #include <cereal/types/utility.hpp>
-#include <utility>
 #include <spdlog/spdlog.h>
+#include <utility>
 
 namespace asciinem::server::domain
 {
@@ -73,18 +73,10 @@ public:
         return *entity_it;
     }
 
-    void spawn_monsters()
+    void spawn_monster()
     {
-        constexpr auto amount = 1;
-
-        for ( int i = 0; i < amount; ++i )
-        {
-            monsters_.insert(
-                std::make_shared<monster>( "mob " + std::to_string( i ),
-                                           entity::position_type { 10, 10 },
-                                           150,
-                                           2 ) );
-        }
+        monsters_.insert( std::make_shared<monster>(
+            "mob", entity::position_type { 10, 10 }, 150, 2 ) );
     }
 
 private:
