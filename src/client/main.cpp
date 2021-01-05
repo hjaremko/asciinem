@@ -1,7 +1,6 @@
 #include "client/network/asio_network_module.hpp"
 #include "client/util.hpp"
-#include "client/view/consoles/ncurses.hpp"
-#include "client/view/main_window.hpp"
+#include "client/view/util.hpp"
 
 auto make_move_request( char input ) -> std::string
 {
@@ -91,7 +90,7 @@ auto main( int argc, char** argv ) -> int
         net.establish( server_ip, server_port, login );
 
         // ---------------------------------------------------------------------
-        auto view = view::main_window<view::console::ncurses> { login };
+        auto view = view::make_main_window( login );
         init_basic_gui( net, login, view );
     }
     catch ( std::exception& e )

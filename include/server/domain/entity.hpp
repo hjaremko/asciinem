@@ -1,6 +1,7 @@
 #ifndef ASCIINEM_SERVER_ENTITY_H
 #define ASCIINEM_SERVER_ENTITY_H
 
+#include <cereal/types/polymorphic.hpp>
 #include <memory>
 #include <string>
 
@@ -54,5 +55,7 @@ protected:
     int level_ { 0 };
 };
 } // namespace asciinem::server::domain
+
+CEREAL_REGISTER_TYPE( asciinem::server::domain::entity );
 
 #endif // ASCIINEM_SERVER_ENTITY_H
