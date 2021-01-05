@@ -28,7 +28,7 @@ public:
     void set_position( const position_type& position );
     void set_health( int health );
 
-    void level_up();
+    virtual void level_up();
 
     template <class Archive>
     void save( Archive& ar ) const

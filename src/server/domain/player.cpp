@@ -6,6 +6,13 @@
 
 namespace asciinem::server::domain
 {
+
+player::player( const std::string& name )
+    : entity( name, { 0, 0 }, 100, 1 ), money_( 10. ), // NOLINT
+      backpack_( {} ), backpack_capacity_( 10 )        // NOLINT
+{
+}
+
 player::player( const std::string& name,
                 const entity::position_type& position,
                 int health,
@@ -140,6 +147,13 @@ auto player::get_money() const -> money
 void player::set_money( double amount )
 {
     money_ = money( amount );
+}
+
+void player::level_up()
+{
+    entity::level_up();
+    backpack_capacity_++;
+    money_ += money( 100. );
 }
 
 } // namespace asciinem::server::domain
