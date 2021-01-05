@@ -1,6 +1,4 @@
 #include "server/db/database.hpp"
-#include "server/db/mappers/backpack_mapper.hpp"
-#include "server/db/mappers/item_mapper.hpp"
 #include "server/db/mappers/player_mapper.hpp"
 #include "server/db/sqlite_connection.hpp"
 
@@ -52,21 +50,21 @@ TEST_CASE( "Create and read backpack", "[server][db]" )
     const auto db_name = "player_tests"s;
     const auto db_path = db_name + ".db";
     const auto db = db::database<db::sqlite_connection> { db_name };
-    db::item_mapper { db };   // to create the table items
-    db::player_mapper { db }; // to create the table players
+    auto im = db::item_mapper { db };   // to create the table items
+    auto pm = db::player_mapper { db }; // to create the table players
     auto bm = db::backpack_mapper { db };
 
-    const auto* query =
-        "INSERT INTO players (login, pos_x, pos_y, health, level, money, "
-        "backpack_capacity) VALUES (\"test_user\", 0, 0 , 1, 1, 1, 1);";
-    db.run_query( query );
+    auto op = domain::player( "test", { 0, 0 }, 1, 1, 1., {}, 1 );
+    pm.insert( op );
 
-    query = "INSERT INTO items (item_id, name, value, level, defense, "
-            "attack) VALUES (1, \"test\", 1, 1 , 1, 1);";
+    const auto* query =
+        "INSERT INTO items (item_id, name, value, level, defense, "
+        "attack) VALUES (1, \"test\", 1, 1 , 1, 1);";
     db.run_query( query );
 
     query = "INSERT INTO backpacks (player_login, item_id) "
             "VALUES (\"test_user\", 1)";
+    bm.insert_player_item( "test", im.record_to_item( im.find_by_id( 1 ) ) );
     db.run_query( query );
 
     auto backpack = bm.get_backpack_for_player( "test_user" );

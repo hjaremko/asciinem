@@ -56,6 +56,7 @@ void entity::set_health( int health )
 void entity::level_up()
 {
     level_++;
+    health_ += 25; // NOLINT
 }
 
 auto entity::operator==( const entity& rhs ) const -> bool

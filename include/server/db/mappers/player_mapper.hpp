@@ -49,9 +49,7 @@ public:
         const auto insert_query = fmt::format(
             "INSERT INTO players (login, pos_x, pos_y, health, level, "
             "money, backpack_capacity, weapon_id, armor_id) VALUES (\"{}\", "
-            "{}, {}, "
-            "{}, "
-            "{}, {}, {}, {});",
+            "{}, {}, {}, {}, {}, {}, {}, {});",
             player.get_name(),
             player.get_position().first,
             player.get_position().second,
@@ -95,6 +93,19 @@ public:
         auto bm = backpack_mapper( db_ );
         bm.remove_all_for_player( player.get_name() );
         bm.insert_player_backpack( player.get_name(), player.get_backpack() );
+    }
+
+    auto find( std::string login )
+    {
+        const auto find_query =
+            fmt::format( "SELECT * FROM players WHERE login = \"{}\";", login );
+        auto result = db_.run_query( find_query );
+        if ( result.has_value() )
+        {
+            auto record = *result->begin();
+            return record_to_player( record );
+        }
+        return std::make_shared<domain::player>(login);
     }
 
     auto remove( const domain::player& player ) -> void

@@ -4,7 +4,6 @@
 
 #include <catch2/catch.hpp>
 #include <filesystem>
-#include <server/db/mappers/item_mapper.hpp>
 
 using namespace asciinem::server;
 using namespace std::string_literals;
@@ -54,12 +53,10 @@ TEST_CASE( "Update table players", "[server][db]" )
     db::item_mapper { db }; // to create the table items
     auto pm = db::player_mapper { db };
 
-    const auto* query =
-        "INSERT INTO players (login, pos_x, pos_y, health, level, money, "
-        "backpack_capacity) VALUES (\"test\", 0, 0 , 1, 1, 1, 1);";
-    db.run_query( query );
+    auto op = domain::player( "test", { 0, 0 }, 1, 1, 1., {}, 1 );
+    pm.insert( op );
 
-    query = "SELECT * FROM players;";
+    const auto *query = "SELECT * FROM players;";
     auto result = db.run_query( query );
     auto record = *result->begin();
     auto p = pm.record_to_player( record );
@@ -77,6 +74,24 @@ TEST_CASE( "Update table players", "[server][db]" )
     auto p2 = pm.record_to_player( record );
 
     REQUIRE( *p == *p2 );
+
+    cleanup_db_file( db_path );
+}
+
+TEST_CASE( "Test find player", "[server][db]" )
+{
+    const auto db_name = "player_tests"s;
+    const auto db_path = db_name + ".db";
+    const auto db = db::database<db::sqlite_connection> { db_name };
+    db::item_mapper { db }; // to create the table items
+    auto pm = db::player_mapper { db };
+
+    auto op = domain::player( "test", { 0, 0 }, 1, 1, 1., {}, 1 );
+    pm.insert( op );
+
+    auto p = pm.find( "test" );
+
+    REQUIRE( op == *p );
 
     cleanup_db_file( db_path );
 }

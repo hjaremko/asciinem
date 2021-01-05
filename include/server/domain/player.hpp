@@ -19,6 +19,7 @@ class player : public entity
 public:
     using pointer = std::shared_ptr<player>;
 
+    explicit player( const std::string& name );
     player() = default;
     player( const std::string& name,
             const entity::position_type& position,
@@ -31,6 +32,8 @@ public:
             item::pointer armor = nullptr );
     //            weapon::pointer weapon = nullptr,
     //            armor::pointer armor = nullptr );
+
+    void level_up() override;
 
     auto operator==( const player& rhs ) const -> bool;
     auto operator!=( const player& rhs ) const -> bool;
