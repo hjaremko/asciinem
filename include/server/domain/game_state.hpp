@@ -22,13 +22,7 @@ public:
     using monsters_type = std::unordered_set<monster::pointer>;
 
     template <class Archive>
-    void save( Archive& ar ) const
-    {
-        ar( entities_, monsters_ );
-    }
-
-    template <class Archive>
-    void load( Archive& ar )
+    void serialize( Archive& ar )
     {
         ar( entities_, monsters_ );
     }

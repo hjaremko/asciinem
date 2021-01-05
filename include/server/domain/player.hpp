@@ -29,13 +29,11 @@ public:
             double amount,
             std::set<item::pointer> backpack,
             unsigned int backpack_capacity,
-            item::pointer weapon = nullptr,
-            item::pointer armor = nullptr );
-    //            weapon::pointer weapon = nullptr,
-    //            armor::pointer armor = nullptr );
+            weapon::pointer weapon = nullptr,
+            armor::pointer armor = nullptr );
 
     void level_up() override;
-    void get_hurt(int damage) override;
+    void get_hurt( int damage ) override;
 
     auto operator==( const player& rhs ) const -> bool;
     auto operator!=( const player& rhs ) const -> bool;
@@ -51,36 +49,17 @@ public:
     [[nodiscard]] auto get_defense() const -> int override;
     [[nodiscard]] auto get_money() const -> money;
     [[nodiscard]] auto get_backpack_capacity() const -> unsigned int;
-    [[nodiscard]] auto get_weapon() const -> item::pointer;
-    [[nodiscard]] auto get_armor() const -> item::pointer;
-    //    [[nodiscard]] auto get_weapon() const -> weapon::pointer;
-    //    [[nodiscard]] auto get_armor() const -> armor::pointer;
+    [[nodiscard]] auto get_weapon() const -> weapon::pointer;
+    [[nodiscard]] auto get_armor() const -> armor::pointer;
     [[nodiscard]] auto get_backpack() const -> std::set<item::pointer>;
 
     void set_money( double amount );
     void set_backpack_capacity( unsigned int );
 
     template <class Archive>
-    void save( Archive& ar ) const
+    void serialize( Archive& ar )
     {
-        ar( name_,
-            position_,
-            health_,
-            level_,
-            money_,
-            backpack_,
-            backpack_capacity_,
-            weapon_,
-            armor_ );
-    }
-
-    template <class Archive>
-    void load( Archive& ar )
-    {
-        ar( name_,
-            position_,
-            health_,
-            level_,
+        ar( cereal::virtual_base_class<entity>( this ),
             money_,
             backpack_,
             backpack_capacity_,
@@ -92,10 +71,8 @@ private:
     money money_;
     std::set<item::pointer> backpack_;
     unsigned int backpack_capacity_ { 0 };
-    //    weapon::pointer weapon_;
-    item::pointer weapon_;
-    //    armor::pointer armor_;
-    item::pointer armor_;
+    weapon::pointer weapon_;
+    armor::pointer armor_;
 };
 
 } // namespace asciinem::server::domain

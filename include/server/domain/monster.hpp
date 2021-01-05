@@ -32,13 +32,7 @@ public:
     auto move() -> entity::position_type;
 
     template <class Archive>
-    void save( Archive& ar ) const
-    {
-        ar( cereal::virtual_base_class<entity>( this ) );
-    }
-
-    template <class Archive>
-    void load( Archive& ar )
+    void serialize( Archive& ar )
     {
         ar( cereal::virtual_base_class<entity>( this ) );
     }
