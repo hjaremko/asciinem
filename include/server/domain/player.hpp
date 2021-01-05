@@ -35,6 +35,7 @@ public:
     //            armor::pointer armor = nullptr );
 
     void level_up() override;
+    void get_hurt(int damage) override;
 
     auto operator==( const player& rhs ) const -> bool;
     auto operator!=( const player& rhs ) const -> bool;

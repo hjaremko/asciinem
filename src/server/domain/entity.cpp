@@ -1,8 +1,7 @@
 #include "server/domain/entity.hpp"
 
 #include <utility>
-namespace asciinem::server::domain
-{
+using namespace asciinem::server::domain;
 
 entity::entity( std::string name,
                 std::pair<int, int> position,
@@ -11,11 +10,6 @@ entity::entity( std::string name,
     : name_( std::move( name ) ), position_( std::move( position ) ),
       health_( health ), level_( level )
 {
-}
-
-void entity::die()
-{
-    health_ = 0;
 }
 
 auto entity::get_name() const -> std::string
@@ -53,12 +47,6 @@ void entity::set_health( int health )
     health_ = health;
 }
 
-void entity::level_up()
-{
-    level_++;
-    health_ += 25; // NOLINT
-}
-
 auto entity::operator==( const entity& rhs ) const -> bool
 {
     return name_ == rhs.name_ && position_ == rhs.position_ &&
@@ -70,4 +58,19 @@ auto entity::operator!=( const entity& rhs ) const -> bool
     return !( rhs == *this );
 }
 
-} // namespace asciinem::server::domain
+auto entity::is_dead() const -> bool
+{
+    return health_ == 0;
+}
+
+void entity::level_up()
+{
+    level_++;
+    health_ += 25; // NOLINT
+}
+
+void entity::get_hurt( int damage )
+{
+    damage = std::max( damage - get_defense(), 0 );
+    health_ = std::max( health_ - damage, 0 );
+}
