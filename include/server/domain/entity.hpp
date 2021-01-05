@@ -57,6 +57,6 @@ protected:
 };
 } // namespace asciinem::server::domain
 
-CEREAL_REGISTER_TYPE( asciinem::server::domain::entity );
+CEREAL_REGISTER_TYPE( asciinem::server::domain::entity )
 
 #endif // ASCIINEM_SERVER_ENTITY_H

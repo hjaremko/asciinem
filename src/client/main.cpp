@@ -53,7 +53,7 @@ void init_basic_gui( asciinem::client::network::network_module& net,
         }
 
         auto input = getch();
-        refresh();
+        asciinem::client::view::terminal_handler::refresh();
 
         if ( input == 'q' )
         {

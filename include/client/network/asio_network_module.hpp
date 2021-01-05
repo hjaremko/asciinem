@@ -35,9 +35,9 @@ public:
 private:
     void start_receiving();
     void start_sending();
-    auto get_most_recent_packet( const std::string& data )
+    static auto get_most_recent_packet( const std::string& data )
         -> std::optional<std::string>;
-    auto split_merged_packets( const std::string& data )
+    static auto split_merged_packets( const std::string& data )
         -> std::vector<std::string>;
 
     server::network::message_queue dl;
