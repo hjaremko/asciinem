@@ -44,7 +44,16 @@ public:
             if ( e->get_name() != you->get_name() )
             {
                 auto pos = find_relative_pos( you_pos, e->get_position() );
-                print_entity( e, pos );
+                print_entity( e, pos, "\\o/" );
+            }
+        }
+
+        for ( const auto& e : state.get_monsters() )
+        {
+            if ( e->get_name() != you->get_name() )
+            {
+                auto pos = find_relative_pos( you_pos, e->get_position() );
+                print_entity( e, pos, "@" );
             }
         }
 
@@ -53,7 +62,8 @@ public:
 
 private:
     void print_entity( const asciinem::server::domain::entity::pointer& e,
-                       std::pair<int, int> pos )
+                       std::pair<int, int> pos,
+                       const std::string& look )
     {
         auto [ x, y ] = pos;
 
@@ -63,7 +73,7 @@ private:
             fmt::format( "Lv {} {}", e->get_level(), e->get_name() ) );
         //        this->raw_window.print(
         //            y + 1, x - 5, fmt::format( "{}/100", e->get_health() ) );
-        this->raw_window.print( y, x, "\\o/" );
+        this->raw_window.print( y, x, look.c_str() );
     }
 
     void print_you( std::pair<int, int> pos )

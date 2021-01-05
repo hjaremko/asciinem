@@ -34,6 +34,7 @@ public:
         }
 
         net_.queue_message( serializer::serialize( game_.get_state() ) );
+        game_.tick();
     }
 
 private:
