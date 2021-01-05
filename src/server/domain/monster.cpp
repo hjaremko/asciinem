@@ -8,6 +8,15 @@ namespace asciinem::server::domain
 
 monster::monster( std::string name,
                   asciinem::server::domain::entity::position_type position,
+                  int level,
+                  move_strategy::pointer strategy )
+    : entity( std::move( name ), position, level ),
+      strategy_( std::move( strategy ) )
+{
+}
+
+monster::monster( std::string name,
+                  asciinem::server::domain::entity::position_type position,
                   int health,
                   int level,
                   move_strategy::pointer strategy )

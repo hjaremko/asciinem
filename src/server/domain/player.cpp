@@ -8,8 +8,23 @@ namespace asciinem::server::domain
 {
 
 player::player( const std::string& name )
-    : entity( name, { 0, 0 }, 100, 1 ), money_( 10. ), // NOLINT
-      backpack_( {} ), backpack_capacity_( 10 )        // NOLINT
+    : entity( name, { 0, 0 }, 1 ), money_( 10. ), // NOLINT
+      backpack_( {} ), backpack_capacity_( 10 )   // NOLINT
+{
+}
+
+player::player( const std::string& name,
+                const entity::position_type& position,
+                int level,
+                double amount,
+                std::set<item::pointer> backpack,
+                unsigned int backpack_capacity,
+                weapon::pointer weapon,
+                armor::pointer armor )
+    : entity( name, position, level ), money_( money( amount ) ),
+      backpack_( std::move( backpack ) ),
+      backpack_capacity_( backpack_capacity ), weapon_( std::move( weapon ) ),
+      armor_( std::move( armor ) )
 {
 }
 
@@ -79,6 +94,14 @@ void player::use( const armor::pointer& armor )
             }
         }
         armor_ = armor;
+    }
+}
+
+void player::use( const health_potion::pointer& potion )
+{
+    if ( potion->get_level() <= this->get_level() )
+    {
+        health_ = std::min( health_ + potion->get_power(), get_max_health() );
     }
 }
 

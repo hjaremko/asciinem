@@ -7,6 +7,7 @@ set(TARGET_SOURCES
         domain/armor.cpp
         domain/collision_checker.cpp
         domain/entity.cpp
+        domain/health_potion.cpp
         domain/item.cpp
         domain/location.cpp
         domain/monster.cpp

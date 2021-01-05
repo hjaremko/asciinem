@@ -50,8 +50,8 @@ TEST_CASE( "Update table items", "[server][db]" )
     const auto db = db::database<db::sqlite_connection> { db_name };
     auto im = db::item_mapper { db };
 
-    const auto* query = "INSERT INTO items (name, value, level, defense, "
-                        "attack) VALUES (\"test\", 1, 1, 1, 1);";
+    const auto* query = "INSERT INTO items (name, value, level, power) VALUES "
+                        "(\"test\", 1, 1, 1);";
     db.run_query( query );
 
     query = "SELECT * FROM items;";

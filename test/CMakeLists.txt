@@ -38,6 +38,7 @@ add_executable(server_tests
         ${PROJECT_ROOT}/src/server/domain/armor.cpp
         ${PROJECT_ROOT}/src/server/domain/collision_checker.cpp
         ${PROJECT_ROOT}/src/server/domain/entity.cpp
+        ${PROJECT_ROOT}/src/server/domain/health_potion.cpp
         ${PROJECT_ROOT}/src/server/domain/item.cpp
         ${PROJECT_ROOT}/src/server/domain/location.cpp
         ${PROJECT_ROOT}/src/server/domain/monster.cpp

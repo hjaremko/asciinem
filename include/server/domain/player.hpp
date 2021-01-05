@@ -3,6 +3,7 @@
 
 #include "armor.hpp"
 #include "entity.hpp"
+#include "health_potion.hpp"
 #include "item.hpp"
 #include "util/money.hpp"
 #include "weapon.hpp"
@@ -22,6 +23,14 @@ public:
 
     explicit player( const std::string& name );
     player() = default;
+    player( const std::string& name,
+            const entity::position_type& position,
+            int level,
+            double amount,
+            std::set<item::pointer> backpack,
+            unsigned int backpack_capacity,
+            weapon::pointer weapon = nullptr,
+            armor::pointer armor = nullptr );
     player( const std::string& name,
             const entity::position_type& position,
             int health,
@@ -44,6 +53,7 @@ public:
 
     void use( const weapon::pointer& weapon );
     void use( const armor::pointer& armor );
+    void use( const health_potion::pointer& potion );
 
     [[nodiscard]] auto get_attack() const -> int override;
     [[nodiscard]] auto get_defense() const -> int override;
