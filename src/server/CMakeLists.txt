@@ -5,6 +5,7 @@ include_directories(${PROJECT_ROOT}/include/)
 set(TARGET_SOURCES
         util.cpp
         domain/armor.cpp
+        domain/collision_checker.cpp
         domain/entity.cpp
         domain/item.cpp
         domain/location.cpp

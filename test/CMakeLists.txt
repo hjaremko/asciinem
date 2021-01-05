@@ -25,6 +25,7 @@ add_executable(server_tests
         server/db/mappers/backpack_mapper_test.cpp
         server/db/mappers/player_mapper_test.cpp
         server/db/mappers/item_mapper_test.cpp
+        server/domain/collision_checker_tests.cpp
         server/domain/location_tests.cpp
         server/domain/player_tests.cpp
         server/domain/monster_tests.cpp
@@ -35,6 +36,7 @@ add_executable(server_tests
         ${PROJECT_ROOT}/src/server/network/asio_manager.cpp
         ${PROJECT_ROOT}/src/server/db/sqlite_connection.cpp
         ${PROJECT_ROOT}/src/server/domain/armor.cpp
+        ${PROJECT_ROOT}/src/server/domain/collision_checker.cpp
         ${PROJECT_ROOT}/src/server/domain/entity.cpp
         ${PROJECT_ROOT}/src/server/domain/item.cpp
         ${PROJECT_ROOT}/src/server/domain/location.cpp

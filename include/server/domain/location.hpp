@@ -13,8 +13,9 @@ public:
     location( const std::string& map_filename,
               const std::string& collision_map_filename );
 
-    [[nodiscard]] auto get_map() -> std::vector<std::string>;
-    [[nodiscard]] auto get_collision_map() -> std::vector<std::vector<bool>>&;
+    [[nodiscard]] auto get_map() const -> std::vector<std::string>;
+    [[nodiscard]] auto get_collision_map() const
+        -> std::vector<std::vector<bool>>;
 
 private:
     std::vector<std::string> map_;
