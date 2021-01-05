@@ -3,6 +3,9 @@
 
 #include "game_state.hpp"
 #include "player.hpp"
+#include "server/db/database.hpp"
+#include "server/db/mappers/player_mapper.hpp"
+#include "server/db/sqlite_connection.hpp"
 
 #include <algorithm>
 
@@ -29,13 +32,15 @@ public:
         player->set_position( pos );
     }
 
-    void add_player( const player::pointer& player )
+    void add_player( const std::string& login )
     {
+        auto player = player_mapper_.find( login );
         current_state_.get_entities().insert( player );
     }
 
-    void remove_player( const player::pointer& player )
+    void remove_player( const std::string& login )
     {
+        auto player = current_state_.find_player( login );
         auto& entities = current_state_.get_entities();
 
         for ( auto it = entities.begin(); it != entities.end(); )
@@ -49,10 +54,19 @@ public:
                 ++it;
             }
         }
+
+        player_mapper_.update( *player );
     }
 
 private:
+    using db_server = db::sqlite_connection;
+    using db_type = db::database<db_server>;
+
     game_state current_state_;
+    db_type db_ { "asciinem" };
+    db::item_mapper<db_type> item_mapper_ { db_ };
+    db::player_mapper<db_type> player_mapper_ { db_ };
+    //    db::backpack_mapper<db_type> backpack_mapper_ { db_ };
 };
 
 } // namespace asciinem::server::domain

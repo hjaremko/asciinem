@@ -24,24 +24,12 @@ public:
 
     void login( const std::string& login )
     {
-        // auto player = get_player_from_db( login );
-        auto player = std::make_shared<domain::player>(
-            login,
-            domain::entity::position_type { 5, 5 },
-            100,
-            1,
-            0.,
-            std::set<domain::item::pointer> {},
-            2 );
-
-        game_.add_player( player );
+        game_.add_player( login );
     }
 
     void logout( const std::string& login )
     {
-        auto player = game_.get_state().find_player( login );
-        game_.remove_player( player );
-        // save_to_db( player );
+        game_.remove_player( login );
     }
 
     void move_up( const std::string& login )
