@@ -40,7 +40,10 @@ private:
         this->raw_window.print(
             5, 4, fmt::format( "Level:   {}", you.get_level() ) );
         this->raw_window.print(
-            6, 4, fmt::format( "Gold:    {}", static_cast<double>( you.get_money() ) ) );
+            6,
+            4,
+            fmt::format( "Gold:    {}",
+                         static_cast<double>( you.get_money() ) ) );
         this->raw_window.print(
             7, 4, fmt::format( "Attack:  {}", you.get_attack() ) );
         this->raw_window.print(
@@ -49,11 +52,13 @@ private:
 
     void draw_bars( const server::domain::player& you ) const
     {
-        const auto max = 100;
-
-        this->raw_window.print(
-            10, 2, fmt::format( "Health {}/{}", you.get_health(), max ) );
-        draw_bar( 11, base::width() - 7, you.get_health(), max );
+        this->raw_window.print( 10,
+                                2,
+                                fmt::format( "Health {}/{}",
+                                             you.get_health(),
+                                             you.get_max_health() ) );
+        draw_bar(
+            11, base::width() - 7, you.get_health(), you.get_max_health() );
 
         const auto max_exp = 100;
 

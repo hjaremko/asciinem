@@ -8,7 +8,13 @@ entity::entity( std::string name,
                 int health,
                 int level )
     : name_( std::move( name ) ), position_( std::move( position ) ),
-      health_( health ), level_( level )
+      health_( health ), level_( level ) // NOLINT
+{
+}
+
+entity::entity( std::string name, std::pair<int, int> position, int level )
+    : name_( std::move( name ) ), position_( std::move( position ) ),
+      health_( 100 * level ), level_( level ) // NOLINT
 {
 }
 
@@ -25,6 +31,11 @@ auto entity::get_position() const -> position_type
 auto entity::get_health() const -> int
 {
     return health_;
+}
+
+auto entity::get_max_health() const -> int
+{
+    return 100 * level_; // NOLINT
 }
 
 auto entity::get_level() const -> int
@@ -66,7 +77,7 @@ auto entity::is_dead() const -> bool
 void entity::level_up()
 {
     level_++;
-    health_ += 25; // NOLINT
+    health_ = std::min( health_ + 25, get_max_health() ); // NOLINT
 }
 
 void entity::get_hurt( int damage )

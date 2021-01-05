@@ -22,6 +22,7 @@ public:
     [[nodiscard]] auto get_name() const -> std::string;
     [[nodiscard]] auto get_position() const -> position_type;
     [[nodiscard]] auto get_health() const -> int;
+    [[nodiscard]] auto get_max_health() const -> int;
     [[nodiscard]] auto get_level() const -> int;
 
     void set_name( const std::string& name );
@@ -43,6 +44,7 @@ public:
 
 protected:
     entity( std::string name, position_type position, int health, int level );
+    entity( std::string name, position_type position, int level );
 
     std::string name_;
     position_type position_;

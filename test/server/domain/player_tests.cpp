@@ -8,7 +8,7 @@ using namespace asciinem::server::domain;
 TEST_CASE( "Basic use of the backpack", "[server][domain]" )
 {
     auto i = std::make_shared<weapon>( 1, "test", 1, 1, 1 );
-    auto p = player( "name", { 1, 1 }, 1, 1, 1, {}, 1 );
+    auto p = player( "name", { 1, 1 }, 1, 1, {}, 1 );
 
     REQUIRE_FALSE( p.has( *i ) );
     p.add_to_backpack( i );
@@ -21,7 +21,7 @@ TEST_CASE( "Backpack capacity", "[server][domain]" )
 {
     auto i_1 = std::make_shared<armor>( 1, "test1", 1, 1, 1 );
     auto i_2 = std::make_shared<weapon>( 2, "test2", 1, 1, 1 );
-    auto p = player( "name", { 1, 1 }, 1, 1, 1, {}, 1 );
+    auto p = player( "name", { 1, 1 }, 1, 1, {}, 1 );
 
     p.add_to_backpack( i_1 );
     REQUIRE( p.has( *i_1 ) );
@@ -89,7 +89,7 @@ TEST_CASE( "Player's weapon", "[domain]" ) // NOLINT
 
 TEST_CASE( "Player getting hur", "[server][domain]" )
 {
-    auto p = player( "name", { 1, 1 }, 100, 1, 1, {}, 0 ); // NOLINT
+    auto p = player( "name", { 1, 1 }, 1, 1, {}, 0 ); // NOLINT
     p.get_hurt( 10 );                                      // NOLINT
 
     REQUIRE_FALSE( p.is_dead() );

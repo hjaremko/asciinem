@@ -12,7 +12,6 @@ TEST_CASE( "Create monster", "[server][domain]" )
     const double half = 0.5;
     auto m = std::make_unique<monster>( "test_monster",
                                         std::pair<int, int>( 0, 0 ),
-                                        1,
                                         level,
                                         std::make_shared<still_strategy>() );
 

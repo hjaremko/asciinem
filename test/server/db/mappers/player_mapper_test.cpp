@@ -53,10 +53,10 @@ TEST_CASE( "Update table players", "[server][db]" )
     db::item_mapper { db }; // to create the table items
     auto pm = db::player_mapper { db };
 
-    auto op = domain::player( "test", { 0, 0 }, 1, 1, 1., {}, 1 );
+    auto op = domain::player( "test", { 0, 0 }, 1, 1., {}, 1 );
     pm.insert( op );
 
-    const auto *query = "SELECT * FROM players;";
+    const auto* query = "SELECT * FROM players;";
     auto result = db.run_query( query );
     auto record = *result->begin();
     auto p = pm.record_to_player( record );
@@ -86,7 +86,7 @@ TEST_CASE( "Test find player", "[server][db]" )
     db::item_mapper { db }; // to create the table items
     auto pm = db::player_mapper { db };
 
-    auto op = domain::player( "test", { 0, 0 }, 1, 1, 1., {}, 1 );
+    auto op = domain::player( "test", { 0, 0 }, 1, 1., {}, 1 );
     pm.insert( op );
 
     auto p = pm.find( "test" );

@@ -2,6 +2,7 @@
 #define ASCIINEM_SERVER_ITEM_MAPPER_H
 
 #include "server/domain/armor.hpp"
+#include "server/domain/health_potion.hpp"
 #include "server/domain/item.hpp"
 #include "server/domain/weapon.hpp"
 
@@ -25,16 +26,17 @@ public:
             "name VARCHAR(50) NOT NULL,"
             "value INT NOT NULL,"
             "level INT NOT NULL,"
-            "defense INT NOT NULL,"
-            "attack INT NOT NULL);"s;
+            "defense INT,"
+            "attack INT,"
+            "power INT);"s;
         db_.run_query( create_query );
     };
 
     auto update_impl( const domain::item& item ) -> void
     {
         const auto update_query = fmt::format(
-            "UPDATE items SET name = \"{}\", value = {}, level = {}, "
-            "defense = 0, attack = 0 WHERE item_id = {}",
+            "UPDATE items SET name = \"{}\", value = {}, level = {} "
+            "WHERE item_id = {}",
             item.get_name(),
             int( item.get_value() ),
             item.get_level(),
@@ -73,6 +75,18 @@ public:
                          armor.get_id() ) );
     }
 
+    auto update( const domain::health_potion& potion ) -> void
+    {
+        update_impl( potion );
+        db_.run_query( fmt::format( "UPDATE items SET name = {}, value = {}, "
+                                    "level = {}, power = {} WHERE item_id = {}",
+                                    potion.get_name(),
+                                    int( potion.get_value() ),
+                                    potion.get_level(),
+                                    potion.get_power(),
+                                    potion.get_id() ) );
+    }
+
     auto remove( const domain::item& item ) -> void
     {
         const auto delete_item = fmt::format(
@@ -105,6 +119,7 @@ public:
         auto level = get_column_value( "level" );
         auto defense = get_column_value( "defense" );
         auto attack = get_column_value( "attack" );
+        auto power = get_column_value( "power" );
 
         if ( defense )
         {
@@ -124,6 +139,16 @@ public:
                 double( std::stoi( *value ) ) / domain::money::SCALE(),
                 std::stoi( *level ),
                 std::stoi( *attack ) );
+        }
+
+        if ( power )
+        {
+            return std::make_shared<domain::health_potion>(
+                std::stoi( *id ),
+                *name,
+                double( std::stoi( *value ) ) / domain::money::SCALE(),
+                std::stoi( *level ),
+                std::stoi( *power ) );
         }
 
         return std::make_shared<domain::item>( std::stoi( *id ),
