@@ -31,8 +31,25 @@ public:
         new_position.first += offset.first;
         new_position.second += offset.second;
 
-        if ( !collision_checker::check_collision(
-                 new_position, current_state_.get_location() ) )
+        auto monster_collision = false;
+        for ( const auto& m : current_state_.get_monsters() )
+        {
+            if ( collision_checker::check_collision(
+                     new_position,
+                     static_cast<int>( player->get_shape().length() ),
+                     m->get_position(),
+                     static_cast<int>( m->get_shape().length() ) ) )
+            {
+                monster_collision = true;
+                break;
+            }
+        }
+
+        if ( !monster_collision &&
+             !collision_checker::check_collision(
+                 new_position,
+                 static_cast<int>( player->get_shape().length() ),
+                 current_state_.get_location() ) )
         {
             player->set_position( new_position );
         }
@@ -138,7 +155,7 @@ public:
     {
         ++ticks_;
 
-        if ( ticks_ % 100 == 0 )
+        if ( ticks_ % 70 == 0 )
         {
             move_monsters();
         }
@@ -148,7 +165,7 @@ public:
             current_state_.spawn_monster( { 18, 10 } );
         }
 
-        if ( ticks_ % 1000 == 0 )
+        if ( ticks_ % 800 == 0 )
         {
             current_state_.clear_notice();
         }
@@ -163,8 +180,25 @@ private:
             auto [ x, y ] = m->get_position();
             auto new_position = entity::position_type { x + mx, y + my };
 
-            if ( !collision_checker::check_collision(
-                     new_position, current_state_.get_location() ) )
+            auto entity_collision = false;
+            for ( const auto& e : current_state_.get_entities() )
+            {
+                if ( collision_checker::check_collision(
+                         new_position,
+                         static_cast<int>( m->get_shape().length() ),
+                         e->get_position(),
+                         static_cast<int>( e->get_shape().length() ) ) )
+                {
+                    entity_collision = true;
+                    break;
+                }
+            }
+
+            if ( !entity_collision &&
+                 !collision_checker::check_collision(
+                     new_position,
+                     static_cast<int>( m->get_shape().length() ),
+                     current_state_.get_location() ) )
             {
                 m->set_position( new_position );
             }
@@ -174,8 +208,23 @@ private:
     static auto is_near( const entity::pointer& first,
                          const entity::pointer& second ) -> bool
     {
-        auto dist_x =
-            abs( first->get_position().first - second->get_position().first );
+        auto dist_x = 0;
+
+        auto a = first->get_position().first;
+        auto b = a + static_cast<int>( first->get_shape().length() ) - 1;
+
+        auto c = second->get_position().first;
+        auto d = c + static_cast<int>( second->get_shape().length() ) - 1;
+
+        if ( b < c )
+        {
+            dist_x = abs( b - c );
+        }
+        else if ( d < a )
+        {
+            dist_x = abs( d - a );
+        }
+
         auto dist_y =
             abs( first->get_position().second - second->get_position().second );
 
