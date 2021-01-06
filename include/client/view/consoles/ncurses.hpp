@@ -80,6 +80,28 @@ struct ncurses
             return x;
         }
 
+        void set_bold() const
+        {
+            ::wattron( ptr, A_BOLD );
+        }
+
+        void set_red() const
+        {
+            ::wattron( ptr, COLOR_PAIR( 1 ) );
+        }
+
+        void set_yellow() const
+        {
+            ::wattron( ptr, COLOR_PAIR( 2 ) );
+        }
+
+        void set_normal() const
+        {
+            ::wattroff( ptr, COLOR_PAIR( 1 ) );
+            ::wattroff( ptr, COLOR_PAIR( 2 ) );
+            wattrset( ptr, 0 );
+        }
+
         WINDOW* ptr;
     };
 
@@ -91,6 +113,9 @@ struct ncurses
         timeout( 1 );
         noecho();
         curs_set( 0 );
+        ::start_color();
+        init_pair( 1, COLOR_RED, COLOR_BLACK );
+        init_pair( 2, COLOR_YELLOW, COLOR_BLACK );
     }
 
     ncurses( const ncurses& ) = default;

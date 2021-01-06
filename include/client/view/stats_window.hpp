@@ -57,24 +57,45 @@ private:
                                 fmt::format( "Health {}/{}",
                                              you.get_health(),
                                              you.get_max_health() ) );
-        draw_bar(
+        draw_red_bar(
             11, base::width() - 7, you.get_health(), you.get_max_health() );
 
         this->raw_window.print(
             12,
             2,
             fmt::format( "Exp {}/{}", you.get_exp(), 100 * you.get_level() ) );
-        draw_bar( 13, base::width() - 7, you.get_exp(), 100 * you.get_level() );
+        draw_yellow_bar(
+            13, base::width() - 7, you.get_exp(), 100 * you.get_level() );
     }
 
-    void draw_bar( int y, int bars, int value, int max ) const
+    void draw_red_bar( int y, int bars, int value, int max ) const
     {
         auto percent = static_cast<double>( value ) / max;
         auto filled_bars = static_cast<unsigned long>( bars * percent );
 
+        this->raw_window.set_red();
         this->raw_window.print(
-            y, 4, std::string( static_cast<unsigned long>( bars ), '.' ) );
+            y, 4, std::string( static_cast<unsigned long>( bars ), '|' ) );
+
+        this->raw_window.set_bold();
         this->raw_window.print( y, 4, std::string( filled_bars, '|' ) );
+
+        this->raw_window.set_normal();
+    }
+
+    void draw_yellow_bar( int y, int bars, int value, int max ) const
+    {
+        auto percent = static_cast<double>( value ) / max;
+        auto filled_bars = static_cast<unsigned long>( bars * percent );
+
+        this->raw_window.set_yellow();
+        this->raw_window.print(
+            y, 4, std::string( static_cast<unsigned long>( bars ), '|' ) );
+
+        this->raw_window.set_bold();
+        this->raw_window.print( y, 4, std::string( filled_bars, '|' ) );
+
+        this->raw_window.set_normal();
     }
 };
 

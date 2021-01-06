@@ -60,6 +60,13 @@ public:
         raw_window.print( y, 0, "+" + std::string( width() - 1, '-' ) + "+" );
     }
 
+    template <class... Args>
+    void print( int y, int x, const std::string& format, Args&&... args )
+    {
+        raw_window.print(
+            y, x, fmt::format( format, std::forward<Args>( args )... ) );
+    }
+
 protected:
     typename Console::raw_window raw_window; // NOLINT
 
