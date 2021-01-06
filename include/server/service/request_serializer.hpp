@@ -72,6 +72,13 @@ public:
             } };
         }
 
+        if ( command == "fight;" )
+        {
+            return request { [ this, login = login ]() {
+                game_.fight( login );
+            } };
+        }
+
         spdlog::warn( "Invalid request `{}` from {}", command, login );
         return std::nullopt;
     }

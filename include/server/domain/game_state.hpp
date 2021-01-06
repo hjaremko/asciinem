@@ -5,6 +5,7 @@
 #include "location.hpp"
 #include "monster.hpp"
 #include "player.hpp"
+#include "strategies/still_strategy.hpp"
 
 #include <cereal/types/memory.hpp>
 #include <cereal/types/unordered_map.hpp>
@@ -25,7 +26,7 @@ public:
     template <class Archive>
     void serialize( Archive& ar )
     {
-        ar( entities_, monsters_, map_ );
+        ar( entities_, monsters_, map_, notice_ );
     }
 
     auto get_entities() -> players_type&
@@ -48,6 +49,26 @@ public:
         return monsters_;
     }
 
+    auto get_notice() -> std::string&
+    {
+        return notice_;
+    }
+
+    [[nodiscard]] auto get_notice() const -> std::string
+    {
+        return notice_;
+    }
+
+    void set_notice( const std::string& notice )
+    {
+        notice_ = notice;
+    }
+
+    void clear_notice()
+    {
+        notice_ = "";
+    }
+
     [[nodiscard]] auto find_player( const std::string& name ) const
         -> player::pointer
     {
@@ -61,7 +82,7 @@ public:
         if ( entity_it == std::end( entities_ ) )
         {
             auto msg = fmt::format( "No such entity: {}", name );
-            spdlog::warn( msg );
+            spdlog::debug( msg );
             return nullptr;
         }
 
@@ -70,7 +91,7 @@ public:
 
     void spawn_monster( entity::position_type where )
     {
-        monsters_.insert( std::make_shared<monster>( "mob", where, 150, 2 ) );
+        monsters_.insert( std::make_shared<monster>( "mob", where, 150, 1 ) );
     }
 
     [[nodiscard]] auto get_map() const -> std::vector<std::string>
@@ -87,6 +108,7 @@ private:
     players_type entities_;
     monsters_type monsters_;
     location map_ { "map1.txt", "map1_collisions.txt" };
+    std::string notice_;
 };
 
 } // namespace asciinem::server::domain

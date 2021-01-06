@@ -52,6 +52,13 @@ public:
         game_.move_player( login, { 1, 0 } );
     }
 
+    void fight( const std::string& login )
+    {
+        spdlog::warn( "Starting fight in game service" );
+        game_.fight( login );
+        spdlog::warn( "End of fight in game service" );
+    }
+
     void tick()
     {
         game_.tick();

@@ -72,13 +72,13 @@ protected:
         else if ( input != user_input::INVALID )
         {
             spdlog::trace( "Pressed '{}'", input );
-            net_.queue_message( login_ + " " + make_move_request( input ) );
+            net_.queue_message( login_ + " " + make_action_request( input ) );
         }
 
         return input;
     }
 
-    auto make_move_request( view::console::user_input input ) -> std::string
+    auto make_action_request( view::console::user_input input ) -> std::string
     {
         using namespace view::console;
 
@@ -95,6 +95,9 @@ protected:
 
         case user_input::RIGHT:
             return "move_right;";
+
+        case user_input::FIGHT:
+            return "fight;";
 
         default:
             return "invalid";

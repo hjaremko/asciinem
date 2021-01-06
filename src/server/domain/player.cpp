@@ -8,20 +8,21 @@ namespace asciinem::server::domain
 {
 
 player::player( const std::string& name )
-    : entity( name, { 28, 26 }, 1 ), money_( 10. ), // NOLINT
-      backpack_( {} ), backpack_capacity_( 10 )     // NOLINT
+    : entity( name, { 28, 26 }, 1 ), exp_( 0 ), money_( 10. ), // NOLINT
+      backpack_( {} ), backpack_capacity_( 10 )                // NOLINT
 {
 }
 
 player::player( const std::string& name,
                 const entity::position_type& position,
                 int level,
+                int exp,
                 double amount,
                 std::set<item::pointer> backpack,
                 unsigned int backpack_capacity,
                 weapon::pointer weapon,
                 armor::pointer armor )
-    : entity( name, position, level ), money_( money( amount ) ),
+    : entity( name, position, level ), exp_( exp ), money_( money( amount ) ),
       backpack_( std::move( backpack ) ),
       backpack_capacity_( backpack_capacity ), weapon_( std::move( weapon ) ),
       armor_( std::move( armor ) )
@@ -32,13 +33,14 @@ player::player( const std::string& name,
                 const entity::position_type& position,
                 int health,
                 int level,
+                int exp,
                 double amount,
                 std::set<item::pointer> backpack,
                 unsigned int backpack_capacity,
                 weapon::pointer weapon,
                 armor::pointer armor )
-    : entity( name, position, health, level ), money_( money( amount ) ),
-      backpack_( std::move( backpack ) ),
+    : entity( name, position, health, level ), exp_( exp ),
+      money_( money( amount ) ), backpack_( std::move( backpack ) ),
       backpack_capacity_( backpack_capacity ), weapon_( std::move( weapon ) ),
       armor_( std::move( armor ) )
 {
@@ -107,13 +109,12 @@ void player::use( const health_potion::pointer& potion )
 
 auto player::get_attack() const -> int
 {
-    return this->get_level() + ( weapon_ ? weapon_->get_attack() : 0 );
+    return 2 * this->get_level() + ( weapon_ ? weapon_->get_attack() : 0 );
 }
 
 auto player::get_defense() const -> int
 {
-    return static_cast<int>( 0.5 * this->get_level() + // NOLINT
-                             ( armor_ ? armor_->get_defense() : 0 ) );
+    return this->get_level() + ( armor_ ? armor_->get_defense() : 0 );
 }
 
 auto player::get_backpack_capacity() const -> unsigned int
@@ -160,6 +161,22 @@ auto player::get_money() const -> money
     return money_;
 }
 
+auto player::get_exp() const -> int
+{
+    return exp_;
+}
+
+auto player::gain_exp( int exp ) -> bool
+{
+    exp_ += exp;
+    if ( exp_ > 100 * level_ ) // NOLINT
+    {
+        level_up();
+        return true;
+    }
+    return false;
+}
+
 void player::set_money( double amount )
 {
     money_ = money( amount );
@@ -170,15 +187,12 @@ void player::level_up()
     entity::level_up();
     backpack_capacity_++;
     money_ += money( 100. );
+    exp_ = 0;
 }
 
-void player::get_hurt( int damage )
+void player::reset()
 {
-    entity::get_hurt( damage );
-    if ( is_dead() )
-    {
-        *this = player( name_ );
-    }
+    *this = player( name_ );
 }
 
 } // namespace asciinem::server::domain

@@ -26,6 +26,7 @@ public:
     player( const std::string& name,
             const entity::position_type& position,
             int level,
+            int exp,
             double amount,
             std::set<item::pointer> backpack,
             unsigned int backpack_capacity,
@@ -35,6 +36,7 @@ public:
             const entity::position_type& position,
             int health,
             int level,
+            int exp,
             double amount,
             std::set<item::pointer> backpack,
             unsigned int backpack_capacity,
@@ -42,7 +44,7 @@ public:
             armor::pointer armor = nullptr );
 
     void level_up() override;
-    void get_hurt( int damage ) override;
+    void reset();
 
     auto operator==( const player& rhs ) const -> bool;
     auto operator!=( const player& rhs ) const -> bool;
@@ -57,12 +59,14 @@ public:
 
     [[nodiscard]] auto get_attack() const -> int override;
     [[nodiscard]] auto get_defense() const -> int override;
+    [[nodiscard]] auto get_exp() const -> int;
     [[nodiscard]] auto get_money() const -> money;
     [[nodiscard]] auto get_backpack_capacity() const -> unsigned int;
     [[nodiscard]] auto get_weapon() const -> weapon::pointer;
     [[nodiscard]] auto get_armor() const -> armor::pointer;
     [[nodiscard]] auto get_backpack() const -> std::set<item::pointer>;
 
+    auto gain_exp( int exp ) -> bool;
     void set_money( double amount );
     void set_backpack_capacity( unsigned int );
 
@@ -70,6 +74,7 @@ public:
     void serialize( Archive& ar )
     {
         ar( cereal::virtual_base_class<entity>( this ),
+            exp_,
             money_,
             backpack_,
             backpack_capacity_,
@@ -78,6 +83,7 @@ public:
     }
 
 private:
+    int exp_ { 0 };
     money money_;
     std::set<item::pointer> backpack_;
     unsigned int backpack_capacity_ { 0 };

@@ -10,6 +10,7 @@ enum class user_input
     DOWN,
     LEFT,
     RIGHT,
+    FIGHT,
     QUIT,
     INVALID
 };
@@ -26,6 +27,8 @@ auto cast_to_user_input( int c ) -> user_input
         return user_input::LEFT;
     case 'd':
         return user_input::RIGHT;
+    case 'f':
+        return user_input::FIGHT;
     case 'q':
         return user_input::QUIT;
     default:

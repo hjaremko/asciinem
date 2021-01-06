@@ -31,7 +31,7 @@ public:
 
     [[nodiscard]] auto is_dead() const -> bool;
     virtual void level_up();
-    virtual void get_hurt( int damage );
+    void get_hurt( int damage );
 
     template <class Archive>
     void serialize( Archive& ar )

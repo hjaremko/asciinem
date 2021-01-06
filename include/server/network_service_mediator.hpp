@@ -29,8 +29,6 @@ public:
             {
                 ( *request )();
             }
-            // request_handler_.add_request(request);
-            // -> service.handle(req) -> req.execute();
         }
 
         net_.queue_message( serializer::serialize( game_.get_state() ) );

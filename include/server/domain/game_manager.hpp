@@ -2,6 +2,7 @@
 #define ASCIINEM_SERVER_GAME_MANAGER_HPP
 
 #include "collision_checker.hpp"
+#include "fight_manager.hpp"
 #include "game_state.hpp"
 #include "player.hpp"
 #include "server/db/database.hpp"
@@ -37,6 +38,59 @@ public:
         }
     }
 
+    void fight( const std::string& login )
+    {
+        auto player = current_state_.find_player( login );
+        auto monsters = current_state_.get_monsters();
+
+        for ( const auto& m : monsters )
+        {
+            if ( is_near( player, m ) )
+            {
+                spdlog::warn(
+                    fmt::format( "Player {} got in a fight with monster {}",
+                                 player->get_name(),
+                                 m->get_name() ) );
+
+                fight_manager::fight( *player, *m );
+
+                if ( m->is_dead() )
+                {
+                    auto exp = 15 * m->get_level(); // NOLINT
+                    auto level_up = player->gain_exp( exp );
+
+                    if ( level_up )
+                    {
+                        spdlog::warn( "Player won" );
+                        current_state_.set_notice( fmt::format(
+                            "Player {} has won a fight and leveled up!",
+                            login,
+                            exp ) );
+                    }
+                    else
+                    {
+                        spdlog::warn( "Player won" );
+                        current_state_.set_notice( fmt::format(
+                            "Player {} has won a fight and gained {} EXP!",
+                            login,
+                            exp ) );
+                    }
+                }
+                else
+                {
+                    spdlog::warn( "Player lost" );
+                    current_state_.set_notice( fmt::format(
+                        "Player {} has lost a fight! Respawning...", login ) );
+                    player->reset();
+                }
+
+                break;
+            }
+        }
+
+        remove_dead_monsters();
+    }
+
     void add_player( const std::string& login )
     {
         auto player = player_mapper_.find( login );
@@ -63,23 +117,45 @@ public:
         player_mapper_.update( *player );
     }
 
+    void remove_dead_monsters()
+    {
+        auto& monsters = current_state_.get_monsters();
+
+        for ( auto it = monsters.begin(); it != monsters.end(); )
+        {
+            if ( ( *it )->is_dead() )
+            {
+                it = monsters.erase( it );
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+
     void tick()
     {
         ++ticks_;
 
-        if ( ticks_ % 10 == 0 )
+        if ( ticks_ % 100 == 0 )
         {
-            update_monsters();
+            move_monsters();
         }
 
         if ( ticks_ % 1000 == 0 && current_state_.get_monsters().size() < 3 )
         {
             current_state_.spawn_monster( { 18, 10 } );
         }
+
+        if ( ticks_ % 1000 == 0 )
+        {
+            current_state_.clear_notice();
+        }
     }
 
 private:
-    void update_monsters()
+    void move_monsters()
     {
         for ( const auto& m : current_state_.get_monsters() )
         {
@@ -93,6 +169,17 @@ private:
                 m->set_position( new_position );
             }
         }
+    }
+
+    static auto is_near( const entity::pointer& first,
+                         const entity::pointer& second ) -> bool
+    {
+        auto dist_x =
+            abs( first->get_position().first - second->get_position().first );
+        auto dist_y =
+            abs( first->get_position().second - second->get_position().second );
+
+        return dist_x <= 1 && dist_y <= 1;
     }
 
     using db_server = db::sqlite_connection;

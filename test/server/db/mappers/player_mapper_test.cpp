@@ -30,8 +30,8 @@ TEST_CASE( "Create table players", "[server][db]" )
     db::player_mapper { db };
 
     const auto* query =
-        "INSERT INTO players (login, pos_x, pos_y, health, level, money, "
-        "backpack_capacity) VALUES (\"test\", 0, 0 , 1, 1, 1, 1);";
+        "INSERT INTO players (login, pos_x, pos_y, health, level, exp, money, "
+        "backpack_capacity) VALUES (\"test\", 0, 0 , 1, 1, 0, 1, 1);";
     auto result = db.run_query( query );
 
     REQUIRE( !result.has_value() );
@@ -53,7 +53,7 @@ TEST_CASE( "Update table players", "[server][db]" )
     db::item_mapper { db }; // to create the table items
     auto pm = db::player_mapper { db };
 
-    auto op = domain::player( "test", { 0, 0 }, 1, 1., {}, 1 );
+    auto op = domain::player( "test", { 0, 0 }, 1, 0, 1., {}, 1 );
     pm.insert( op );
 
     const auto* query = "SELECT * FROM players;";
@@ -86,7 +86,7 @@ TEST_CASE( "Test find player", "[server][db]" )
     db::item_mapper { db }; // to create the table items
     auto pm = db::player_mapper { db };
 
-    auto op = domain::player( "test", { 0, 0 }, 1, 1., {}, 1 );
+    auto op = domain::player( "test", { 0, 0 }, 1, 0, 1., {}, 1 );
     pm.insert( op );
 
     auto p = pm.find( "test" );
