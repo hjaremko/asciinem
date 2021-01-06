@@ -9,7 +9,7 @@ namespace asciinem::server::domain
 
 player::player( const std::string& name )
     : entity( name, "\\o>", { 28, 26 }, 1 ), exp_( 0 ), money_( 10. ), // NOLINT
-      backpack_( {} ), backpack_capacity_( 10 )                        // NOLINT
+      backpack_( {} ), backpack_capacity_( 5 )                         // NOLINT
 {
 }
 
@@ -24,8 +24,9 @@ player::player( const std::string& name,
                 armor::pointer armor )
     : entity( name, "\\o>", position, level ), exp_( exp ),
       money_( money( amount ) ), backpack_( std::move( backpack ) ),
-      backpack_capacity_( backpack_capacity ), weapon_( std::move( weapon ) ),
-      armor_( std::move( armor ) )
+      backpack_capacity_( std::min(
+          backpack_capacity, static_cast<unsigned int>( 10 ) ) ), // NOLINT
+      weapon_( std::move( weapon ) ), armor_( std::move( armor ) )
 {
 }
 
@@ -41,8 +42,9 @@ player::player( const std::string& name,
                 armor::pointer armor )
     : entity( name, "\\o>", position, health, level ), exp_( exp ),
       money_( money( amount ) ), backpack_( std::move( backpack ) ),
-      backpack_capacity_( backpack_capacity ), weapon_( std::move( weapon ) ),
-      armor_( std::move( armor ) )
+      backpack_capacity_( std::min(
+          backpack_capacity, static_cast<unsigned int>( 10 ) ) ), // NOLINT
+      weapon_( std::move( weapon ) ), armor_( std::move( armor ) )
 {
 }
 
@@ -67,46 +69,6 @@ auto player::has( const item& item ) -> bool
            backpack_.end();
 }
 
-void player::use( const weapon::pointer& weapon )
-{
-    if ( weapon->get_level() <= this->get_level() )
-    {
-        if ( this->has( *weapon ) )
-        {
-            this->take_from_backpack( weapon );
-            if ( weapon_ )
-            {
-                this->add_to_backpack( weapon_ );
-            }
-        }
-        weapon_ = weapon;
-    }
-}
-
-void player::use( const armor::pointer& armor )
-{
-    if ( armor->get_level() <= this->get_level() )
-    {
-        if ( this->has( *armor ) )
-        {
-            this->take_from_backpack( armor );
-            if ( armor_ )
-            {
-                this->add_to_backpack( armor_ );
-            }
-        }
-        armor_ = armor;
-    }
-}
-
-void player::use( const health_potion::pointer& potion )
-{
-    if ( potion->get_level() <= this->get_level() )
-    {
-        health_ = std::min( health_ + potion->get_power(), get_max_health() );
-    }
-}
-
 auto player::get_attack() const -> int
 {
     return 2 * this->get_level() + ( weapon_ ? weapon_->get_attack() : 0 );
@@ -124,7 +86,8 @@ auto player::get_backpack_capacity() const -> unsigned int
 
 void player::set_backpack_capacity( unsigned int backpackCapacity )
 {
-    backpack_capacity_ = backpackCapacity;
+    backpack_capacity_ =
+        std::min( backpackCapacity, static_cast<unsigned int>( 10 ) ); // NOLINT
 }
 
 auto player::get_weapon() const -> weapon::pointer
@@ -185,7 +148,10 @@ void player::set_money( double amount )
 void player::level_up()
 {
     entity::level_up();
-    backpack_capacity_++;
+    if ( level_ % 4 )
+    {
+        backpack_capacity_++;
+    }
     money_ += money( 100. );
     exp_ = 0;
 }
@@ -193,6 +159,21 @@ void player::level_up()
 void player::reset()
 {
     *this = player( name_ );
+}
+
+void player::gain_health( int health )
+{
+    health_ = std::min( health_ + health, get_max_health() );
+}
+
+void player::set_weapon( const weapon::pointer& weapon )
+{
+    weapon_ = weapon;
+}
+
+void player::set_armor( const armor::pointer& armor )
+{
+    armor_ = armor;
 }
 
 } // namespace asciinem::server::domain

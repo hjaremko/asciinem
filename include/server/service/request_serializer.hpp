@@ -79,6 +79,14 @@ public:
             } };
         }
 
+        if ( command.find( "use", 0 ) == 0 )
+        {
+            int ind = command[ 3 ] - '0';
+            return request { [ this, login = login, ind = ind ]() {
+                game_.use( login, ind );
+            } };
+        }
+
         spdlog::warn( "Invalid request `{}` from {}", command, login );
         return std::nullopt;
     }

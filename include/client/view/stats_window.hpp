@@ -26,7 +26,7 @@ public:
 
         draw_stats( *you );
         draw_bars( *you );
-        // draw_eq();
+        draw_eq( *you );
     }
 
 private:
@@ -96,6 +96,54 @@ private:
         this->raw_window.print( y, 4, std::string( filled_bars, '|' ) );
 
         this->raw_window.set_normal();
+    }
+
+    void draw_eq( const server::domain::player& you ) const
+    {
+        auto bp = std::vector<server::domain::item::pointer> {};
+
+        for ( const auto& p : you.get_backpack() )
+        {
+            bp.push_back( p );
+        }
+
+        std::sort( bp.begin(), bp.end(), []( auto a, auto b ) {
+            return a->get_name() < b->get_name();
+        } );
+
+        this->raw_window.print( 15,
+                                2,
+                                fmt::format( "Backpack: {}/{}",
+                                             bp.size(),
+                                             you.get_backpack_capacity() ) );
+
+        int offset = 0;
+        for ( const auto& i : bp )
+        {
+            this->raw_window.print(
+                16 + offset, 4, fmt::format( "{} {}", offset, i->get_name() ) );
+            offset++;
+        }
+
+        if ( you.get_weapon() )
+        {
+            this->raw_window.print(
+                16 + offset + 2,
+                4,
+                fmt::format( "weapon: {}", you.get_weapon()->get_name() ) );
+            offset++;
+        }
+
+        if ( you.get_armor(
+
+                 ) )
+        {
+            this->raw_window.print(
+                16 + offset + 3,
+                4,
+                fmt::format( "armor: {}", you.get_armor()->get_name() ) );
+            offset++;
+        }
     }
 };
 

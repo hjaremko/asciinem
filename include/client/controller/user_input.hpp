@@ -11,6 +11,16 @@ enum class user_input
     LEFT,
     RIGHT,
     FIGHT,
+    USE0,
+    USE1,
+    USE2,
+    USE3,
+    USE4,
+    USE5,
+    USE6,
+    USE7,
+    USE8,
+    USE9,
     QUIT,
     INVALID
 };
@@ -29,6 +39,28 @@ auto cast_to_user_input( int c ) -> user_input
         return user_input::RIGHT;
     case 'f':
         return user_input::FIGHT;
+
+    case '0':
+        return user_input::USE0;
+    case '1':
+        return user_input::USE1;
+    case '2':
+        return user_input::USE2;
+    case '3':
+        return user_input::USE3;
+    case '4':
+        return user_input::USE4;
+    case '5':
+        return user_input::USE5;
+    case '6':
+        return user_input::USE6;
+    case '7':
+        return user_input::USE7;
+    case '8':
+        return user_input::USE8;
+    case '9':
+        return user_input::USE9;
+
     case 'q':
         return user_input::QUIT;
     default:

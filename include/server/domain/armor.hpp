@@ -8,17 +8,18 @@
 namespace asciinem::server::domain
 {
 
-class armor : public item
+class armor : public item, public std::enable_shared_from_this<armor>
 {
 public:
     using pointer = std::shared_ptr<armor>;
 
     armor() = default;
-    explicit armor(
-        int id, std::string name, double value, int level, int defense );
+    explicit armor( std::string name, double value, int level, int defense );
 
     [[nodiscard]] auto get_defense() const -> int;
     void set_defense( int defense );
+
+    void use( player& player ) override;
 
     template <class Archive>
     void serialize( Archive& ar )

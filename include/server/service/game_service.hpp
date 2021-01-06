@@ -59,6 +59,11 @@ public:
         spdlog::warn( "End of fight in game service" );
     }
 
+    void use( const std::string& login, int ind )
+    {
+        game_.use( login, ind );
+    }
+
     void tick()
     {
         game_.tick();
