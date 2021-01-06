@@ -1,5 +1,7 @@
 #include "client/network/asio_network_module.hpp"
 #include "client/util.hpp"
+#include "client/view/consoles/macos_ncurses.hpp"
+#include "client/view/consoles/ncurses.hpp"
 #include "client/view/util.hpp"
 
 #include <client/controller/game_controller.hpp>
@@ -22,8 +24,9 @@ auto main( int argc, char** argv ) -> int
         net.establish( server_ip, server_port, login );
 
         // ---------------------------------------------------------------------
-        auto view = view::make_main_window( login );
-        auto controller = game_controller( net, view, login );
+        auto view = view::make_view();
+        auto controller =
+            game_controller<view::terminal_handler>( net, *view, login );
         controller.run();
     }
     catch ( std::exception& e )

@@ -2,7 +2,7 @@
 #define ASCIINEM_SERVER_EVENT_HANDLER_H
 
 #include <client/network/interfaces/network_module.hpp>
-#include <client/view/main_window.hpp>
+#include <client/view/window.hpp>
 #include <ncurses.h>
 #include <spdlog/spdlog.h>
 #include <thread>
@@ -15,7 +15,7 @@ class game_controller
 {
 public:
     explicit game_controller( asciinem::client::network::network_module& net,
-                              view::main_window<Console>& view,
+                              view::widget& view,
                               const std::string& login )
         : net_( net ), view_( view ), login_( login )
     {
@@ -54,7 +54,7 @@ protected:
             state = asciinem::server::serializer::deserialize<
                 asciinem::server::domain::game_state>( msg );
 
-            view_.draw( state );
+            view_.draw( state, login_ );
         }
     }
 
@@ -62,8 +62,8 @@ protected:
     {
         using namespace view::console;
 
-        auto input = Console::get_char();
-        Console::refresh();
+        auto input = Console::get_char( Console::standard_screen() );
+        Console::refresh( Console::standard_screen() );
 
         if ( input == user_input::QUIT )
         {
@@ -127,7 +127,7 @@ protected:
 
 private:
     asciinem::client::network::network_module& net_;
-    asciinem::client::view::main_window<Console>& view_;
+    asciinem::client::view::widget& view_;
     const std::string& login_;
 };
 
