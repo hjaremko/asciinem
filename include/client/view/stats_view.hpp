@@ -1,22 +1,21 @@
 #ifndef ASCIINEM_CLIENT_VIEW_STATS_WINDOW_HPP
 #define ASCIINEM_CLIENT_VIEW_STATS_WINDOW_HPP
 
-#include "client/view/interfaces/window.hpp"
+#include "client/view/window.hpp"
 
 namespace asciinem::client::view
 {
 
-template <class Console>
-class stats_window : public window<Console>
+class stats_view : public window
 {
 public:
-    using pointer = std::unique_ptr<stats_window>;
-    using base = window<Console>;
-    using window<Console>::window;
+    using window::window;
 
-    void draw( game_state_cr state, const std::string& login ) override
+    void draw( const server::domain::game_state& state,
+               const std::string& login ) override
     {
-        base::draw_border();
+        raw_window_->clear();
+        raw_window_->draw_border();
         auto you = state.find_player( login );
 
         if ( you == nullptr )
@@ -27,45 +26,50 @@ public:
         draw_stats( *you );
         draw_bars( *you );
         draw_eq( *you );
+        raw_window_->refresh();
     }
 
 private:
     void draw_stats( const server::domain::player& you ) const
     {
         auto [ x, y ] = you.get_position();
-        this->raw_window.print(
+        raw_window_->print(
             2, 2, fmt::format( "{} ({}, {})", you.get_name(), x, y ) );
 
-        this->raw_window.print( 4, 2, "Stats" );
-        this->raw_window.print(
+        raw_window_->print( 4, 2, "Stats" );
+        raw_window_->print(
             5, 4, fmt::format( "Level:   {}", you.get_level() ) );
-        this->raw_window.print(
+        raw_window_->print(
             6,
             4,
             fmt::format( "Gold:    {}",
                          static_cast<double>( you.get_money() ) ) );
-        this->raw_window.print(
+        raw_window_->print(
             7, 4, fmt::format( "Attack:  {}", you.get_attack() ) );
-        this->raw_window.print(
+        raw_window_->print(
             8, 4, fmt::format( "Defence: {}", you.get_defense() ) );
     }
 
     void draw_bars( const server::domain::player& you ) const
     {
-        this->raw_window.print( 10,
-                                2,
-                                fmt::format( "Health {}/{}",
-                                             you.get_health(),
-                                             you.get_max_health() ) );
-        draw_red_bar(
-            11, base::width() - 7, you.get_health(), you.get_max_health() );
+        raw_window_->print( 10,
+                            2,
+                            fmt::format( "Health {}/{}",
+                                         you.get_health(),
+                                         you.get_max_health() ) );
+        draw_red_bar( 11,
+                      raw_window_->max_width() - 7,
+                      you.get_health(),
+                      you.get_max_health() );
 
-        this->raw_window.print(
+        raw_window_->print(
             12,
             2,
             fmt::format( "Exp {}/{}", you.get_exp(), 100 * you.get_level() ) );
-        draw_yellow_bar(
-            13, base::width() - 7, you.get_exp(), 100 * you.get_level() );
+        draw_yellow_bar( 13,
+                         raw_window_->max_width() - 7,
+                         you.get_exp(),
+                         100 * you.get_level() );
     }
 
     void draw_red_bar( int y, int bars, int value, int max ) const
@@ -73,14 +77,14 @@ private:
         auto percent = static_cast<double>( value ) / max;
         auto filled_bars = static_cast<unsigned long>( bars * percent );
 
-        this->raw_window.set_red();
-        this->raw_window.print(
+        raw_window_->set_red();
+        raw_window_->print(
             y, 4, std::string( static_cast<unsigned long>( bars ), '|' ) );
 
-        this->raw_window.set_bold();
-        this->raw_window.print( y, 4, std::string( filled_bars, '|' ) );
+        raw_window_->set_bold();
+        raw_window_->print( y, 4, std::string( filled_bars, '|' ) );
 
-        this->raw_window.set_normal();
+        raw_window_->set_normal();
     }
 
     void draw_yellow_bar( int y, int bars, int value, int max ) const
@@ -88,14 +92,14 @@ private:
         auto percent = static_cast<double>( value ) / max;
         auto filled_bars = static_cast<unsigned long>( bars * percent );
 
-        this->raw_window.set_yellow();
-        this->raw_window.print(
+        raw_window_->set_yellow();
+        raw_window_->print(
             y, 4, std::string( static_cast<unsigned long>( bars ), '|' ) );
 
-        this->raw_window.set_bold();
-        this->raw_window.print( y, 4, std::string( filled_bars, '|' ) );
+        raw_window_->set_bold();
+        raw_window_->print( y, 4, std::string( filled_bars, '|' ) );
 
-        this->raw_window.set_normal();
+        raw_window_->set_normal();
     }
 
     void draw_eq( const server::domain::player& you ) const
@@ -111,23 +115,23 @@ private:
             return a->get_name() < b->get_name();
         } );
 
-        this->raw_window.print( 15,
-                                2,
-                                fmt::format( "Backpack: {}/{}",
-                                             bp.size(),
-                                             you.get_backpack_capacity() ) );
+        raw_window_->print( 15,
+                            2,
+                            fmt::format( "Backpack: {}/{}",
+                                         bp.size(),
+                                         you.get_backpack_capacity() ) );
 
         int offset = 0;
         for ( const auto& i : bp )
         {
-            this->raw_window.print(
+            raw_window_->print(
                 16 + offset, 4, fmt::format( "{} {}", offset, i->get_name() ) );
             offset++;
         }
 
         if ( you.get_weapon() )
         {
-            this->raw_window.print(
+            raw_window_->print(
                 16 + offset + 2,
                 4,
                 fmt::format( "weapon: {}", you.get_weapon()->get_name() ) );
@@ -138,7 +142,7 @@ private:
 
                  ) )
         {
-            this->raw_window.print(
+            raw_window_->print(
                 16 + offset + 3,
                 4,
                 fmt::format( "armor: {}", you.get_armor()->get_name() ) );
