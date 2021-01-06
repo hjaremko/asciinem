@@ -62,9 +62,8 @@ private:
 
         const auto max_exp = 100;
 
-        this->raw_window.print(
-            12, 2, fmt::format( "Exp {}/{}", you.get_level(), max_exp ) );
-        draw_bar( 13, base::width() - 7, you.get_health(), max_exp );
+        this->raw_window.print( 12, 2, fmt::format( "Exp {}/{}", 0, max_exp ) );
+        draw_bar( 13, base::width() - 7, 0, max_exp );
     }
 
     void draw_bar( int y, int bars, int value, int max ) const

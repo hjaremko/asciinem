@@ -62,6 +62,24 @@ struct macos_ncurses
             return cast_to_user_input( wgetch( ptr ) );
         }
 
+        auto max_height() -> int
+        {
+            auto y { 0 };
+            auto x { 0 };
+            getmaxyx( ptr, y, x );
+
+            return y;
+        }
+
+        auto max_width() -> int
+        {
+            [[maybe_unused]] auto y { 0 };
+            auto x { 0 };
+            getmaxyx( ptr, y, x );
+
+            return x;
+        }
+
         WINDOW* ptr;
     };
 
