@@ -1,18 +1,47 @@
 #include "server/domain/collision_checker.hpp"
 using namespace asciinem::server::domain;
 
-auto collision_checker::check_collision(
-    const player::position_type& player_position,
-    const monster::position_type& monster_position ) -> bool
+auto collision_checker::check_collision( const player::position_type& f_pos,
+                                         int f_length,
+                                         const player::position_type& s_pos,
+                                         int s_length ) -> bool
 {
-    return player_position == monster_position;
+
+    auto f_s = std::set<entity::position_type> {};
+
+    for ( auto f = 0; f < f_length; f++ )
+    {
+        f_s.insert( { f_pos.first + f, f_pos.second } );
+    }
+
+    for ( auto s = 0; s < s_length; s++ )
+    {
+        for ( const auto& pos : f_s )
+        {
+            if ( pos == std::make_pair( s_pos.first + s, s_pos.second ) )
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
-auto collision_checker::check_collision(
-    const player::position_type& player_position, const location& location )
-    -> bool
+auto collision_checker::check_collision( const player::position_type& p_pos,
+                                         int p_length,
+                                         const location& location ) -> bool
 {
-    return location.get_collision_map()
-        .at( player_position.second ) // NOLINT
-        .at( player_position.first ); // NOLINT
+
+    for ( auto f = 0; f < p_length; f++ )
+    {
+        if ( location.get_collision_map()
+                 .at( p_pos.second )      // NOLINT
+                 .at( p_pos.first + f ) ) // NOLINT
+        {
+            return true;
+        }
+    }
+
+    return false;
 }

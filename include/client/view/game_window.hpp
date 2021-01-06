@@ -60,7 +60,7 @@ public:
             if ( e->get_name() != you->get_name() )
             {
                 auto pos = find_relative_pos( you_pos, e->get_position() );
-                print_entity( e, pos, "\\o/" );
+                print_entity( e, pos, e->get_shape() );
             }
         }
 
@@ -69,11 +69,12 @@ public:
             if ( e->get_name() != you->get_name() )
             {
                 auto pos = find_relative_pos( you_pos, e->get_position() );
-                print_entity( e, pos, "@" );
+                print_entity( e, pos, e->get_shape() );
             }
         }
 
-        print_you( this->raw_window.get_center() );
+        auto [ x, y ] = this->raw_window.get_center();
+        this->raw_window.print( y, x, you->get_shape() );
     }
 
 private:
@@ -90,12 +91,6 @@ private:
         //        this->raw_window.print(
         //            y + 1, x - 5, fmt::format( "{}/100", e->get_health() ) );
         this->raw_window.print( y, x, look.c_str() );
-    }
-
-    void print_you( std::pair<int, int> pos )
-    {
-        auto [ x, y ] = pos;
-        this->raw_window.print( y, x, "\\o/" );
     }
 };
 

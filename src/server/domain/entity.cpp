@@ -1,20 +1,27 @@
 #include "server/domain/entity.hpp"
 
 #include <utility>
-using namespace asciinem::server::domain;
+namespace asciinem::server::domain
+{
 
 entity::entity( std::string name,
+                std::string shape,
                 std::pair<int, int> position,
                 int health,
                 int level )
-    : name_( std::move( name ) ), position_( std::move( position ) ),
-      health_( health ), level_( level ) // NOLINT
+    : name_( std::move( name ) ), shape_( std::move( shape ) ),
+      position_( std::move( position ) ), health_( health ),
+      level_( level ) // NOLINT
 {
 }
 
-entity::entity( std::string name, std::pair<int, int> position, int level )
-    : name_( std::move( name ) ), position_( std::move( position ) ),
-      health_( 100 * level ), level_( level ) // NOLINT
+entity::entity( std::string name,
+                std::string shape,
+                std::pair<int, int> position,
+                int level )
+    : name_( std::move( name ) ), shape_( std::move( shape ) ),
+      position_( std::move( position ) ), health_( 100 * level ), // NOLINT
+      level_( level )                                             // NOLINT
 {
 }
 
@@ -85,3 +92,15 @@ void entity::get_hurt( int damage )
     damage = std::max( damage - get_defense(), 0 );
     health_ = std::max( health_ - damage, 0 );
 }
+
+auto entity::get_shape() const -> const std::string&
+{
+    return shape_;
+}
+
+void entity::set_shape( const std::string& shape )
+{
+    shape_ = shape;
+}
+
+} // namespace asciinem::server::domain

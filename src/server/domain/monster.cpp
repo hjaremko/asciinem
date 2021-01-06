@@ -10,7 +10,7 @@ monster::monster( std::string name,
                   asciinem::server::domain::entity::position_type position,
                   int level,
                   move_strategy::pointer strategy )
-    : entity( std::move( name ), position, level ),
+    : entity( std::move( name ), "@", position, level ),
       strategy_( std::move( strategy ) )
 {
 }
@@ -20,7 +20,7 @@ monster::monster( std::string name,
                   int health,
                   int level,
                   move_strategy::pointer strategy )
-    : entity( std::move( name ), position, health, level ),
+    : entity( std::move( name ), "@", position, health, level ),
       strategy_( std::move( strategy ) )
 {
 }
