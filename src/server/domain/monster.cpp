@@ -32,8 +32,7 @@ auto monster::get_attack() const -> int
 
 auto monster::get_defense() const -> int
 {
-    const double half = 0.5;
-    return static_cast<int>( half * this->get_level() );
+    return static_cast<int>( 0.5 * this->get_level() ); // NOLINT
 }
 
 auto monster::move() -> entity::position_type

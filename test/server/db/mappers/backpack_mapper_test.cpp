@@ -54,7 +54,7 @@ TEST_CASE( "Create and read backpack", "[server][db]" )
     auto pm = db::player_mapper { db }; // to create the table players
     auto bm = db::backpack_mapper { db };
 
-    auto op = domain::player( "test", { 0, 0 }, 1, 1., {}, 1 );
+    auto op = domain::player( "test", { 0, 0 }, 1, 0, 1., {}, 1 );
     pm.insert( op );
 
     const auto* query =

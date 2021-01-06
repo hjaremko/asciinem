@@ -28,6 +28,7 @@ public:
                                   "pos_y INT NOT NULL,"
                                   "health INT NOT NULL,"
                                   "level INT NOT NULL,"
+                                  "exp INT NOT NULL,"
                                   "money INT NOT NULL,"
                                   "backpack_capacity INT NOT NULL,"
                                   "weapon_id INTEGER,"
@@ -47,14 +48,15 @@ public:
     auto insert( const domain::player& player ) -> void
     {
         const auto insert_query = fmt::format(
-            "INSERT INTO players (login, pos_x, pos_y, health, level, "
+            "INSERT INTO players (login, pos_x, pos_y, health, level, exp,"
             "money, backpack_capacity, weapon_id, armor_id) VALUES (\"{}\", "
-            "{}, {}, {}, {}, {}, {}, {}, {});",
+            "{}, {}, {}, {}, {}, {}, {}, {}, {});",
             player.get_name(),
             player.get_position().first,
             player.get_position().second,
             player.get_health(),
             player.get_level(),
+            player.get_exp(),
             int( player.get_money() ),
             player.get_backpack_capacity(),
             ( player.get_weapon()
@@ -71,23 +73,25 @@ public:
 
     auto update( const domain::player& player ) -> void
     {
-        const auto update_query = fmt::format(
-            "UPDATE players SET pos_x = {}, pos_y = {}, "
-            "health = {}, level = {}, money = {}, backpack_capacity = {}, "
-            "weapon_id = {}, armor_id = {} WHERE login = \"{}\"; ",
-            player.get_position().first,
-            player.get_position().second,
-            player.get_health(),
-            player.get_level(),
-            int( player.get_money() ),
-            player.get_backpack_capacity(),
-            ( player.get_weapon()
-                  ? fmt::to_string( player.get_weapon()->get_id() )
-                  : "NULL" ),
-            ( player.get_armor()
-                  ? fmt::to_string( player.get_armor()->get_id() )
-                  : "NULL" ),
-            player.get_name() );
+        const auto update_query =
+            fmt::format( "UPDATE players SET pos_x = {}, pos_y = {}, "
+                         "health = {}, level = {}, exp = {}, money = {}, "
+                         "backpack_capacity = {}, "
+                         "weapon_id = {}, armor_id = {} WHERE login = \"{}\"; ",
+                         player.get_position().first,
+                         player.get_position().second,
+                         player.get_health(),
+                         player.get_level(),
+                         player.get_exp(),
+                         int( player.get_money() ),
+                         player.get_backpack_capacity(),
+                         ( player.get_weapon()
+                               ? fmt::to_string( player.get_weapon()->get_id() )
+                               : "NULL" ),
+                         ( player.get_armor()
+                               ? fmt::to_string( player.get_armor()->get_id() )
+                               : "NULL" ),
+                         player.get_name() );
         db_.run_query( update_query );
 
         auto bm = backpack_mapper( db_ );
@@ -148,6 +152,11 @@ public:
                           std::end( record ),
                           []( const auto& p ) { return p.first == "level"; } )
                 ->second;
+        auto exp =
+            std::find_if( std::begin( record ),
+                          std::end( record ),
+                          []( const auto& p ) { return p.first == "exp"; } )
+                ->second;
         auto money =
             std::find_if( std::begin( record ),
                           std::end( record ),
@@ -200,6 +209,7 @@ public:
             std::make_pair( std::stoi( *pos_x ), std::stoi( *pos_y ) ),
             std::stoi( *health ),
             std::stoi( *level ),
+            std::stoi( *exp ),
             double( std::stoi( *money ) ) / domain::money::SCALE(),
             std::set<domain::item::pointer> {},
             std::stoi( *backpack_capacity ),
