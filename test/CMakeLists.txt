@@ -72,39 +72,14 @@ catch_discover_tests(
         --reporter=xml
         --out=tests.xml)
 
-add_executable(tests tests.cpp)
-target_link_libraries(tests PRIVATE project_warnings project_options catch_main)
-
-catch_discover_tests(
-        tests
-        TEST_PREFIX
-        "general."
-        EXTRA_ARGS
-        -s
-        --reporter=xml
-        --out=tests.xml)
-
-add_executable(constexpr_tests constexpr_tests.cpp)
-target_link_libraries(constexpr_tests PRIVATE project_options project_warnings catch_main)
-
-catch_discover_tests(
-        constexpr_tests
-        TEST_PREFIX
-        "constexpr."
-        EXTRA_ARGS
-        -s
-        --reporter=xml
-        --out=constexpr.xml)
-
-add_executable(relaxed_constexpr_tests constexpr_tests.cpp)
-target_link_libraries(relaxed_constexpr_tests PRIVATE project_options project_warnings catch_main)
-target_compile_definitions(relaxed_constexpr_tests PRIVATE -DCATCH_CONFIG_RUNTIME_STATIC_REQUIRE)
-
-catch_discover_tests(
-        relaxed_constexpr_tests
-        TEST_PREFIX
-        "relaxed_constexpr."
-        EXTRA_ARGS
-        -s
-        --reporter=xml
-        --out=relaxed_constexpr.xml)
+#add_executable(common common\test.cpp)
+#target_link_libraries(common PRIVATE project_warnings project_options catch_main)
+#
+#catch_discover_tests(
+#        tests
+#        TEST_PREFIX
+#        "common."
+#        EXTRA_ARGS
+#        -s
+#        --reporter=xml
+#        --out=tests.xml)
