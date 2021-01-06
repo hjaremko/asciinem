@@ -8,8 +8,8 @@ namespace asciinem::server::domain
 {
 
 player::player( const std::string& name )
-    : entity( name, { 0, 0 }, 1 ), money_( 10. ), // NOLINT
-      backpack_( {} ), backpack_capacity_( 10 )   // NOLINT
+    : entity( name, { 28, 26 }, 1 ), money_( 10. ), // NOLINT
+      backpack_( {} ), backpack_capacity_( 10 )     // NOLINT
 {
 }
 

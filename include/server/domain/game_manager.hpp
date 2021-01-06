@@ -1,6 +1,7 @@
 #ifndef ASCIINEM_SERVER_GAME_MANAGER_HPP
 #define ASCIINEM_SERVER_GAME_MANAGER_HPP
 
+#include "collision_checker.hpp"
 #include "game_state.hpp"
 #include "player.hpp"
 #include "server/db/database.hpp"
@@ -24,12 +25,16 @@ public:
                       const entity::position_type& offset )
     {
         auto player = current_state_.find_player( login );
-        auto pos = player->get_position();
+        auto new_position = player->get_position();
 
-        pos.first += offset.first;
-        pos.second += offset.second;
+        new_position.first += offset.first;
+        new_position.second += offset.second;
 
-        player->set_position( pos );
+        if ( !collision_checker::check_collision(
+                 new_position, current_state_.get_location() ) )
+        {
+            player->set_position( new_position );
+        }
     }
 
     void add_player( const std::string& login )
@@ -69,7 +74,7 @@ public:
 
         if ( ticks_ % 1000 == 0 && current_state_.get_monsters().size() < 3 )
         {
-            current_state_.spawn_monster();
+            current_state_.spawn_monster( { 18, 10 } );
         }
     }
 
@@ -80,7 +85,13 @@ private:
         {
             auto [ mx, my ] = m->move();
             auto [ x, y ] = m->get_position();
-            m->set_position( { x + mx, y + my } );
+            auto new_position = entity::position_type { x + mx, y + my };
+
+            if ( !collision_checker::check_collision(
+                     new_position, current_state_.get_location() ) )
+            {
+                m->set_position( new_position );
+            }
         }
     }
 

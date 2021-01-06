@@ -12,6 +12,7 @@ auto collision_checker::check_collision(
     const player::position_type& player_position, const location& location )
     -> bool
 {
-    return location.get_collision_map()[ player_position.first ]   // NOLINT
-                                       [ player_position.second ]; // NOLINT
+    return location.get_collision_map()
+        .at( player_position.second ) // NOLINT
+        .at( player_position.first ); // NOLINT
 }

@@ -2,6 +2,7 @@
 #define ASCIINEM_SERVER_GAME_STATE_HPP
 
 #include "entity.hpp"
+#include "location.hpp"
 #include "monster.hpp"
 #include "player.hpp"
 
@@ -24,7 +25,7 @@ public:
     template <class Archive>
     void serialize( Archive& ar )
     {
-        ar( entities_, monsters_ );
+        ar( entities_, monsters_, map_ );
     }
 
     auto get_entities() -> players_type&
@@ -67,15 +68,25 @@ public:
         return *entity_it;
     }
 
-    void spawn_monster()
+    void spawn_monster( entity::position_type where )
     {
-        monsters_.insert( std::make_shared<monster>(
-            "mob", entity::position_type { 10, 10 }, 150, 2 ) );
+        monsters_.insert( std::make_shared<monster>( "mob", where, 150, 2 ) );
+    }
+
+    [[nodiscard]] auto get_map() const -> std::vector<std::string>
+    {
+        return map_.get_map();
+    }
+
+    [[nodiscard]] auto get_location() const -> location
+    {
+        return map_;
     }
 
 private:
     players_type entities_;
     monsters_type monsters_;
+    location map_ { "map1.txt", "map1_collisions.txt" };
 };
 
 } // namespace asciinem::server::domain

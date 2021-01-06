@@ -29,7 +29,7 @@ public:
 
     void draw( game_state_cr state, const std::string& login ) override
     {
-        this->draw_border();
+
         auto you = state.find_player( login );
 
         if ( you == nullptr )
@@ -38,6 +38,22 @@ public:
         }
 
         auto you_pos = you->get_position();
+
+        auto m = state.get_map();
+        auto map_pos = find_relative_pos( you_pos, { 0, 0 } );
+        int i = 0;
+        for ( const auto& l : m )
+        {
+            for ( int j = 0; j < l.size(); ++j )
+            {
+                this->raw_window.print( map_pos.second + i,
+                                        map_pos.first + j,
+                                        std::string { l[ j ] } );
+            }
+            ++i;
+        }
+
+        this->draw_border();
 
         for ( const auto& e : state.get_entities() )
         {
