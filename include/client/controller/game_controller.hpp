@@ -99,6 +99,27 @@ protected:
         case user_input::FIGHT:
             return "fight;";
 
+        case user_input::USE0:
+            return "use0;";
+        case user_input::USE1:
+            return "use1;";
+        case user_input::USE2:
+            return "use2;";
+        case user_input::USE3:
+            return "use3;";
+        case user_input::USE4:
+            return "use4;";
+        case user_input::USE5:
+            return "use5;";
+        case user_input::USE6:
+            return "use6;";
+        case user_input::USE7:
+            return "use7;";
+        case user_input::USE8:
+            return "use8;";
+        case user_input::USE9:
+            return "use9;";
+
         default:
             return "invalid";
         }

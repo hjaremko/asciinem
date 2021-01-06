@@ -5,9 +5,8 @@
 namespace asciinem::server::domain
 {
 
-item::item( int id, std::string name, double value, int level )
-    : id_( id ), name_( std::move( name ) ), value_( money( value ) ),
-      level_( level )
+item::item( std::string name, double value, int level )
+    : name_( std::move( name ) ), value_( money( value ) ), level_( level )
 {
 }
 
@@ -52,9 +51,9 @@ auto operator!=( const item& lhs, const item& rhs ) -> bool
 {
     return !( rhs == lhs );
 }
-auto item::get_id() const -> int
+
+void item::use( player& /*unused*/ )
 {
-    return id_;
 }
 
 } // namespace asciinem::server::domain

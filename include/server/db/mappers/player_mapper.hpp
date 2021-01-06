@@ -31,14 +31,14 @@ public:
                                   "exp INT NOT NULL,"
                                   "money INT NOT NULL,"
                                   "backpack_capacity INT NOT NULL,"
-                                  "weapon_id INTEGER,"
-                                  "armor_id INTEGER,"
-                                  "FOREIGN KEY (weapon_id)"
-                                  "    REFERENCES items (item_id)"
+                                  "weapon_name VARCHAR(50),"
+                                  "armor_name VARCHAR(50),"
+                                  "FOREIGN KEY (weapon_name)"
+                                  "    REFERENCES items (name)"
                                   "    ON DELETE NO ACTION"
                                   "    ON UPDATE NO ACTION,"
-                                  "FOREIGN KEY (armor_id)"
-                                  "    REFERENCES items (item_id)"
+                                  "FOREIGN KEY (armor_name)"
+                                  "    REFERENCES items (name)"
                                   "    ON DELETE NO ACTION"
                                   "    ON UPDATE NO ACTION"
                                   ");"s;
@@ -49,8 +49,8 @@ public:
     {
         const auto insert_query = fmt::format(
             "INSERT INTO players (login, pos_x, pos_y, health, level, exp,"
-            "money, backpack_capacity, weapon_id, armor_id) VALUES (\"{}\", "
-            "{}, {}, {}, {}, {}, {}, {}, {}, {});",
+            "money, backpack_capacity) VALUES "
+            "(\"{}\", {}, {}, {}, {}, {}, {}, {});",
             player.get_name(),
             player.get_position().first,
             player.get_position().second,
@@ -58,14 +58,27 @@ public:
             player.get_level(),
             player.get_exp(),
             int( player.get_money() ),
-            player.get_backpack_capacity(),
-            ( player.get_weapon()
-                  ? fmt::to_string( player.get_weapon()->get_id() )
-                  : "NULL" ),
-            ( player.get_armor()
-                  ? fmt::to_string( player.get_armor()->get_id() )
-                  : "NULL" ) );
+            player.get_backpack_capacity() );
         db_.run_query( insert_query );
+
+        if ( player.get_weapon() )
+        {
+            auto update_query =
+                fmt::format( "UPDATE players SET weapon_name = \"{}\" WHERE "
+                             "login = \"{}\"; ",
+                             player.get_weapon()->get_name(),
+                             player.get_name() );
+            db_.run_query( update_query );
+        }
+        if ( player.get_armor() )
+        {
+            auto update_query =
+                fmt::format( "UPDATE players SET armor_name = \"{}\" WHERE "
+                             "login = \"{}\"; ",
+                             player.get_weapon()->get_name(),
+                             player.get_name() );
+            db_.run_query( update_query );
+        }
 
         auto bm = backpack_mapper( db_ );
         bm.insert_player_backpack( player.get_name(), player.get_backpack() );
@@ -73,11 +86,11 @@ public:
 
     auto update( const domain::player& player ) -> void
     {
-        const auto update_query =
+        auto update_query =
             fmt::format( "UPDATE players SET pos_x = {}, pos_y = {}, "
                          "health = {}, level = {}, exp = {}, money = {}, "
-                         "backpack_capacity = {}, "
-                         "weapon_id = {}, armor_id = {} WHERE login = \"{}\"; ",
+                         "backpack_capacity = {}, weapon_name = null, "
+                         "armor_name = null WHERE login = \"{}\"; ",
                          player.get_position().first,
                          player.get_position().second,
                          player.get_health(),
@@ -85,14 +98,27 @@ public:
                          player.get_exp(),
                          int( player.get_money() ),
                          player.get_backpack_capacity(),
-                         ( player.get_weapon()
-                               ? fmt::to_string( player.get_weapon()->get_id() )
-                               : "NULL" ),
-                         ( player.get_armor()
-                               ? fmt::to_string( player.get_armor()->get_id() )
-                               : "NULL" ),
                          player.get_name() );
         db_.run_query( update_query );
+
+        if ( player.get_weapon() )
+        {
+            update_query =
+                fmt::format( "UPDATE players SET weapon_name = \"{}\" WHERE "
+                             "login = \"{}\"; ",
+                             player.get_weapon()->get_name(),
+                             player.get_name() );
+            db_.run_query( update_query );
+        }
+        if ( player.get_armor() )
+        {
+            update_query =
+                fmt::format( "UPDATE players SET armor_name = \"{}\" WHERE "
+                             "login = \"{}\"; ",
+                             player.get_weapon()->get_name(),
+                             player.get_name() );
+            db_.run_query( update_query );
+        }
 
         auto bm = backpack_mapper( db_ );
         bm.remove_all_for_player( player.get_name() );
@@ -112,7 +138,15 @@ public:
         }
 
         spdlog::debug( "Player {} logged for the first time!", login );
+
+        auto im = item_mapper( db_ );
+        auto stick = ( im.record_to_weapon( im.find_by_name( "stick" ) ) );
+        auto apple = im.record_to_potion( im.find_by_name( "apple" ) );
+
         auto player = std::make_shared<domain::player>( login );
+        player->add_to_backpack( stick );
+        player->add_to_backpack( apple );
+
         insert( *player );
         return player;
     }
@@ -169,41 +203,38 @@ public:
                 []( const auto& p ) { return p.first == "backpack_capacity"; } )
                 ->second;
 
-        auto weapon_id = std::find_if( std::begin( record ),
-                                       std::end( record ),
-                                       []( const auto& p ) {
-                                           return p.first == "weapon_id";
-                                       } )
-                             ->second;
+        auto weapon_name = std::find_if( std::begin( record ),
+                                         std::end( record ),
+                                         []( const auto& p ) {
+                                             return p.first == "weapon_name";
+                                         } )
+                               ->second;
 
         auto weapon = domain::weapon::pointer {};
 
-        if ( weapon_id )
+        if ( weapon_name )
         {
             auto im = item_mapper( db_ );
-            weapon = std::dynamic_pointer_cast<domain::weapon>(
-                im.record_to_item( im.find_by_id( std::stoi( *weapon_id ) ) ) );
+            weapon = im.record_to_weapon( im.find_by_name( *weapon_name ) );
         }
 
-        auto armor_id = std::find_if( std::begin( record ),
-                                      std::end( record ),
-                                      []( const auto& p ) {
-                                          return p.first == "armor_id";
-                                      } )
-                            ->second;
+        auto armor_name = std::find_if( std::begin( record ),
+                                        std::end( record ),
+                                        []( const auto& p ) {
+                                            return p.first == "armor_name";
+                                        } )
+                              ->second;
 
         auto armor = domain::armor::pointer {};
 
-        if ( armor_id )
+        if ( armor_name )
         {
             auto im = item_mapper( db_ );
-            armor = std::dynamic_pointer_cast<domain::armor>(
-                im.record_to_item( im.find_by_id( std::stoi( *armor_id ) ) ) );
+            armor = im.record_to_armor( im.find_by_name( *armor_name ) );
         }
 
         auto bm = backpack_mapper( db_ );
-        auto b = bm.get_backpack_for_player( *name );
-
+        auto backpack = bm.get_backpack_for_player( *name );
         return std::make_shared<domain::player>(
             *name,
             std::make_pair( std::stoi( *pos_x ), std::stoi( *pos_y ) ),
@@ -211,7 +242,7 @@ public:
             std::stoi( *level ),
             std::stoi( *exp ),
             double( std::stoi( *money ) ) / domain::money::SCALE(),
-            std::set<domain::item::pointer> {},
+            backpack,
             std::stoi( *backpack_capacity ),
             weapon,
             armor );

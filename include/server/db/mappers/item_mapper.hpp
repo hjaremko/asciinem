@@ -20,27 +20,86 @@ class item_mapper
 public:
     explicit item_mapper( DB& db ) : db_( db )
     {
-        const auto create_query =
-            "CREATE TABLE IF NOT EXISTS items("
-            "item_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-            "name VARCHAR(50) NOT NULL,"
-            "value INT NOT NULL,"
-            "level INT NOT NULL,"
-            "defense INT,"
-            "attack INT,"
-            "power INT);"s;
+        const auto create_query = "CREATE TABLE IF NOT EXISTS items("
+                                  "name VARCHAR(50) PRIMARY KEY NOT NULL,"
+                                  "value INT NOT NULL,"
+                                  "level INT NOT NULL,"
+                                  "defense INT,"
+                                  "attack INT,"
+                                  "power INT);"s;
         db_.run_query( create_query );
+
+        auto table_empty = !db_.run_query( "SELECT * FROM items;" ).has_value();
+        if ( table_empty )
+        {
+            const auto items_query =
+                "INSERT INTO items(name, value, level, "
+                "defense, attack, power) VALUES"
+                "(\"stick\", 10, 1, null, 1, null),"
+                "(\"apple\", 10, 1, null, null, 10),"
+                "(\"wooden armor\", 25, 2, 2, null, null),"
+                "(\"wooden sword\", 30, 2, null, 2, null),"
+                "(\"common potion\", 25, 2, null, null, 50),"
+                "(\"steel armor\", 55, 3, 10, null, null),"
+                "(\"steel sword\", 65, 3, null, 10, null),"
+                "(\"rare potion\", 70, 3, null, null, 100);"s;
+            db_.run_query( items_query );
+        }
     };
+
+    auto insert_impl( const domain::item& item ) -> void
+    {
+        const auto items_query = fmt::format(
+            "INSERT INTO items(name, value, level) VALUES (\"{}\", {}, {})",
+            item.get_name(),
+            int( item.get_value() ),
+            item.get_level() );
+        db_.run_query( items_query );
+    }
+
+    auto insert( const domain::item& item ) -> void
+    {
+        insert_impl( item );
+    }
+
+    auto insert( const domain::weapon& weapon ) -> void
+    {
+        insert_impl( weapon );
+        const auto items_query =
+            fmt::format( "UPDATE item SET attack = {} WHERE name = \"{}\"",
+                         weapon.get_attack(),
+                         weapon.get_name() );
+        db_.run_query( items_query );
+    }
+
+    auto insert( const domain::armor& armor ) -> void
+    {
+        insert_impl( armor );
+        const auto items_query =
+            fmt::format( "UPDATE items SET defense = {} WHERE name = \"{}\"",
+                         armor.get_defense(),
+                         armor.get_name() );
+        db_.run_query( items_query );
+    }
+
+    auto insert( const domain::health_potion& potion ) -> void
+    {
+        insert_impl( potion );
+        const auto items_query =
+            fmt::format( "UPDATE item SET power = {} WHERE name = \"{}\"",
+                         potion.get_power(),
+                         potion.get_name() );
+        db_.run_query( items_query );
+    }
 
     auto update_impl( const domain::item& item ) -> void
     {
         const auto update_query = fmt::format(
-            "UPDATE items SET name = \"{}\", value = {}, level = {} "
-            "WHERE item_id = {}",
-            item.get_name(),
+            "UPDATE items SET value = {}, level = {}, defense = "
+            "null, attack = null, power = null WHERE name = \"{}\";",
             int( item.get_value() ),
             item.get_level(),
-            item.get_id() );
+            item.get_name() );
         db_.run_query( update_query );
     }
 
@@ -53,57 +112,46 @@ public:
     {
         update_impl( weapon );
         db_.run_query(
-            fmt::format( "UPDATE items SET name = {}, value = {}, level = {}, "
-                         "attack = {} WHERE item_id = {}",
-                         weapon.get_name(),
-                         int( weapon.get_value() ),
-                         weapon.get_level(),
+            fmt::format( "UPDATE items SET attack = {} WHERE name = \"{}\";",
                          weapon.get_attack(),
-                         weapon.get_id() ) );
+                         weapon.get_name() ) );
     }
 
     auto update( const domain::armor& armor ) -> void
     {
         update_impl( armor );
         db_.run_query(
-            fmt::format( "UPDATE items SET name = {}, value = {}, level = {}, "
-                         "defense = {} WHERE item_id = {}",
-                         armor.get_name(),
-                         int( armor.get_value() ),
-                         armor.get_level(),
+            fmt::format( "UPDATE items SET defense = {} WHERE name = \"{}\";",
                          armor.get_defense(),
-                         armor.get_id() ) );
+                         armor.get_name() ) );
     }
 
     auto update( const domain::health_potion& potion ) -> void
     {
         update_impl( potion );
-        db_.run_query( fmt::format( "UPDATE items SET name = {}, value = {}, "
-                                    "level = {}, power = {} WHERE item_id = {}",
-                                    potion.get_name(),
-                                    int( potion.get_value() ),
-                                    potion.get_level(),
-                                    potion.get_power(),
-                                    potion.get_id() ) );
+        db_.run_query(
+            fmt::format( "UPDATE items SET power = {} WHERE name = \"{}\"",
+                         potion.get_power(),
+                         potion.get_name() ) );
     }
 
     auto remove( const domain::item& item ) -> void
     {
         const auto delete_item = fmt::format(
-            "DELETE FROM items WHERE item_id = {};", item.get_id() );
+            "DELETE FROM items WHERE name = \"{}\";", item.get_name() );
         db_.run_query( delete_item );
     }
 
-    auto find_by_id( int item_id ) -> types::record
+    auto find_by_name( std::string item_id ) -> types::record
     {
         const auto find_query =
-            fmt::format( "SELECT * FROM items WHERE item_id = {};", item_id );
+            fmt::format( "SELECT * FROM items WHERE name = \"{}\";", item_id );
         auto result = db_.run_query( find_query );
         return *result->begin();
     }
 
-    [[nodiscard]] auto record_to_item( types::record record )
-        -> domain::item::pointer
+    [[nodiscard]] auto record_to_armor( types::record record )
+        -> domain::armor::pointer
     {
         auto get_column_value = [ &record ]( const auto& col ) {
             return std::find_if(
@@ -113,49 +161,64 @@ public:
                 ->second;
         };
 
-        auto id = get_column_value( "item_id" );
         auto name = get_column_value( "name" );
         auto value = get_column_value( "value" );
         auto level = get_column_value( "level" );
         auto defense = get_column_value( "defense" );
+
+        spdlog::warn( *defense );
+
+        return std::make_shared<domain::armor>( *name,
+                                                double( std::stoi( *value ) ) /
+                                                    domain::money::SCALE(),
+                                                std::stoi( *level ),
+                                                std::stoi( *defense ) );
+    }
+
+    [[nodiscard]] auto record_to_weapon( types::record record )
+        -> domain::weapon::pointer
+    {
+        auto get_column_value = [ &record ]( const auto& col ) {
+            return std::find_if(
+                       std::begin( record ),
+                       std::end( record ),
+                       [ col ]( const auto& p ) { return p.first == col; } )
+                ->second;
+        };
+
+        auto name = get_column_value( "name" );
+        auto value = get_column_value( "value" );
+        auto level = get_column_value( "level" );
         auto attack = get_column_value( "attack" );
+
+        return std::make_shared<domain::weapon>( *name,
+                                                 double( std::stoi( *value ) ) /
+                                                     domain::money::SCALE(),
+                                                 std::stoi( *level ),
+                                                 std::stoi( *attack ) );
+    }
+
+    [[nodiscard]] auto record_to_potion( types::record record )
+        -> domain::health_potion::pointer
+    {
+        auto get_column_value = [ &record ]( const auto& col ) {
+            return std::find_if(
+                       std::begin( record ),
+                       std::end( record ),
+                       [ col ]( const auto& p ) { return p.first == col; } )
+                ->second;
+        };
+
+        auto name = get_column_value( "name" );
+        auto value = get_column_value( "value" );
+        auto level = get_column_value( "level" );
         auto power = get_column_value( "power" );
 
-        if ( defense )
-        {
-            return std::make_shared<domain::armor>(
-                std::stoi( *id ),
-                *name,
-                double( std::stoi( *value ) ) / domain::money::SCALE(),
-                std::stoi( *level ),
-                std::stoi( *defense ) );
-        }
-
-        if ( attack )
-        {
-            return std::make_shared<domain::weapon>(
-                std::stoi( *id ),
-                *name,
-                double( std::stoi( *value ) ) / domain::money::SCALE(),
-                std::stoi( *level ),
-                std::stoi( *attack ) );
-        }
-
-        if ( power )
-        {
-            return std::make_shared<domain::health_potion>(
-                std::stoi( *id ),
-                *name,
-                double( std::stoi( *value ) ) / domain::money::SCALE(),
-                std::stoi( *level ),
-                std::stoi( *power ) );
-        }
-
-        return std::make_shared<domain::item>( std::stoi( *id ),
-                                               *name,
-                                               double( std::stoi( *value ) ) /
-                                                   domain::money::SCALE(),
-                                               std::stoi( *level ) );
+        return std::make_shared<domain::health_potion>(
+            *name,
+            double( std::stoi( *value ) ) / domain::money::SCALE(),
+            std::stoi( *level ),
+            std::stoi( *power ) );
     }
 
 private:

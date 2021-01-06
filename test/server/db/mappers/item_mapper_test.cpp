@@ -28,8 +28,8 @@ TEST_CASE( "Create table items", "[server][db]" )
     const auto db = db::database<db::sqlite_connection> { db_name };
     db::item_mapper { db };
 
-    const auto* query = "INSERT INTO items (name, value, level, defense, "
-                        "attack) VALUES (\"test\", 1, 1 , 1, 1);";
+    const auto* query = "INSERT INTO items (name, value, level) VALUES "
+                        "(\"test\", 1, 1);";
     auto result = db.run_query( query );
 
     REQUIRE( !result.has_value() );
@@ -38,7 +38,7 @@ TEST_CASE( "Create table items", "[server][db]" )
     result = db.run_query( query );
 
     REQUIRE( result.has_value() );
-    REQUIRE( result->size() == 1 );
+    REQUIRE_FALSE( result->empty() );
 
     cleanup_db_file( db_path );
 }
@@ -50,26 +50,17 @@ TEST_CASE( "Update table items", "[server][db]" )
     const auto db = db::database<db::sqlite_connection> { db_name };
     auto im = db::item_mapper { db };
 
-    const auto* query = "INSERT INTO items (name, value, level, power) VALUES "
-                        "(\"test\", 1, 1, 1);";
-    db.run_query( query );
+    auto oi = domain::armor( "test_item", 1, 1, 1 );
+    im.insert( oi );
 
-    query = "SELECT * FROM items;";
-    auto result = db.run_query( query );
-    auto record = *result->begin();
-    auto i = im.record_to_item( record );
+    auto record = im.find_by_name( "test_item" );
+    auto i = im.record_to_armor( record );
 
-    i->set_name( "updated_test" );
+    i->set_value( 10.50 ); // NOLINT
     im.update( *i );
 
-    query = "SELECT * FROM items;";
-    result = db.run_query( query );
-
-    REQUIRE( result.has_value() );
-    REQUIRE( result->size() == 1 );
-
-    record = *result->begin();
-    auto i2 = im.record_to_item( record );
+    record = im.find_by_name( "test_item" );
+    auto i2 = im.record_to_armor( record );
 
     REQUIRE( *i == *i2 );
 

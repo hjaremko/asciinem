@@ -53,10 +53,6 @@ public:
     void take_from_backpack( const item::pointer& item );
     auto has( const item& item ) -> bool;
 
-    void use( const weapon::pointer& weapon );
-    void use( const armor::pointer& armor );
-    void use( const health_potion::pointer& potion );
-
     [[nodiscard]] auto get_attack() const -> int override;
     [[nodiscard]] auto get_defense() const -> int override;
     [[nodiscard]] auto get_exp() const -> int;
@@ -65,10 +61,13 @@ public:
     [[nodiscard]] auto get_weapon() const -> weapon::pointer;
     [[nodiscard]] auto get_armor() const -> armor::pointer;
     [[nodiscard]] auto get_backpack() const -> std::set<item::pointer>;
+    void set_weapon( const weapon::pointer& weapon );
 
+    void gain_health( int health );
     auto gain_exp( int exp ) -> bool;
     void set_money( double amount );
     void set_backpack_capacity( unsigned int );
+    void set_armor( const armor::pointer& armor );
 
     template <class Archive>
     void serialize( Archive& ar )

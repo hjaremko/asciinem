@@ -5,28 +5,27 @@
 namespace asciinem::server::domain
 {
 
-class health_potion : public item
+class health_potion : public item,
+                      public std::enable_shared_from_this<health_potion>
 {
 public:
     using pointer = std::shared_ptr<health_potion>;
 
     health_potion() = default;
-    explicit health_potion(
-        int id, std::string name, double value, int level, int power );
+    explicit health_potion( std::string name,
+                            double value,
+                            int level,
+                            int power );
 
     [[nodiscard]] auto get_power() const -> int;
     void set_power( int power );
 
-    template <class Archive>
-    void save( Archive& ar ) const
-    {
-        ar( id_, name_, value_, level_, power_ );
-    }
+    void use( player& player ) override;
 
     template <class Archive>
-    void load( Archive& ar )
+    void serialize( Archive& ar )
     {
-        ar( id_, name_, value_, level_, power_ );
+        ar( cereal::virtual_base_class<item>( this ), power_ );
     }
 
 private:
@@ -34,4 +33,7 @@ private:
 };
 
 } // namespace asciinem::server::domain
+
+CEREAL_REGISTER_TYPE( asciinem::server::domain::health_potion )
+
 #endif // ASCIINEM_SERVER_POTION_H

@@ -108,6 +108,28 @@ public:
         remove_dead_monsters();
     }
 
+    void use( const std::string& login, int ind )
+    {
+        spdlog::warn( fmt::format( "Player {} uses item {}.", login, ind ) );
+        auto player = current_state_.find_player( login );
+        auto bp = std::vector<server::domain::item::pointer> {};
+
+        for ( const auto& p : player->get_backpack() )
+        {
+            bp.push_back( p );
+        }
+
+        std::sort( bp.begin(), bp.end(), []( auto a, auto b ) {
+            return a->get_name() < b->get_name();
+        } );
+
+        if ( ind < static_cast<int>( bp.size() ) )
+        {
+            auto i = bp[ ind ];
+            i->use( *player );
+        }
+    }
+
     void add_player( const std::string& login )
     {
         auto player = player_mapper_.find( login );
