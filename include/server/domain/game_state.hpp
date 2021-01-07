@@ -94,6 +94,18 @@ public:
         monsters_.insert( std::make_shared<monster>( "mob", where, 150, 1 ) );
     }
 
+    void spawn_boss( entity::position_type where )
+    {
+        auto boss =
+            std::make_shared<monster>( "wonsz rzeczny",
+                                       where,
+                                       200,
+                                       5,
+                                       std::make_shared<still_strategy>() );
+        boss->set_shape( "~~~~O<" );
+        monsters_.insert( std::move( boss ) );
+    }
+
     [[nodiscard]] auto get_map() const -> std::vector<std::string>
     {
         return map_.get_map();
