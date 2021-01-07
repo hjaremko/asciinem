@@ -75,6 +75,8 @@ public:
                 {
                     auto exp = 15 * m->get_level(); // NOLINT
                     auto level_up = player->gain_exp( exp );
+                    player->add_to_backpack(
+                        item_mapper_.get_item_on_level( m->get_level() ) );
 
                     if ( level_up )
                     {

@@ -7,6 +7,7 @@
 #include "server/domain/weapon.hpp"
 
 #include <fmt/format.h>
+#include <random>
 #include <server/db/query_result_type.hpp>
 
 using namespace std::string_literals;
@@ -213,6 +214,61 @@ public:
         auto value = get_column_value( "value" );
         auto level = get_column_value( "level" );
         auto power = get_column_value( "power" );
+
+        return std::make_shared<domain::health_potion>(
+            *name,
+            double( std::stoi( *value ) ) / domain::money::SCALE(),
+            std::stoi( *level ),
+            std::stoi( *power ) );
+    }
+
+    [[nodiscard]] auto get_item_on_level( int lvl ) -> domain::item::pointer
+    {
+        const auto& query =
+            fmt::format( "SELECT * FROM items WHERE level = {}", lvl );
+        auto result = db_.run_query( query );
+        static auto dev = std::random_device {};
+        static auto rng = std::mt19937 { dev() };
+        static auto dist = std::uniform_int_distribution<> {
+            0, static_cast<int>( result.value().size() ) - 1
+        };
+        auto it = std::begin( result.value() );
+        std::advance( it, dist( rng ) );
+
+        auto record = *it;
+
+        auto get_column_value = [ &record ]( const auto& col ) {
+            return std::find_if(
+                       std::begin( record ),
+                       std::end( record ),
+                       [ col ]( const auto& p ) { return p.first == col; } )
+                ->second;
+        };
+
+        auto name = get_column_value( "name" );
+        auto value = get_column_value( "value" );
+        auto level = get_column_value( "level" );
+        auto defense = get_column_value( "defense" );
+        auto attack = get_column_value( "attack" );
+        auto power = get_column_value( "power" );
+
+        if ( std::stoi( *defense ) )
+        {
+            return std::make_shared<domain::armor>(
+                *name,
+                double( std::stoi( *value ) ) / domain::money::SCALE(),
+                std::stoi( *level ),
+                std::stoi( *defense ) );
+        }
+
+        if ( std::stoi( *attack ) )
+        {
+            return std::make_shared<domain::weapon>(
+                *name,
+                double( std::stoi( *value ) ) / domain::money::SCALE(),
+                std::stoi( *level ),
+                std::stoi( *attack ) );
+        }
 
         return std::make_shared<domain::health_potion>(
             *name,
