@@ -30,7 +30,10 @@ void weapon::use( player& p )
             p.take_from_backpack( shared_from_this() );
             if ( p.get_weapon() )
             {
-                p.add_to_backpack( shared_from_this() );
+                if ( *p.get_weapon() != *this )
+                {
+                    p.add_to_backpack( p.get_weapon() );
+                }
             }
         }
         p.set_weapon( shared_from_this() );

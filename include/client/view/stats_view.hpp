@@ -118,16 +118,20 @@ private:
         for ( const auto& i : bp )
         {
             raw_window_->print(
-                16 + offset, 4, fmt::format( "{} {}", offset, i->get_name() ) );
+                16 + offset,
+                4,
+                fmt::format(
+                    "{} {} lvl {}", offset, i->get_name(), i->get_level() ) );
             offset++;
         }
 
         if ( you.get_weapon() )
         {
-            raw_window_->print(
-                16 + offset + 2,
-                4,
-                fmt::format( "weapon: {}", you.get_weapon()->get_name() ) );
+            raw_window_->print( 16 + offset + 2,
+                                4,
+                                fmt::format( "weapon: {} lvl {}",
+                                             you.get_weapon()->get_name(),
+                                             you.get_weapon()->get_level() ) );
             offset++;
         }
 
@@ -135,10 +139,11 @@ private:
 
                  ) )
         {
-            raw_window_->print(
-                16 + offset + 3,
-                4,
-                fmt::format( "armor: {}", you.get_armor()->get_name() ) );
+            raw_window_->print( 16 + offset + 3,
+                                4,
+                                fmt::format( "armor: {} lvl {}",
+                                             you.get_armor()->get_name(),
+                                             you.get_armor()->get_level() ) );
             offset++;
         }
     }
