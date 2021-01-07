@@ -31,6 +31,8 @@ public:
     virtual void set_bold() = 0;
     virtual void set_red() = 0;
     virtual void set_yellow() = 0;
+    virtual void set_blue() = 0;
+    virtual void set_green() = 0;
     virtual void set_normal() = 0;
     virtual void move( int, int ) = 0;
 
@@ -104,6 +106,16 @@ public:
     void set_yellow() override
     {
         Curses::set_yellow( window_ );
+    }
+
+    void set_blue() override
+    {
+        Curses::set_blue( window_ );
+    }
+
+    void set_green() override
+    {
+        Curses::set_green( window_ );
     }
 
     void set_normal() override

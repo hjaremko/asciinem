@@ -58,9 +58,9 @@ inline auto make_view() -> widget::pointer
     auto stats_win = make_stats_window( max_height - 2, 33 );
     auto notify_win = make_notify_window( 5, 60 );
 
+    game_win->add_widget( 1, 1, std::move( notify_win ) );
     main_win->add_widget( 1, 1, std::move( game_win ) );
     main_win->add_widget( 1, max_width - 33, std::move( stats_win ) );
-    main_win->add_widget( 2, 2, std::move( notify_win ) );
 
     return main_win;
 }

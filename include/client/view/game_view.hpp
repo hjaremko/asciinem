@@ -33,9 +33,21 @@ public:
         {
             for ( int j = 0; j < l.size(); ++j )
             {
-                raw_window_->print( map_pos.second + i,
-                                    map_pos.first + j,
-                                    std::string { l[ j ] } );
+                auto c = l[ j ];
+
+                if ( c == '#' )
+                {
+                    raw_window_->set_green();
+                }
+
+                if ( c == '@' )
+                {
+                    raw_window_->set_blue();
+                }
+
+                raw_window_->print(
+                    map_pos.second + i, map_pos.first + j, std::string { c } );
+                raw_window_->set_normal();
             }
             ++i;
         }
@@ -61,8 +73,10 @@ public:
         auto [ x, y ] = raw_window_->get_center();
         this->raw_window_->print( y, x, you->get_shape() );
 
+
         raw_window_->draw_border();
         raw_window_->refresh();
+        window::draw( state, login );
     }
 
 private:
@@ -89,9 +103,10 @@ private:
             y - 1,
             x - 5,
             fmt::format( "Lv {} {}", e->get_level(), e->get_name() ) );
-        //        this->raw_window_.print(
-        //            y + 1, x - 5, fmt::format( "{}/100", e->get_health() ) );
+
+        raw_window_->set_yellow();
         raw_window_->print( y, x, look );
+        raw_window_->set_normal();
     }
 };
 
