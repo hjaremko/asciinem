@@ -110,6 +110,7 @@ public:
                              player.get_name() );
             db_.run_query( update_query );
         }
+
         if ( player.get_armor() )
         {
             update_query =

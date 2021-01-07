@@ -30,7 +30,10 @@ void armor::use( player& p )
             p.take_from_backpack( shared_from_this() );
             if ( p.get_armor() )
             {
-                p.add_to_backpack( shared_from_this() );
+                if ( *p.get_armor() != *this )
+                {
+                    p.add_to_backpack( shared_from_this() );
+                }
             }
         }
         p.set_armor( shared_from_this() );

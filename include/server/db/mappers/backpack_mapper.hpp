@@ -57,8 +57,7 @@ public:
         -> std::set<domain::item::pointer>
     {
         const auto find_query = fmt::format(
-            "SELECT item_name FROM backpacks WHERE player_login = \"{}\"",
-            login );
+            "SELECT * FROM backpacks WHERE player_login = \"{}\"", login );
         auto result = db_.run_query( find_query );
 
         auto im = item_mapper( db_ );
@@ -86,19 +85,19 @@ public:
                 auto defense = get_column( record, "defense" )->second;
                 auto power = get_column( record, "power" )->second;
 
-                if ( attack )
+                if ( attack && std::stoi( *attack ) )
                 {
-                    spdlog::warn( "Getting item " + *ind->second );
+                    spdlog::warn( "Getting weapon " + *ind->second );
                     backpack.insert( im.record_to_weapon( record ) );
                 }
-                else if ( defense )
+                else if ( defense && std::stoi( *defense ) )
                 {
-                    spdlog::warn( "Getting item " + *ind->second );
+                    spdlog::warn( "Getting armor " + *ind->second );
                     backpack.insert( im.record_to_armor( record ) );
                 }
-                else if ( power )
+                else if ( power && std::stoi( *power ) )
                 {
-                    spdlog::warn( "Getting item " + *ind->second );
+                    spdlog::warn( "Getting potion " + *ind->second );
                     backpack.insert( im.record_to_potion( record ) );
                 }
             }
