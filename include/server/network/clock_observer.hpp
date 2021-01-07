@@ -5,10 +5,10 @@
 
 #include <functional>
 
-// todo: move to common
 namespace asciinem::server::network
 {
 
+// observer
 class clock_observer : public network::observer
 {
 public:

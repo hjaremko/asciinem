@@ -7,6 +7,7 @@
 namespace asciinem::server::domain
 {
 
+// strategy
 class still_strategy : public move_strategy
 {
 public:

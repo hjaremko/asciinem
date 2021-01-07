@@ -7,26 +7,9 @@
 namespace asciinem::server::db
 {
 
-// todo:
-// template <class DatabaseImplementation>
-// class player_mapper
-//{
-// public:
-//    auto add_player( const player& ) -> bool
-//    {
-//        impl_.run_query(player -> sql query);
-//    }
-//
-//    auto remove_player( const player& ) -> bool;
-//    auto find_player( const player::id_type& ) -> bool;
-//
-// private:
-//    DatabaseImplementation impl_;
-//};
-
+// bridge
 template <class DbImplementation>
-class database // : public player_mapper<DbImplementation>,
-               // public npc_mapper<DbImplementation>, ...
+class database
 {
 public:
     explicit database( std::string db_name ) : impl_( std::move( db_name ) )

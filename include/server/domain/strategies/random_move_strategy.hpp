@@ -9,6 +9,7 @@
 namespace asciinem::server::domain
 {
 
+// strategy
 class random_move_strategy : public move_strategy
 {
 public:

@@ -18,7 +18,7 @@ public:
              position_type position,
              int level,
              move_strategy::pointer strategy =
-             std::make_shared<random_move_strategy>() );
+                 std::make_shared<random_move_strategy>() ); // strategy
     monster( std::string name,
              position_type position,
              int health,

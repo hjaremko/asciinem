@@ -21,7 +21,7 @@ public:
     ~message_queue() override = default;
 
     auto pop() -> types::msg override;
-    auto pop_wait() -> types::msg override; // todo: add observer to end waiting
+    auto pop_wait() -> types::msg override;
     void push( types::msg msg ) override;
     auto back() -> types::msg override;
     auto front() -> types::msg override;

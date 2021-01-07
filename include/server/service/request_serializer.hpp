@@ -7,6 +7,7 @@
 namespace asciinem::server::service
 {
 
+// command
 class request_serializer
 {
 public:

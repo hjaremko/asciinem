@@ -14,6 +14,7 @@
 namespace asciinem::server::network
 {
 
+// abstract factory
 class network_factory
 {
 public:

@@ -8,6 +8,7 @@
 namespace asciinem::server::network
 {
 
+// facade
 class network_module
 {
 public:

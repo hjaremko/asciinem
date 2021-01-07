@@ -7,6 +7,7 @@
 namespace asciinem::server::network
 {
 
+// observer
 class observer
 {
 public:

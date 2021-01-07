@@ -11,6 +11,7 @@
 namespace asciinem::client::view
 {
 
+// bridge
 using terminal_handler =
 #ifdef __APPLE__
     console::macos_ncurses;
