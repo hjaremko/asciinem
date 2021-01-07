@@ -148,7 +148,11 @@ public:
         const auto find_query =
             fmt::format( "SELECT * FROM items WHERE name = \"{}\";", item_id );
         auto result = db_.run_query( find_query );
-        return *result->begin();
+        if ( result.has_value() )
+        {
+            return *result->begin();
+        }
+        return types::record {};
     }
 
     [[nodiscard]] auto record_to_armor( types::record record )

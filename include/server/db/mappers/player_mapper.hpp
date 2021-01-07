@@ -231,7 +231,11 @@ public:
         if ( armor_name )
         {
             auto im = item_mapper( db_ );
-            armor = im.record_to_armor( im.find_by_name( *armor_name ) );
+            auto armor_record = im.find_by_name( *armor_name );
+            if ( !armor_record.empty() )
+            {
+                armor = im.record_to_armor( armor_record );
+            }
         }
 
         auto bm = backpack_mapper( db_ );
