@@ -14,9 +14,9 @@ public:
     {
         while ( !player.is_dead() && !monster.is_dead() )
         {
-//            spdlog::warn( "Player health = {}, monster health = {}",
-//                          player.get_health(),
-//                          monster.get_health() );
+            spdlog::trace( "Player health = {}, monster health = {}",
+                           player.get_health(),
+                           monster.get_health() );
 
             monster.get_hurt( player.get_attack() );
 

@@ -6,7 +6,7 @@
 using namespace std::chrono_literals;
 using namespace asciinem::server::network;
 
-TEST_CASE( "Listener start/stop test", "[network], [listener]" )
+TEST_CASE( "Listener start/stop test", "[network][listener]" )
 {
     auto manager_mock = std::make_shared<connection_manager_mock>();
 
@@ -22,7 +22,7 @@ TEST_CASE( "Listener start/stop test", "[network], [listener]" )
     l.start_listening();
 }
 
-TEST_CASE( "Receive confirmation message test", "[network], [listener]" )
+TEST_CASE( "Receive confirmation message test", "[network][listener]" )
 {
     using asio::ip::tcp;
     using namespace testing;
