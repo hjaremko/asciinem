@@ -17,6 +17,11 @@ namespace asciinem::server::domain
 class game_manager
 {
 public:
+    game_manager()
+    {
+        current_state_.spawn_boss( { 73, 3 } );
+    }
+
     [[nodiscard]] auto get_state() const -> game_state
     {
         return current_state_;
@@ -262,7 +267,6 @@ private:
     db_type db_ { "asciinem" };
     db::item_mapper<db_type> item_mapper_ { db_ };
     db::player_mapper<db_type> player_mapper_ { db_ };
-    //    db::backpack_mapper<db_type> backpack_mapper_ { db_ };
     unsigned long long ticks_ { 0 };
 };
 
