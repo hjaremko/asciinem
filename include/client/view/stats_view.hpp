@@ -62,44 +62,37 @@ private:
                       you.get_health(),
                       you.get_max_health() );
 
+        const auto max_exp = 100 * you.get_level();
         raw_window_->print(
-            12,
-            2,
-            fmt::format( "Exp {}/{}", you.get_exp(), 100 * you.get_level() ) );
-        draw_yellow_bar( 13,
-                         raw_window_->max_width() - 7,
-                         you.get_exp(),
-                         100 * you.get_level() );
+            12, 2, fmt::format( "Exp {}/{}", you.get_exp(), max_exp ) );
+        draw_yellow_bar(
+            13, raw_window_->max_width() - 7, you.get_exp(), max_exp );
     }
 
     void draw_red_bar( int y, int bars, int value, int max ) const
     {
-        auto percent = static_cast<double>( value ) / max;
-        auto filled_bars = static_cast<unsigned long>( bars * percent );
-
         raw_window_->set_red();
-        raw_window_->print(
-            y, 4, std::string( static_cast<unsigned long>( bars ), '|' ) );
-
-        raw_window_->set_bold();
-        raw_window_->print( y, 4, std::string( filled_bars, '|' ) );
-
+        draw_bar( y, bars, value, max );
         raw_window_->set_normal();
     }
 
     void draw_yellow_bar( int y, int bars, int value, int max ) const
     {
+        raw_window_->set_yellow();
+        draw_bar( y, bars, value, max );
+        raw_window_->set_normal();
+    }
+
+    void draw_bar( int y, int bars, int value, int max ) const
+    {
         auto percent = static_cast<double>( value ) / max;
         auto filled_bars = static_cast<unsigned long>( bars * percent );
 
-        raw_window_->set_yellow();
         raw_window_->print(
             y, 4, std::string( static_cast<unsigned long>( bars ), '|' ) );
 
         raw_window_->set_bold();
         raw_window_->print( y, 4, std::string( filled_bars, '|' ) );
-
-        raw_window_->set_normal();
     }
 
     void draw_eq( const server::domain::player& you ) const

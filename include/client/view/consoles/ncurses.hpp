@@ -22,6 +22,8 @@ struct ncurses
         ::start_color();
         init_pair( 1, COLOR_RED, COLOR_BLACK );
         init_pair( 2, COLOR_YELLOW, COLOR_BLACK );
+        init_pair( 3, COLOR_GREEN, COLOR_BLACK );
+        init_pair( 4, COLOR_BLUE, COLOR_BLACK );
     }
 
     static auto standard_screen() -> raw_window_ptr
@@ -112,10 +114,22 @@ struct ncurses
         ::wattron( win, COLOR_PAIR( 2 ) );
     }
 
+    static void set_green( raw_window_ptr win )
+    {
+        ::wattron( win, COLOR_PAIR( 3 ) );
+    }
+
+    static void set_blue( raw_window_ptr win )
+    {
+        ::wattron( win, COLOR_PAIR( 4 ) );
+    }
+
     static void set_normal( raw_window_ptr win )
     {
         ::wattroff( win, COLOR_PAIR( 1 ) );
         ::wattroff( win, COLOR_PAIR( 2 ) );
+        ::wattroff( win, COLOR_PAIR( 3 ) );
+        ::wattroff( win, COLOR_PAIR( 4 ) );
         wattrset( win, 0 );
     }
 
