@@ -15,10 +15,6 @@ asio_manager::asio_manager( queue::pointer dl, queue::pointer up, subject& c )
 
 asio_manager::~asio_manager()
 {
-    //    spdlog::trace(
-    //        "Manager destructor waiting on a connection manager mutex..." );
-    //    auto l = std::lock_guard<std::recursive_mutex> { mutex_ };
-
     for ( auto& [ c, poller ] : clients_ )
     {
         c->disconnect();
@@ -60,7 +56,7 @@ void asio_manager::remove_client( types::id client_id )
         [ client_id ]( const auto& c ) { return c.first->id() == client_id; } );
 
     auto login = to_remove->first->id();
-    to_remove->second.detach(); // todo: ugly
+    to_remove->second.detach();
     clients_.erase( to_remove );
 
     spdlog::debug( "Connected clients: {}", connected_players() );

@@ -30,7 +30,6 @@ public:
     auto has_message_available() -> bool override;
     void queue_message( const types::msg& msg ) override;
     auto establish( const types::ip&, types::port, const std::string& ) -> bool;
-    // todo: queue should throw when network module is destroyed, use observer
 
 private:
     void start_receiving();

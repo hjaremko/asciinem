@@ -7,6 +7,7 @@
 namespace asciinem::server
 {
 
+// mediator
 class network_service_mediator
 {
 public:

@@ -4,6 +4,7 @@
 namespace asciinem::server::service
 {
 
+// command
 class request
 {
 public:
@@ -14,7 +15,7 @@ public:
 
     void operator()()
     {
-        spdlog::info( "Invoking request." );
+        spdlog::debug( "Invoking request" );
         request_();
     }
 

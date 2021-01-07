@@ -11,9 +11,17 @@
 namespace asciinem::server::network
 {
 
+// abstract factory
+// singleton
 class asio_factory : public network_factory
 {
 public:
+    asio_factory( const asio_factory& ) = delete;
+    asio_factory( asio_factory&& ) = delete;
+    auto operator=( const asio_factory& ) -> asio_factory& = delete;
+    auto operator=( asio_factory&& ) noexcept -> asio_factory& = delete;
+    ~asio_factory() override = default;
+
     static auto instance() -> asio_factory&
     {
         static auto instance = asio_factory();

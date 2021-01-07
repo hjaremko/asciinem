@@ -163,7 +163,6 @@ void asio_network_module::start_receiving()
         }
 
         spdlog::info( "Disconnected from server" );
-        // todo: notify observer
     };
 
     receiving_thread_ = std::thread( poller );
@@ -187,7 +186,6 @@ void asio_network_module::start_sending()
         }
 
         spdlog::info( "Stopped sending." );
-        // todo: notify observer
     };
 
     sending_thread_ = std::thread( sender );

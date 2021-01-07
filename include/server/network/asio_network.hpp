@@ -11,6 +11,7 @@
 namespace asciinem::server::network
 {
 
+// facade
 class asio_network : public network_module
 {
 public:

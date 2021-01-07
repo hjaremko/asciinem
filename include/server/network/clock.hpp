@@ -8,6 +8,7 @@
 namespace asciinem::server::network
 {
 
+// observer
 template <int Interval>
 class clock : public subject
 {
@@ -27,15 +28,8 @@ public:
     auto operator=( const clock& ) -> clock& = delete;
     auto operator=( clock&& ) noexcept -> clock& = delete;
 
-    // not sure if needed
-    auto current_tick() -> int
-    {
-        return tick_.load();
-    }
-
     void notify() override
     {
-        tick_.fetch_add( 1 ); // todo: what if overflows
         subject::notify();
     }
 
@@ -59,7 +53,6 @@ private:
         spdlog::info( "Stopping server clock..." );
     }
 
-    std::atomic<long long> tick_ {};
     std::atomic_bool running_ { true };
     std::thread thread_;
 };

@@ -10,6 +10,7 @@
 namespace asciinem::server::network
 {
 
+// observer
 class subject
 {
 public:

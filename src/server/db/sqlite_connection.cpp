@@ -77,7 +77,7 @@ sqlite_connection::sqlite_connection( std::string db_name )
     {
         auto error_msg = "Can't open database " + db_path;
         spdlog::error( error_msg );
-        throw std::runtime_error( error_msg ); // todo: custom db exception
+        throw std::runtime_error( error_msg );
     }
 
     spdlog::info( "Opened database {} successfully", db_path );
