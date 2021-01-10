@@ -1,4 +1,5 @@
 #include "server/domain/collision_checker.hpp"
+
 using namespace asciinem::server::domain;
 
 auto collision_checker::check_collision( const player::position_type& f_pos,
@@ -36,8 +37,9 @@ auto collision_checker::check_collision( const player::position_type& p_pos,
     for ( auto f = 0; f < p_length; f++ )
     {
         if ( location.get_collision_map()
-                 .at( p_pos.second )      // NOLINT
-                 .at( p_pos.first + f ) ) // NOLINT
+                 .at( static_cast<unsigned long>( p_pos.second ) )
+                 .at( static_cast<unsigned long>( p_pos.first ) +
+                      static_cast<unsigned long>( f ) ) )
         {
             return true;
         }

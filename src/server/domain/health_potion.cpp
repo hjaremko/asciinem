@@ -2,8 +2,6 @@
 
 #include "server/domain/player.hpp"
 
-#include <utility>
-
 namespace asciinem::server::domain
 {
 

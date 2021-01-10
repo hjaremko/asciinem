@@ -1,7 +1,10 @@
 #ifndef ASCIINEM_NETWORK_SERVICE_MEDIATOR_HPP
 #define ASCIINEM_NETWORK_SERVICE_MEDIATOR_HPP
 
-#include "serializer.hpp"
+#include "server/network/clock_observer.hpp"
+#include "server/network/interfaces/network_module.hpp"
+#include "server/network/interfaces/subject.hpp"
+#include "server/service/game_service.hpp"
 #include "server/service/request_serializer.hpp"
 
 namespace asciinem::server
@@ -13,28 +16,9 @@ class network_service_mediator
 public:
     explicit network_service_mediator( network::subject& clock,
                                        network::network_module& net,
-                                       service::game_service& game )
-        : net_( net ), game_( game )
-    {
-        clock.attach( observer_ );
-    }
+                                       service::game_service& game );
 
-    void exchange_data()
-    {
-        if ( net_.has_message_available() )
-        {
-            spdlog::info( "New message available!" );
-            auto request = serializer_.deserialize( net_.poll_message() );
-
-            if ( request.has_value() )
-            {
-                ( *request )();
-            }
-        }
-
-        net_.queue_message( serializer::serialize( game_.get_state() ) );
-        game_.tick();
-    }
+    void exchange_data();
 
 private:
     network::clock_observer::pointer observer_ { network::make_clock_observer(

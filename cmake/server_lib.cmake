@@ -1,5 +1,6 @@
 set(SERVER_TARGET_SOURCES
         ${PROJECT_ROOT}/src/server/util.cpp
+        ${PROJECT_ROOT}/src/server/network_service_mediator.cpp
         ${PROJECT_ROOT}/src/server/domain/armor.cpp
         ${PROJECT_ROOT}/src/server/domain/collision_checker.cpp
         ${PROJECT_ROOT}/src/server/domain/entity.cpp
@@ -9,6 +10,9 @@ set(SERVER_TARGET_SOURCES
         ${PROJECT_ROOT}/src/server/domain/monster.cpp
         ${PROJECT_ROOT}/src/server/domain/player.cpp
         ${PROJECT_ROOT}/src/server/domain/weapon.cpp
+        ${PROJECT_ROOT}/src/server/domain/fight_manager.cpp
+        ${PROJECT_ROOT}/src/server/domain/game_manager.cpp
+        ${PROJECT_ROOT}/src/server/domain/game_state.cpp
         ${PROJECT_ROOT}/src/server/domain/strategies/random_move_strategy.cpp
         ${PROJECT_ROOT}/src/server/domain/strategies/still_strategy.cpp
         ${PROJECT_ROOT}/src/server/domain/util/money.cpp
@@ -18,6 +22,9 @@ set(SERVER_TARGET_SOURCES
         ${PROJECT_ROOT}/src/server/network/message_queue.cpp
         ${PROJECT_ROOT}/src/server/network/asio_manager.cpp
         ${PROJECT_ROOT}/src/server/db/sqlite_connection.cpp
+        ${PROJECT_ROOT}/src/server/db/query_result_type.cpp
+        ${PROJECT_ROOT}/src/server/service/game_service.cpp
+        ${PROJECT_ROOT}/src/server/service/request_serializer.cpp
         )
 
 add_library(server_obj STATIC ${SERVER_TARGET_SOURCES})

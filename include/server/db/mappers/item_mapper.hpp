@@ -1,6 +1,7 @@
 #ifndef ASCIINEM_SERVER_ITEM_MAPPER_H
 #define ASCIINEM_SERVER_ITEM_MAPPER_H
 
+#include "server/db/query_result_type.hpp"
 #include "server/domain/armor.hpp"
 #include "server/domain/health_potion.hpp"
 #include "server/domain/item.hpp"
@@ -8,7 +9,6 @@
 
 #include <fmt/format.h>
 #include <random>
-#include <server/db/query_result_type.hpp>
 
 using namespace std::string_literals;
 

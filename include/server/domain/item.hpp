@@ -1,7 +1,6 @@
 #ifndef ASCIINEM_SERVER_ITEM_H
 #define ASCIINEM_SERVER_ITEM_H
 
-//#include "player.hpp"
 #include "util/money.hpp"
 
 #include <cereal/types/polymorphic.hpp>

@@ -30,7 +30,7 @@ public:
     auto id() -> types::id& override;
     auto ip() -> types::ip override;
     auto receive_data() -> types::msg override;
-    void send_data( const types::msg& ) override;
+    void send_data( const types::msg& /*msg*/ ) override;
     auto socket() -> asio::ip::tcp::socket&;
     void send_confirmation();
     void disconnect() override;

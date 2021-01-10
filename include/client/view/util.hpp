@@ -5,6 +5,8 @@
 #include "client/view/consoles/ncurses.hpp"
 #include "client/view/game_view.hpp"
 #include "client/view/interfaces/widget.hpp"
+#include "client/view/ncurses_main_window.hpp"
+#include "client/view/ncurses_window.hpp"
 #include "client/view/notify_view.hpp"
 #include "client/view/stats_view.hpp"
 

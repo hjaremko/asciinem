@@ -4,7 +4,6 @@
 #include "server/domain/entity.hpp"
 
 #include <memory>
-#include <utility>
 
 namespace asciinem::server::domain
 {

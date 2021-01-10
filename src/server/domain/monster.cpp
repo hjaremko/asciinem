@@ -45,4 +45,9 @@ void monster::set_strategy( const move_strategy::pointer& strategy )
     strategy_ = strategy;
 }
 
+auto monster::get_id() const -> int
+{
+    return id_;
+}
+
 } // namespace asciinem::server::domain

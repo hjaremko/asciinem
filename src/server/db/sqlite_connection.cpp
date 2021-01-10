@@ -1,5 +1,7 @@
 #include "server/db/sqlite_connection.hpp"
 
+#include <spdlog/spdlog.h>
+
 namespace
 {
 using namespace asciinem::server::db;
@@ -122,6 +124,11 @@ auto sqlite_connection::run_query( const std::string& query ) const
     spdlog::debug( "Selected {} records.", result.size() );
 
     return result.empty() ? std::nullopt : std::make_optional( result );
+}
+
+inline auto sqlite_connection::path() const -> std::string
+{
+    return db_name_ + ".db";
 }
 
 } // namespace asciinem::server::db

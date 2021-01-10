@@ -26,11 +26,7 @@ public:
              move_strategy::pointer strategy =
                  std::make_shared<random_move_strategy>() );
 
-    [[nodiscard]] auto get_id() const -> int
-    {
-        return id_;
-    }
-
+    [[nodiscard]] auto get_id() const -> int;
     [[nodiscard]] auto get_attack() const -> int override;
     [[nodiscard]] auto get_defense() const -> int override;
     void set_strategy( const move_strategy::pointer& strategy );

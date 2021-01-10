@@ -3,6 +3,7 @@
 
 #include <catch2/catch.hpp>
 #include <filesystem>
+#include <spdlog/spdlog.h>
 
 using namespace asciinem::server;
 using namespace std::chrono_literals;

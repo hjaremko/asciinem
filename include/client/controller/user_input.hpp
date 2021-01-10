@@ -25,7 +25,7 @@ enum class user_input
     INVALID
 };
 
-auto cast_to_user_input( int c ) -> user_input
+inline auto cast_to_user_input( int c ) -> user_input
 {
     switch ( c )
     {

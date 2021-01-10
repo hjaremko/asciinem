@@ -89,11 +89,11 @@ TEST_CASE( "Test find player", "[server][db]" )
     auto pm = db::player_mapper { db };
 
     auto op = domain::player( "test" );
-    //    pm.insert( op );
+    pm.insert( op );
 
-    //    auto p = pm.find( "test" );
-    //
-    //    REQUIRE( op == *p );
+    auto p = pm.find( "test" );
+
+    REQUIRE( op == *p );
 
     cleanup_db_file( db_path );
 }

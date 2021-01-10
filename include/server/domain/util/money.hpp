@@ -2,6 +2,7 @@
 #define ASCIINEM_SERVER_MONEY_H
 
 #include <string>
+
 namespace asciinem::server::domain
 {
 

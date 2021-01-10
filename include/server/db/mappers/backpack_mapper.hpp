@@ -5,6 +5,7 @@
 
 #include <fmt/format.h>
 #include <set>
+#include <spdlog/spdlog.h>
 
 using namespace std::string_literals;
 
