@@ -73,7 +73,6 @@ public:
         auto [ x, y ] = raw_window_->get_center();
         this->raw_window_->print( y, x, you->get_shape() );
 
-
         raw_window_->draw_border();
         raw_window_->refresh();
         window::draw( state, login );

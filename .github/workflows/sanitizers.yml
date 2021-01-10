@@ -17,14 +17,14 @@ jobs:
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install Conan
         run: sudo pip install conan
-      - name: Create build dir
-        run: mkdir build
       - name: Cache CMake files
         uses: actions/cache@v2
         with:
           path: build
-          key: ${{ runner.os }}-asan-${{ hashFiles('*') }}
+          key: ${{ runner.os }}-asan-${{ hashFiles('**/') }}
           restore-keys: ${{ runner.os }}-asan-
+      - name: Create build dir
+        run: mkdir -p build
       - name: Load CMake
         run: |
           cd build
