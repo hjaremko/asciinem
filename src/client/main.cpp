@@ -1,7 +1,5 @@
 #include "client/network/asio_network_module.hpp"
 #include "client/util.hpp"
-#include "client/view/consoles/macos_ncurses.hpp"
-#include "client/view/consoles/ncurses.hpp"
 #include "client/view/util.hpp"
 
 #include <client/controller/game_controller.hpp>

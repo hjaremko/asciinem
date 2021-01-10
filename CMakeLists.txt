@@ -50,6 +50,10 @@ set(CONAN_EXTRA_OPTIONS "")
 include(cmake/conan.cmake)
 run_conan()
 
+include_directories(${PROJECT_ROOT}/include/)
+include(cmake/server_lib.cmake)
+include(cmake/client_lib.cmake)
+
 if(ENABLE_TESTING)
   enable_testing()
   message("Building Tests.")
@@ -57,4 +61,3 @@ if(ENABLE_TESTING)
 endif()
 
 add_subdirectory(src)
-

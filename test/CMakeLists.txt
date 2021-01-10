@@ -4,16 +4,17 @@ else ()
     include(${CONAN_CATCH2_ROOT}/lib/cmake/Catch2/Catch.cmake)
 endif ()
 
-include_directories(${PROJECT_ROOT}/include)
-
 add_library(catch_main STATIC catch_main.cpp)
-target_link_libraries(catch_main PUBLIC
+target_link_libraries(
+        catch_main PUBLIC
         CONAN_PKG::catch2
         CONAN_PKG::spdlog
         CONAN_PKG::asio
         CONAN_PKG::gtest
         CONAN_PKG::sqlite3
-        CONAN_PKG::cereal)
+        CONAN_PKG::cereal
+)
+
 target_link_libraries(catch_main PRIVATE project_options)
 
 add_executable(server_tests
@@ -29,25 +30,14 @@ add_executable(server_tests
         server/domain/location_tests.cpp
         server/domain/player_tests.cpp
         server/domain/monster_tests.cpp
-        ${PROJECT_ROOT}/src/server/network/asio_connection.cpp
-        ${PROJECT_ROOT}/src/server/network/asio_server.cpp
-        ${PROJECT_ROOT}/src/server/network/asio_listener.cpp
-        ${PROJECT_ROOT}/src/server/network/message_queue.cpp
-        ${PROJECT_ROOT}/src/server/network/asio_manager.cpp
-        ${PROJECT_ROOT}/src/server/db/sqlite_connection.cpp
-        ${PROJECT_ROOT}/src/server/domain/armor.cpp
-        ${PROJECT_ROOT}/src/server/domain/collision_checker.cpp
-        ${PROJECT_ROOT}/src/server/domain/entity.cpp
-        ${PROJECT_ROOT}/src/server/domain/health_potion.cpp
-        ${PROJECT_ROOT}/src/server/domain/item.cpp
-        ${PROJECT_ROOT}/src/server/domain/location.cpp
-        ${PROJECT_ROOT}/src/server/domain/monster.cpp
-        ${PROJECT_ROOT}/src/server/domain/player.cpp
-        ${PROJECT_ROOT}/src/server/domain/weapon.cpp
-        ${PROJECT_ROOT}/src/server/domain/util/money.cpp
-        ${PROJECT_ROOT}/src/server/domain/strategies/still_strategy.cpp
         )
-target_link_libraries(server_tests PRIVATE project_warnings project_options catch_main)
+
+target_link_libraries(server_tests
+        PRIVATE project_warnings
+        project_options
+        catch_main
+        server_obj
+        )
 
 catch_discover_tests(
         server_tests
@@ -61,7 +51,10 @@ catch_discover_tests(
 add_executable(client_tests
         client/tests.cpp
         )
-target_link_libraries(client_tests PRIVATE project_warnings project_options catch_main)
+target_link_libraries(client_tests
+        PRIVATE project_warnings
+        project_options
+        catch_main)
 
 catch_discover_tests(
         client_tests
