@@ -10,6 +10,6 @@ using msg = std::string;
 using ip = std::string;
 using port = unsigned short;
 
-}
+} // namespace asciinem::client::network::types
 
 #endif // ASCIINEM_CLIENT_NETWORK_TYPES_HPP

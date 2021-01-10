@@ -29,10 +29,7 @@ public:
                  broadcast,
                  ( const asciinem::server::network::types::msg& ),
                  ( const, override ) );
-    MOCK_METHOD( bool,
-                 is_logged,
-                 ( const std::string& ),
-                 ( const, override ) );
+    MOCK_METHOD( bool, is_logged, ( const std::string& ), ( const, override ) );
 };
 
 #endif // ASCIINEM_CONNECTION_MANAGER_MOCK_HPP

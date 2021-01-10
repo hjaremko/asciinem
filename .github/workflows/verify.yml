@@ -4,7 +4,7 @@ on: [ push ]
 
 jobs:
   build:
-    name: Build project
+    name: Verify project
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -19,22 +19,31 @@ jobs:
         run: sudo pip install conan
       - name: Install clang-tidy
         run: sudo apt-get install clang-tidy -y
-      - name: Create build dir
-        run: mkdir -p build
       - name: Cache CMake files
         uses: actions/cache@v2
         with:
-          path: build
-          key: ${{ runner.os }}-verify-${{ hashFiles('*') }}
+          path: |
+            build
+            ~/.conan
+          key: ${{ runner.os }}-verify-${{ hashFiles('**/') }}
           restore-keys: ${{ runner.os }}-verify-
+      - name: Create build dir
+        run: mkdir -p build
       - name: Build
         run: |
           cd build
-          cmake -G Ninja .. -DENABLE_CLANG_TIDY=1
+          cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_CLANG_TIDY=1
           cmake --build .
       - name: Run tests
         run: |
           cd build
           ctest --verbose
 
-# todo: verify formatting
+  formatting:
+      name: Formatting
+      runs-on: ubuntu-20.04
+      steps:
+      - name: Chceckout code
+        uses: actions/checkout@v2
+      - name: Run clang-format style check
+        uses: jidicula/clang-format-action@v2.0.0
