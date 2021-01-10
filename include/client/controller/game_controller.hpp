@@ -1,8 +1,10 @@
 #ifndef ASCIINEM_SERVER_EVENT_HANDLER_H
 #define ASCIINEM_SERVER_EVENT_HANDLER_H
 
-#include <client/network/interfaces/network_module.hpp>
-#include <client/view/window.hpp>
+#include "client/controller/user_input.hpp"
+#include "client/network/interfaces/network_module.hpp"
+#include "client/view/window.hpp"
+
 #include <ncurses.h>
 #include <spdlog/spdlog.h>
 #include <thread>
