@@ -1,5 +1,7 @@
 # Asciinem - dynamic terminal MMO RPG ![Build](https://github.com/hjaremko/asciinem/workflows/Build/badge.svg)
 
+![Gameplay](https://i.imgur.com/XIWlsVC.png)
+
 [comment]: <> (### Downloading)
 
 [comment]: <> (Builds for Windows, Linux and macOS are available [here]&#40;https://github.com/hjaremko/asciinem/releases&#41;.)
