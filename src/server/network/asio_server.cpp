@@ -18,9 +18,8 @@ void asio_server::start_accept()
     auto new_connection = make_connection( io_context_, "" );
 
     acceptor_.async_accept( new_connection->socket(),
-                            [ this, new_connection ]( auto error_code ) {
-                                handle_accept( new_connection, error_code );
-                            } );
+                            [ this, new_connection ]( auto error_code )
+                            { handle_accept( new_connection, error_code ); } );
 }
 
 void asio_server::handle_accept( const asio_connection::pointer& new_connection,

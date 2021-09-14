@@ -6,7 +6,8 @@ using namespace asciinem::server::db;
 
 auto make_key_value( int i, char** record_data, char** col_name )
 {
-    auto make_value = [ i, record_data ] {
+    auto make_value = [ i, record_data ]
+    {
         return record_data[ i ]                             // NOLINT
                    ? std::make_optional( record_data[ i ] ) // NOLINT
                    : std::nullopt;

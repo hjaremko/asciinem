@@ -158,11 +158,12 @@ public:
     [[nodiscard]] auto record_to_armor( types::record record )
         -> domain::armor::pointer
     {
-        auto get_column_value = [ &record ]( const auto& col ) {
-            return std::find_if(
-                       std::begin( record ),
-                       std::end( record ),
-                       [ col ]( const auto& p ) { return p.first == col; } )
+        auto get_column_value = [ &record ]( const auto& col )
+        {
+            return std::find_if( std::begin( record ),
+                                 std::end( record ),
+                                 [ col ]( const auto& p )
+                                 { return p.first == col; } )
                 ->second;
         };
 
@@ -181,11 +182,12 @@ public:
     [[nodiscard]] auto record_to_weapon( types::record record )
         -> domain::weapon::pointer
     {
-        auto get_column_value = [ &record ]( const auto& col ) {
-            return std::find_if(
-                       std::begin( record ),
-                       std::end( record ),
-                       [ col ]( const auto& p ) { return p.first == col; } )
+        auto get_column_value = [ &record ]( const auto& col )
+        {
+            return std::find_if( std::begin( record ),
+                                 std::end( record ),
+                                 [ col ]( const auto& p )
+                                 { return p.first == col; } )
                 ->second;
         };
 
@@ -204,11 +206,12 @@ public:
     [[nodiscard]] auto record_to_potion( types::record record )
         -> domain::health_potion::pointer
     {
-        auto get_column_value = [ &record ]( const auto& col ) {
-            return std::find_if(
-                       std::begin( record ),
-                       std::end( record ),
-                       [ col ]( const auto& p ) { return p.first == col; } )
+        auto get_column_value = [ &record ]( const auto& col )
+        {
+            return std::find_if( std::begin( record ),
+                                 std::end( record ),
+                                 [ col ]( const auto& p )
+                                 { return p.first == col; } )
                 ->second;
         };
 
@@ -243,11 +246,12 @@ public:
 
             auto record = *it;
 
-            auto get_column_value = [ &record ]( const auto& col ) {
-                return std::find_if(
-                           std::begin( record ),
-                           std::end( record ),
-                           [ col ]( const auto& p ) { return p.first == col; } )
+            auto get_column_value = [ &record ]( const auto& col )
+            {
+                return std::find_if( std::begin( record ),
+                                     std::end( record ),
+                                     [ col ]( const auto& p )
+                                     { return p.first == col; } )
                     ->second;
             };
 
