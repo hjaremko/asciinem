@@ -60,9 +60,7 @@ auto collision_checker::check_collision( const player::position_type& p_pos,
             return false;
         }
 
-        int i = y;
-        int j = x + f;
-        if ( collision_map.at( i ).at( j ) )
+        if ( collision_map.at( y ).at( x + f ) ) // NOLINT
         {
             return true;
         }
