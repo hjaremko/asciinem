@@ -42,7 +42,8 @@ auto asio_connection::ip() -> types::ip
 
 auto asio_connection::receive_data() -> types::msg
 {
-    auto array_to_str = []( const auto& buffer, auto size ) {
+    auto array_to_str = []( const auto& buffer, auto size )
+    {
         auto ss = std::stringstream {};
         ss.write( buffer.data(), static_cast<long>( size ) );
         return ss.str();
@@ -51,8 +52,8 @@ auto asio_connection::receive_data() -> types::msg
     constexpr const auto buffer_size = 2048 * 8;
     using buffer_type = std::array<char, buffer_size>;
 
-    auto receive_from_socket =
-        [ this ]() -> std::pair<buffer_type, std::size_t> {
+    auto receive_from_socket = [ this ]() -> std::pair<buffer_type, std::size_t>
+    {
         auto buffer = buffer_type { {} };
         auto error = asio::error_code {};
 
@@ -85,12 +86,7 @@ void asio_connection::send_data( const types::msg& msg )
 
     spdlog::trace( "Sending '{}' to {} at {}", msg, id(), ip() );
 
-    asio::async_write(
-        socket_,
-        asio::buffer( msg + server_config::PACKET_DELIM ),
-        [ this_ptr = shared_from_this() ]( auto /*unused*/, auto /*unused*/ ) {
-            this_ptr->handle_write();
-        } );
+    asio::write( socket_, asio::buffer( msg + server_config::PACKET_DELIM ) );
 }
 
 auto asio_connection::socket() -> asio::ip::tcp::socket&
@@ -104,10 +100,6 @@ void asio_connection::send_confirmation()
 
     auto message_ = std::string { "confirm!" };
     send_data( message_ );
-}
-
-void asio_connection::handle_write()
-{
 }
 
 void asio_connection::disconnect()

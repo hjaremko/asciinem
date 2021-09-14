@@ -1,4 +1,6 @@
 #include "server/domain/collision_checker.hpp"
+
+#include <spdlog/spdlog.h>
 using namespace asciinem::server::domain;
 
 auto collision_checker::check_collision( const player::position_type& f_pos,
@@ -32,12 +34,35 @@ auto collision_checker::check_collision( const player::position_type& p_pos,
                                          int p_length,
                                          const location& location ) -> bool
 {
+    const auto [ x, y ] = p_pos;
+    const auto& collision_map = location.get_collision_map();
 
     for ( auto f = 0; f < p_length; f++ )
     {
-        if ( location.get_collision_map()
-                 .at( p_pos.second )      // NOLINT
-                 .at( p_pos.first + f ) ) // NOLINT
+        auto is_out_of_bounds = [ collision_map, f ]( int i, int j )
+        {
+            const auto map_height = static_cast<int>( collision_map.size() );
+            if ( j < 0 || j >= map_height || i + f < 0 )
+            {
+                return true;
+            }
+
+            const auto map_width = static_cast<int>(
+                collision_map.at( static_cast<size_t>( j ) ).size() );
+
+            return i + f >= map_width;
+        };
+
+        if ( is_out_of_bounds( x, y ) )
+        {
+            // todo: add player context?
+            spdlog::debug( "Player out of map bounds: {}, {}", x, y );
+            return false;
+        }
+
+        int i = y;
+        int j = x + f;
+        if ( collision_map.at( i ).at( j ) )
         {
             return true;
         }

@@ -72,9 +72,8 @@ public:
     [[nodiscard]] auto find_player( const std::string& name ) const
         -> player::pointer
     {
-        auto find_player = [ name ]( const auto& e ) {
-            return e->get_name() == name;
-        };
+        auto find_player = [ name ]( const auto& e )
+        { return e->get_name() == name; };
 
         auto entity_it = std::find_if(
             std::begin( entities_ ), std::end( entities_ ), find_player );
@@ -119,7 +118,8 @@ public:
 private:
     players_type entities_;
     monsters_type monsters_;
-    location map_ { "map1.txt", "map1_collisions.txt" };
+    location map_ { "locations/map1.txt",
+                    "locations/map1_collisions.txt" }; // todo
     std::string notice_;
 };
 

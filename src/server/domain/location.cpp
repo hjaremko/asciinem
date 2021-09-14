@@ -20,6 +20,9 @@ using namespace asciinem::server::domain;
 location::location( const std::string& map_filename,
                     const std::string& collision_map_filename )
 {
+    spdlog::debug( "Reading map file: {}", map_filename );
+    spdlog::debug( "Reading collision file: {}", collision_map_filename );
+
     try
     {
         if ( !does_exist( map_filename ) ||
@@ -28,7 +31,8 @@ location::location( const std::string& map_filename,
             throw std::runtime_error( "Location map does not exist!" );
         }
 
-        auto read_map = [ map_filename ]() {
+        auto read_map = [ map_filename ]()
+        {
             auto map = std::vector<std::string> {};
             auto file = std::ifstream { map_filename };
 
@@ -40,7 +44,8 @@ location::location( const std::string& map_filename,
             return map;
         };
 
-        auto read_collisions = [ collision_map_filename ]() {
+        auto read_collisions = [ collision_map_filename ]()
+        {
             auto collision_map = std::vector<std::vector<bool>> {};
             auto file = std::ifstream { collision_map_filename };
 
@@ -78,9 +83,8 @@ auto location::get_folded_map() const -> std::string
     return std::accumulate( std::begin( map_ ),
                             std::end( map_ ),
                             std::string {},
-                            []( auto acc, const auto& line ) {
-                                return std::move( acc ) + line + '\n';
-                            } );
+                            []( auto acc, const auto& line )
+                            { return std::move( acc ) + line + '\n'; } );
 }
 
 auto location::get_collision_map() const -> std::vector<std::vector<bool>>
