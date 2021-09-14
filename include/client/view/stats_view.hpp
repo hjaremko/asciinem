@@ -104,9 +104,10 @@ private:
             bp.push_back( p );
         }
 
-        std::sort( bp.begin(), bp.end(), []( auto a, auto b ) {
-            return a->get_name() < b->get_name();
-        } );
+        std::sort( bp.begin(),
+                   bp.end(),
+                   []( auto a, auto b )
+                   { return a->get_name() < b->get_name(); } );
 
         raw_window_->print( 15,
                             2,

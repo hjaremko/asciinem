@@ -126,9 +126,10 @@ public:
             bp.push_back( p );
         }
 
-        std::sort( bp.begin(), bp.end(), []( auto a, auto b ) {
-            return a->get_name() < b->get_name();
-        } );
+        std::sort( bp.begin(),
+                   bp.end(),
+                   []( auto a, auto b )
+                   { return a->get_name() < b->get_name(); } );
 
         if ( ind < static_cast<int>( bp.size() ) )
         {
@@ -141,6 +142,7 @@ public:
     {
         auto player = player_mapper_.find( login );
         current_state_.get_entities().insert( player );
+        spdlog::debug( "Player {} added to the game", login );
     }
 
     void remove_player( const std::string& login )

@@ -65,8 +65,8 @@ auto player::has( const item& item ) -> bool
 {
     return std::find_if( backpack_.begin(),
                          backpack_.end(),
-                         [ item ]( const auto& x ) { return *x == item; } ) !=
-           backpack_.end();
+                         [ item ]( const auto& x )
+                         { return *x == item; } ) != backpack_.end();
 }
 
 auto player::get_attack() const -> int

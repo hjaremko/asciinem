@@ -36,7 +36,6 @@ public:
     void disconnect() override;
 
 private:
-    void handle_write();
     void disconnect_();
 
     asio::ip::tcp::socket socket_;

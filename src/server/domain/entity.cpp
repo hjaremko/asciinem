@@ -6,7 +6,7 @@ namespace asciinem::server::domain
 
 entity::entity( std::string name,
                 std::string shape,
-                std::pair<int, int> position,
+                position_type position,
                 int health,
                 int level )
     : name_( std::move( name ) ), shape_( std::move( shape ) ),
@@ -17,7 +17,7 @@ entity::entity( std::string name,
 
 entity::entity( std::string name,
                 std::string shape,
-                std::pair<int, int> position,
+                position_type position,
                 int level )
     : name_( std::move( name ) ), shape_( std::move( shape ) ),
       position_( std::move( position ) ), health_( 100 * level ), // NOLINT

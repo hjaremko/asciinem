@@ -198,17 +198,16 @@ public:
                           []( const auto& p ) { return p.first == "money"; } )
                 ->second;
         auto backpack_capacity =
-            std::find_if(
-                std::begin( record ),
-                std::end( record ),
-                []( const auto& p ) { return p.first == "backpack_capacity"; } )
+            std::find_if( std::begin( record ),
+                          std::end( record ),
+                          []( const auto& p )
+                          { return p.first == "backpack_capacity"; } )
                 ->second;
 
         auto weapon_name = std::find_if( std::begin( record ),
                                          std::end( record ),
-                                         []( const auto& p ) {
-                                             return p.first == "weapon_name";
-                                         } )
+                                         []( const auto& p )
+                                         { return p.first == "weapon_name"; } )
                                ->second;
 
         auto weapon = domain::weapon::pointer {};
@@ -221,9 +220,8 @@ public:
 
         auto armor_name = std::find_if( std::begin( record ),
                                         std::end( record ),
-                                        []( const auto& p ) {
-                                            return p.first == "armor_name";
-                                        } )
+                                        []( const auto& p )
+                                        { return p.first == "armor_name"; } )
                               ->second;
 
         auto armor = domain::armor::pointer {};

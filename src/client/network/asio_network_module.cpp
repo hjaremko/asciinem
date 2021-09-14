@@ -25,7 +25,8 @@ namespace asciinem::client::network
 
 asio_network_module::~asio_network_module()
 {
-    auto join_thread = []( auto& t ) {
+    auto join_thread = []( auto& t )
+    {
         if ( t.has_value() )
         {
             spdlog::trace( "Joining..." );
@@ -141,7 +142,8 @@ auto asio_network_module::get_most_recent_packet( const std::string& data )
 
 void asio_network_module::start_receiving()
 {
-    auto poller = [ this ]() {
+    auto poller = [ this ]()
+    {
         spdlog::info( "Waiting for server messages..." );
 
         while ( running_.load() )
@@ -170,7 +172,8 @@ void asio_network_module::start_receiving()
 
 void asio_network_module::start_sending()
 {
-    auto sender = [ this ]() {
+    auto sender = [ this ]()
+    {
         spdlog::info( "Sending messages from the queue..." );
 
         while ( running_.load() )

@@ -50,10 +50,10 @@ void asio_manager::remove_client( types::id client_id )
 
     spdlog::debug( "Removing client: {}", client_id );
 
-    auto to_remove = std::find_if(
-        std::begin( clients_ ),
-        std::end( clients_ ),
-        [ client_id ]( const auto& c ) { return c.first->id() == client_id; } );
+    auto to_remove = std::find_if( std::begin( clients_ ),
+                                   std::end( clients_ ),
+                                   [ client_id ]( const auto& c )
+                                   { return c.first->id() == client_id; } );
 
     auto login = to_remove->first->id();
     to_remove->second.detach();
@@ -68,7 +68,8 @@ auto asio_manager::poll_client( const client_connection::pointer& c )
     -> std::thread
 {
     auto poller = [ this, dl = downlink_->shared_from_this() ](
-                      const client_connection::pointer& client ) {
+                      const client_connection::pointer& client )
+    {
         spdlog::info( "Polling client id {}", client->id() );
 
         while ( true )

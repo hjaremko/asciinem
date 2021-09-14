@@ -33,7 +33,8 @@ void asio_listener::start_listening_()
         return;
     }
 
-    auto listening_thread = [ & ]() {
+    auto listening_thread = [ & ]()
+    {
         spdlog::info( "Starting listening on {}...", port_ );
 
         try

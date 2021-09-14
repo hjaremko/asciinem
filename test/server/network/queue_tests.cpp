@@ -14,7 +14,8 @@ namespace
 template <int Amount>
 auto make_pushers( queue& q )
 {
-    auto poosher = [ &q ]() {
+    auto poosher = [ &q ]()
+    {
         std::this_thread::sleep_for( 300ms );
         q.push( std::to_string( 1 ) );
     };
@@ -31,7 +32,8 @@ auto make_pushers( queue& q )
 template <int Amount>
 auto make_popper( queue& q, int& sum )
 {
-    auto popper = [ & ]() {
+    auto popper = [ & ]()
+    {
         auto elems = 0;
 
         while ( elems < Amount )

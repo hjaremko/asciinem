@@ -26,7 +26,8 @@ TEST_CASE( "Manager add/remove client test", "[network][manager]" )
     auto m = std::make_shared<asio_manager>( dl, up, clock );
     auto l = asio_listener { port, m };
 
-    auto add_client = [ & ]( int i ) {
+    auto add_client = [ & ]( int i )
+    {
         auto io_context = asio::io_context {};
         auto c =
             make_connection( io_context, localhost, port, std::to_string( i ) );
@@ -57,7 +58,8 @@ TEST_CASE( "Manager should broadcast to all connections", "[network][manager]" )
     auto m = std::make_shared<asio_manager>( dl, up, clock );
     auto l = asio_listener { port, m };
 
-    auto add_client = [ & ]( int i ) {
+    auto add_client = [ & ]( int i )
+    {
         auto io_context = asio::io_context {};
         auto c =
             make_connection( io_context, localhost, port, std::to_string( i ) );

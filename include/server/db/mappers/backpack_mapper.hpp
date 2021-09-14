@@ -70,11 +70,12 @@ public:
 
         for ( const auto& r : *result )
         {
-            auto get_column = []( const auto& record, const auto& col ) {
-                return std::find_if(
-                    std::begin( record ),
-                    std::end( record ),
-                    [ col ]( const auto& p ) { return p.first == col; } );
+            auto get_column = []( const auto& record, const auto& col )
+            {
+                return std::find_if( std::begin( record ),
+                                     std::end( record ),
+                                     [ col ]( const auto& p )
+                                     { return p.first == col; } );
             };
 
             auto ind = get_column( r, "item_name" );
