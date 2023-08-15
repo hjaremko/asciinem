@@ -14,15 +14,15 @@ class message_queue : public queue
 {
 public:
     message_queue() = default;
-    message_queue( const message_queue& ) = delete;
-    message_queue( message_queue&& ) noexcept = delete;
-    auto operator=( const message_queue& ) -> message_queue& = delete;
-    auto operator=( message_queue&& ) noexcept -> message_queue& = delete;
+    message_queue(const message_queue&) = delete;
+    message_queue(message_queue&&) noexcept = delete;
+    auto operator=(const message_queue&) -> message_queue& = delete;
+    auto operator=(message_queue&&) noexcept -> message_queue& = delete;
     ~message_queue() override = default;
 
     auto pop() -> types::msg override;
     auto pop_wait() -> types::msg override;
-    void push( types::msg msg ) override;
+    void push(types::msg msg) override;
     auto back() -> types::msg override;
     auto front() -> types::msg override;
     auto size() -> std::size_t override;

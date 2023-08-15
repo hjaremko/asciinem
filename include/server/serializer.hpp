@@ -14,43 +14,43 @@ class serializer
 {
 public:
     template <class T>
-    static auto serialize( const T& data ) -> std::string
+    static auto serialize(const T& data) -> std::string
     {
-        auto ss = std::ostringstream {};
+        auto ss = std::ostringstream{};
 
         {
-            auto archive = cereal::XMLOutputArchive( ss );
-            archive( data );
+            auto archive = cereal::XMLOutputArchive(ss);
+            archive(data);
         }
 
         return ss.str();
     }
 
     template <class T>
-    static auto deserialize( const std::string& data ) -> T
+    static auto deserialize(const std::string& data) -> T
     {
-        spdlog::trace( "Deserializing: '{}'", data );
+        spdlog::trace("Deserializing: '{}'", data);
 
-        auto tmp = T {};
-        auto ss = std::istringstream { data };
+        auto tmp = T{};
+        auto ss = std::istringstream{data};
 
         try
         {
-            auto archive = cereal::XMLInputArchive( ss );
-            archive( tmp );
+            auto archive = cereal::XMLInputArchive(ss);
+            archive(tmp);
         }
-        catch ( std::exception& e )
+        catch (std::exception& e)
         {
-            spdlog::warn( "Deserialization error: {}", e.what() );
+            spdlog::warn("Deserialization error: {}", e.what());
         }
 
         return tmp;
     }
 
-    static auto is_complete( std::string_view data ) -> bool
+    static auto is_complete(std::string_view data) -> bool
     {
-        return data.find( "<cereal>" ) != std::string::npos &&
-               data.find( "</cereal>" ) != std::string::npos;
+        return data.find("<cereal>") != std::string::npos
+            && data.find("</cereal>") != std::string::npos;
     }
 };
 

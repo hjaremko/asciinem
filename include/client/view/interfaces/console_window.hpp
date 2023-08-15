@@ -16,10 +16,10 @@ public:
     using pointer = std::unique_ptr<console_window>;
 
     console_window() = default;
-    console_window( const console_window& ) = default;
-    console_window( console_window&& ) noexcept = default;
-    auto operator=( const console_window& ) -> console_window& = default;
-    auto operator=( console_window&& ) noexcept -> console_window& = default;
+    console_window(const console_window&) = default;
+    console_window(console_window&&) noexcept = default;
+    auto operator=(const console_window&) -> console_window& = default;
+    auto operator=(console_window&&) noexcept -> console_window& = default;
     virtual ~console_window() = default;
 
     virtual void clear() const = 0;
@@ -34,9 +34,9 @@ public:
     virtual void set_blue() = 0;
     virtual void set_green() = 0;
     virtual void set_normal() = 0;
-    virtual void move( int, int ) = 0;
+    virtual void move(int, int) = 0;
 
-    virtual void print( int y, int x, const std::string& format ) = 0;
+    virtual void print(int y, int x, const std::string& format) = 0;
 };
 
 template <class Curses>
@@ -45,87 +45,87 @@ class ncurses_window : public console_window
 public:
     ncurses_window() = default;
 
-    explicit ncurses_window( typename Curses::raw_window_ptr win )
-        : window_( win ) {};
+    explicit ncurses_window(typename Curses::raw_window_ptr win)
+        : window_(win){};
 
-    ncurses_window( int y, int x, int height, int width )
-        : window_( Curses::make_window( y, x, height, width ) )
+    ncurses_window(int y, int x, int height, int width)
+        : window_(Curses::make_window(y, x, height, width))
     {
     }
 
     ~ncurses_window() override
     {
-        Curses::destroy_window( window_ );
+        Curses::destroy_window(window_);
     }
 
     void clear() const override
     {
-        Curses::clear( window_ );
+        Curses::clear(window_);
     }
 
     void refresh() const override
     {
-        Curses::refresh( window_ );
+        Curses::refresh(window_);
     }
 
     void draw_border() override
     {
-        Curses::draw_border( window_ );
+        Curses::draw_border(window_);
     }
 
     [[nodiscard]] auto get_center() const -> std::pair<int, int> override
     {
-        return Curses::get_center( window_ );
+        return Curses::get_center(window_);
     }
 
     [[nodiscard]] auto max_height() const -> int override
     {
-        return Curses::max_height( window_ );
+        return Curses::max_height(window_);
     }
 
     [[nodiscard]] auto max_width() const -> int override
     {
-        return Curses::max_width( window_ );
+        return Curses::max_width(window_);
     }
 
-    void print( int y, int x, const std::string& format ) override
+    void print(int y, int x, const std::string& format) override
     {
-        Curses::print( window_, y, x, format );
+        Curses::print(window_, y, x, format);
     }
 
     void set_bold() override
     {
-        Curses::set_bold( window_ );
+        Curses::set_bold(window_);
     }
 
     void set_red() override
     {
-        Curses::set_red( window_ );
+        Curses::set_red(window_);
     }
 
     void set_yellow() override
     {
-        Curses::set_yellow( window_ );
+        Curses::set_yellow(window_);
     }
 
     void set_blue() override
     {
-        Curses::set_blue( window_ );
+        Curses::set_blue(window_);
     }
 
     void set_green() override
     {
-        Curses::set_green( window_ );
+        Curses::set_green(window_);
     }
 
     void set_normal() override
     {
-        Curses::set_normal( window_ );
+        Curses::set_normal(window_);
     }
 
-    void move( int y, int x ) override
+    void move(int y, int x) override
     {
-        Curses::move( window_, y, x );
+        Curses::move(window_, y, x);
     }
 
 private:
@@ -138,7 +138,8 @@ class ncurses_main_window : public ncurses_window<Curses>
 public:
     ncurses_main_window()
         : ncurses_window<Curses>(
-              ( Curses::initialize(), Curses::standard_screen() ) )
+            (Curses::initialize(), Curses::standard_screen())
+        )
     {
     }
 

@@ -18,19 +18,22 @@ using query_result = std::set<record>;
 
 } // namespace types
 
-[[maybe_unused]] inline void print_query_result( const types::query_result& r )
+[[maybe_unused]] inline void print_query_result(const types::query_result& r)
 {
-    for ( const auto& record : r )
+    for (const auto& record : r)
     {
-        auto rs = std::string {};
+        auto rs = std::string{};
 
-        for ( const auto& tup : record )
+        for (const auto& tup : record)
         {
             rs += fmt::format(
-                "{} = {}, ", tup.first, tup.second.value_or( "null" ) );
+                "{} = {}, ",
+                tup.first,
+                tup.second.value_or("null")
+            );
         }
 
-        fmt::print( "{}\n", rs );
+        fmt::print("{}\n", rs);
     }
 }
 

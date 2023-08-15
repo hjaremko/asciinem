@@ -11,14 +11,18 @@ namespace asciinem::server::domain
 class collision_checker
 {
 public:
-    static auto check_collision( const player::position_type& f_pos,
-                                 int f_length,
-                                 const player::position_type& s_pos,
-                                 int s_length ) -> bool;
+    static auto check_collision(
+        const player::position_type& f_pos,
+        int f_length,
+        const player::position_type& s_pos,
+        int s_length
+    ) -> bool;
 
-    static auto check_collision( const player::position_type& p_pos,
-                                 int p_length,
-                                 const location& location ) -> bool;
+    static auto check_collision(
+        const player::position_type& p_pos,
+        int p_length,
+        const location& location
+    ) -> bool;
 };
 
 } // namespace asciinem::server::domain

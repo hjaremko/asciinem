@@ -11,8 +11,10 @@ namespace asciinem::server::domain
 class location
 {
 public:
-    location( const std::string& map_filename,
-              const std::string& collision_map_filename );
+    location(
+        const std::string& map_filename,
+        const std::string& collision_map_filename
+    );
 
     [[nodiscard]] auto get_map() const -> std::vector<std::string>;
     [[nodiscard]] auto get_folded_map() const -> std::string;
@@ -20,9 +22,9 @@ public:
         -> std::vector<std::vector<bool>>;
 
     template <class Archive>
-    void serialize( Archive& ar )
+    void serialize(Archive& ar)
     {
-        ar( map_ );
+        ar(map_);
     }
 
 private:

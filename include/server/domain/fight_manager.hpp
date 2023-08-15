@@ -10,19 +10,21 @@ namespace asciinem::server::domain
 class fight_manager
 {
 public:
-    static void fight( player& player, monster& monster )
+    static void fight(player& player, monster& monster)
     {
-        while ( !player.is_dead() && !monster.is_dead() )
+        while (!player.is_dead() && !monster.is_dead())
         {
-            spdlog::trace( "Player health = {}, monster health = {}",
-                           player.get_health(),
-                           monster.get_health() );
+            spdlog::trace(
+                "Player health = {}, monster health = {}",
+                player.get_health(),
+                monster.get_health()
+            );
 
-            monster.get_hurt( player.get_attack() );
+            monster.get_hurt(player.get_attack());
 
-            if ( !monster.is_dead() )
+            if (!monster.is_dead())
             {
-                player.get_hurt( monster.get_attack() );
+                player.get_hurt(monster.get_attack());
             }
         }
     }

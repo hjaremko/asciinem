@@ -15,15 +15,20 @@ namespace asciinem::server::network
 class asio_network : public network_module
 {
 public:
-    asio_network( types::port port,
-                  queue::pointer dl,
-                  queue::pointer ul,
-                  subject::pointer clock,
-                  connection_manager::pointer manager,
-                  listener::pointer listener )
-        : port_( port ), dl_( std::move( dl ) ), ul_( std::move( ul ) ),
-          clock_( std::move( clock ) ), manager_( std::move( manager ) ),
-          listener_( std::move( listener ) )
+    asio_network(
+        types::port port,
+        queue::pointer dl,
+        queue::pointer ul,
+        subject::pointer clock,
+        connection_manager::pointer manager,
+        listener::pointer listener
+    )
+        : port_(port)
+        , dl_(std::move(dl))
+        , ul_(std::move(ul))
+        , clock_(std::move(clock))
+        , manager_(std::move(manager))
+        , listener_(std::move(listener))
     {
     }
 
@@ -32,9 +37,9 @@ public:
         return dl_->pop();
     }
 
-    void queue_message( const types::msg& msg ) override
+    void queue_message(const types::msg& msg) override
     {
-        ul_->push( msg );
+        ul_->push(msg);
     }
 
     [[nodiscard]] auto has_message_available() const -> bool override

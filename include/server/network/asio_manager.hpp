@@ -20,21 +20,21 @@ private:
         std::pair<client_connection::pointer, std::thread>;
 
 public:
-    explicit asio_manager( queue::pointer dl, queue::pointer up, subject& );
+    explicit asio_manager(queue::pointer dl, queue::pointer up, subject&);
 
-    asio_manager( const asio_manager& ) = delete;
-    asio_manager( asio_manager&& ) noexcept = delete;
-    auto operator=( const asio_manager& ) -> asio_manager& = delete;
-    auto operator=( asio_manager&& ) noexcept -> asio_manager& = delete;
+    asio_manager(const asio_manager&) = delete;
+    asio_manager(asio_manager&&) noexcept = delete;
+    auto operator=(const asio_manager&) -> asio_manager& = delete;
+    auto operator=(asio_manager&&) noexcept -> asio_manager& = delete;
 
     ~asio_manager() override;
 
-    void add_client( client_connection::pointer client ) override;
-    void remove_client( types::id client_id ) override;
-    auto poll_client( const client_connection::pointer& c ) -> std::thread;
+    void add_client(client_connection::pointer client) override;
+    void remove_client(types::id client_id) override;
+    auto poll_client(const client_connection::pointer& c) -> std::thread;
     [[nodiscard]] auto connected_players() const -> int override;
-    void broadcast( const types::msg& msg ) const override;
-    auto is_logged( const std::string& login ) const -> bool override;
+    void broadcast(const types::msg& msg) const override;
+    auto is_logged(const std::string& login) const -> bool override;
 
 private:
     [[nodiscard]] auto make_clock_observer() const -> clock_observer::pointer;

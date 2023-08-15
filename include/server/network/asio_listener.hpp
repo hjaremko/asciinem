@@ -17,13 +17,12 @@ namespace asciinem::server::network
 class asio_listener : public listener
 {
 public:
-    asio_listener( types::port port,
-                   const connection_manager::pointer& manager );
+    asio_listener(types::port port, const connection_manager::pointer& manager);
 
-    asio_listener( const asio_listener& ) = delete;
-    asio_listener( asio_listener&& ) noexcept = delete;
-    auto operator=( const asio_listener& ) -> asio_listener& = delete;
-    auto operator=( asio_listener&& ) noexcept -> asio_listener& = delete;
+    asio_listener(const asio_listener&) = delete;
+    asio_listener(asio_listener&&) noexcept = delete;
+    auto operator=(const asio_listener&) -> asio_listener& = delete;
+    auto operator=(asio_listener&&) noexcept -> asio_listener& = delete;
     ~asio_listener() override;
 
     void start_listening() override;

@@ -5,12 +5,12 @@
 namespace asciinem::client
 {
 
-auto parse_command_line( int argc, char** argv ) -> cxxopts::ParseResult
+auto parse_command_line(int argc, char** argv) -> cxxopts::ParseResult
 {
     using namespace cxxopts;
 
-    static auto options { Options { *argv, "Asciinem client 1.0.0" } };
-    options.positional_help( "[optional args]" ).show_positional_help();
+    static auto options{Options{*argv, "Asciinem client 1.0.0"}};
+    options.positional_help("[optional args]").show_positional_help();
 
     options.add_options()( "h,help", "Print usage" )(
         "l,login", "Set user login", value<std::string>() )(
@@ -23,28 +23,28 @@ auto parse_command_line( int argc, char** argv ) -> cxxopts::ParseResult
         value<std::string>()->default_value( "info" )->implicit_value(
             "debug" ) );
 
-    auto result = options.parse( argc, argv );
+    auto result = options.parse(argc, argv);
 
-    if ( result.count( "help" ) )
+    if (result.count("help"))
     {
-        fmt::print( "{}\n", options.help( { "", "Group" } ) );
-        std::exit( 0 );
+        fmt::print("{}\n", options.help({"", "Group"}));
+        std::exit(0);
     }
 
     return result;
 }
 
-auto get_log_level( const cxxopts::ParseResult& result )
+auto get_log_level(const cxxopts::ParseResult& result)
     -> spdlog::level::level_enum
 {
-    auto level = result[ "verbose" ].as<std::string>();
+    auto level = result["verbose"].as<std::string>();
 
-    if ( level == "debug" )
+    if (level == "debug")
     {
         return spdlog::level::debug;
     }
 
-    if ( level == "trace" )
+    if (level == "trace")
     {
         return spdlog::level::trace;
     }
@@ -52,33 +52,33 @@ auto get_log_level( const cxxopts::ParseResult& result )
     return spdlog::level::info;
 }
 
-auto get_port( const cxxopts::ParseResult& result )
+auto get_port(const cxxopts::ParseResult& result)
     -> server::network::types::port
 {
-    return static_cast<unsigned short>( result[ "port" ].as<int>() );
+    return static_cast<unsigned short>(result["port"].as<int>());
 }
 
-auto get_ip( const cxxopts::ParseResult& result ) -> server::network::types::ip
+auto get_ip(const cxxopts::ParseResult& result) -> server::network::types::ip
 {
-    return result[ "ip" ].as<std::string>();
+    return result["ip"].as<std::string>();
 }
 
-auto get_login( const cxxopts::ParseResult& result ) -> std::string
+auto get_login(const cxxopts::ParseResult& result) -> std::string
 {
     try
     {
-        return result[ "login" ].as<std::string>();
+        return result["login"].as<std::string>();
     }
-    catch ( ... )
+    catch (...)
     {
-        constexpr auto max_guest_id = 2000;
-        auto dev = std::random_device {};
-        auto rng = std::mt19937 { dev() };
-        auto dist = std::uniform_int_distribution<std::mt19937::result_type> {
-            1, max_guest_id
-        };
+        constexpr auto max_guest_id = 2'000;
+        auto dev = std::random_device{};
+        auto rng = std::mt19937{dev()};
+        auto dist = std::uniform_int_distribution<std::mt19937::result_type>{
+            1,
+            max_guest_id};
 
-        return "guest" + std::to_string( dist( rng ) );
+        return "guest" + std::to_string(dist(rng));
     }
 }
 

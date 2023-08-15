@@ -13,10 +13,10 @@ class observer
 public:
     using pointer = std::shared_ptr<observer>;
 
-    observer( const observer& ) = default;
-    observer( observer&& ) noexcept = default;
-    auto operator=( const observer& ) -> observer& = default;
-    auto operator=( observer&& ) noexcept -> observer& = default;
+    observer(const observer&) = default;
+    observer(observer&&) noexcept = default;
+    auto operator=(const observer&) -> observer& = default;
+    auto operator=(observer&&) noexcept -> observer& = default;
     virtual ~observer() = default;
 
     virtual void update() = 0;

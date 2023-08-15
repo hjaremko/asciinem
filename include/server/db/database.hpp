@@ -12,13 +12,14 @@ template <class DbImplementation>
 class database
 {
 public:
-    explicit database( std::string db_name ) : impl_( std::move( db_name ) )
+    explicit database(std::string db_name)
+        : impl_(std::move(db_name))
     {
     }
 
-    auto run_query( const std::string& query ) const
+    auto run_query(const std::string& query) const
     {
-        return impl_.run_query( query );
+        return impl_.run_query(query);
     }
 
 private:

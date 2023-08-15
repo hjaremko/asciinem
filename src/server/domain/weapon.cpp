@@ -6,8 +6,9 @@
 namespace asciinem::server::domain
 {
 
-weapon::weapon( std::string name, double value, int level, int attack )
-    : item( std::move( name ), value, level ), attack_( attack )
+weapon::weapon(std::string name, double value, int level, int attack)
+    : item(std::move(name), value, level)
+    , attack_(attack)
 {
 }
 
@@ -16,27 +17,27 @@ auto weapon::get_attack() const -> int
     return attack_;
 }
 
-void weapon::set_attack( int attack )
+void weapon::set_attack(int attack)
 {
     attack_ = attack;
 }
 
-void weapon::use( player& p )
+void weapon::use(player& p)
 {
-    if ( get_level() <= p.get_level() )
+    if (get_level() <= p.get_level())
     {
-        if ( p.has( *this ) )
+        if (p.has(*this))
         {
-            p.take_from_backpack( shared_from_this() );
-            if ( p.get_weapon() )
+            p.take_from_backpack(shared_from_this());
+            if (p.get_weapon())
             {
-                if ( *p.get_weapon() != *this )
+                if (*p.get_weapon() != *this)
                 {
-                    p.add_to_backpack( p.get_weapon() );
+                    p.add_to_backpack(p.get_weapon());
                 }
             }
         }
-        p.set_weapon( shared_from_this() );
+        p.set_weapon(shared_from_this());
     }
 }
 

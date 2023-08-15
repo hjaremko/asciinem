@@ -14,17 +14,21 @@ public:
     using pointer = std::shared_ptr<monster>;
 
     monster() = default;
-    monster( std::string name,
-             position_type position,
-             int level,
-             move_strategy::pointer strategy =
-                 std::make_shared<random_move_strategy>() ); // strategy
-    monster( std::string name,
-             position_type position,
-             int health,
-             int level,
-             move_strategy::pointer strategy =
-                 std::make_shared<random_move_strategy>() );
+    monster(
+        std::string name,
+        position_type position,
+        int level,
+        move_strategy::pointer strategy =
+            std::make_shared<random_move_strategy>()
+    ); // strategy
+    monster(
+        std::string name,
+        position_type position,
+        int health,
+        int level,
+        move_strategy::pointer strategy =
+            std::make_shared<random_move_strategy>()
+    );
 
     [[nodiscard]] auto get_id() const -> int
     {
@@ -33,23 +37,23 @@ public:
 
     [[nodiscard]] auto get_attack() const -> int override;
     [[nodiscard]] auto get_defense() const -> int override;
-    void set_strategy( const move_strategy::pointer& strategy );
+    void set_strategy(const move_strategy::pointer& strategy);
     auto move() -> entity::position_type;
 
     template <class Archive>
-    void serialize( Archive& ar )
+    void serialize(Archive& ar)
     {
-        ar( cereal::virtual_base_class<entity>( this ) );
+        ar(cereal::virtual_base_class<entity>(this));
     }
 
 private:
     move_strategy::pointer strategy_;
     static inline auto ids = 0;
-    int id_ { ids++ };
+    int id_{ids++};
 };
 
 } // namespace asciinem::server::domain
 
-CEREAL_REGISTER_TYPE( asciinem::server::domain::monster )
+CEREAL_REGISTER_TYPE(asciinem::server::domain::monster)
 
 #endif // ASCIINEM_SERVER_MONSTER_H

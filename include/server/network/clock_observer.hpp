@@ -15,8 +15,9 @@ public:
     using pointer = std::shared_ptr<clock_observer>;
 
     template <class F>
-    clock_observer( std::string name, F fun )
-        : name_( std::move( name ) ), fun_( std::move( fun ) )
+    clock_observer(std::string name, F fun)
+        : name_(std::move(name))
+        , fun_(std::move(fun))
     {
     }
 
@@ -36,10 +37,12 @@ private:
 };
 
 template <class F>
-inline auto make_clock_observer( std::string name, F&& fun )
+inline auto make_clock_observer(std::string name, F&& fun)
 {
-    return std::make_shared<clock_observer>( std::move( name ),
-                                             std::forward<F>( fun ) );
+    return std::make_shared<clock_observer>(
+        std::move(name),
+        std::forward<F>(fun)
+    );
 }
 
 } // namespace asciinem::server::network

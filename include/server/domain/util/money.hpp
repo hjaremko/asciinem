@@ -9,12 +9,12 @@ class money
 {
 public:
     money();
-    explicit money( double );
-    money( const money& );
+    explicit money(double);
+    money(const money&);
     ~money() = default;
 
-    auto operator=( const money& ) -> money&;
-    auto operator=( double ) -> money&;
+    auto operator=(const money&) -> money&;
+    auto operator=(double) -> money&;
     explicit operator double() const;
     explicit operator int() const;
 
@@ -24,29 +24,29 @@ public:
         return 100;
     }
 
-    friend auto operator+( const money&, const money& ) -> money;
-    friend auto operator-( const money&, const money& ) -> money;
-    friend auto operator*( const money&, double ) -> money;
-    friend auto operator*( double, const money& ) -> money;
-    friend auto operator/( const money&, const money& ) -> double;
+    friend auto operator+(const money&, const money&) -> money;
+    friend auto operator-(const money&, const money&) -> money;
+    friend auto operator*(const money&, double) -> money;
+    friend auto operator*(double, const money&) -> money;
+    friend auto operator/(const money&, const money&) -> double;
 
-    friend auto operator==( const money&, const money& ) -> bool;
-    friend auto operator<( const money&, const money& ) -> bool;
+    friend auto operator==(const money&, const money&) -> bool;
+    friend auto operator<(const money&, const money&) -> bool;
 
-    auto operator+=( const money& ) -> money&;
-    auto operator-=( const money& ) -> money&;
+    auto operator+=(const money&) -> money&;
+    auto operator-=(const money&) -> money&;
 
-    auto operator*=( double ) -> money&;
-    auto operator/=( double ) -> money&;
+    auto operator*=(double) -> money&;
+    auto operator/=(double) -> money&;
 
     template <class Archive>
-    void serialize( Archive& ar )
+    void serialize(Archive& ar)
     {
-        ar( m_money_ );
+        ar(m_money_);
     }
 
 private:
-    double m_money_ {};
+    double m_money_{};
 };
 
 } // namespace asciinem::server::domain

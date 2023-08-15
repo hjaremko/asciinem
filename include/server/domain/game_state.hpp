@@ -24,9 +24,9 @@ public:
     using monsters_type = std::unordered_set<monster::pointer>;
 
     template <class Archive>
-    void serialize( Archive& ar )
+    void serialize(Archive& ar)
     {
-        ar( entities_, monsters_, map_, notice_ );
+        ar(entities_, monsters_, map_, notice_);
     }
 
     auto get_entities() -> players_type&
@@ -59,7 +59,7 @@ public:
         return notice_;
     }
 
-    void set_notice( const std::string& notice )
+    void set_notice(const std::string& notice)
     {
         notice_ = notice;
     }
@@ -69,41 +69,46 @@ public:
         notice_ = "";
     }
 
-    [[nodiscard]] auto find_player( const std::string& name ) const
+    [[nodiscard]] auto find_player(const std::string& name) const
         -> player::pointer
     {
-        auto find_player = [ name ]( const auto& e ) {
+        auto find_player = [name](const auto& e)
+        {
             return e->get_name() == name;
         };
 
         auto entity_it = std::find_if(
-            std::begin( entities_ ), std::end( entities_ ), find_player );
+            std::begin(entities_),
+            std::end(entities_),
+            find_player
+        );
 
-        if ( entity_it == std::end( entities_ ) )
+        if (entity_it == std::end(entities_))
         {
-            auto msg = fmt::format( "No such entity: {}", name );
-            spdlog::debug( msg );
+            auto msg = fmt::format("No such entity: {}", name);
+            spdlog::debug(msg);
             return nullptr;
         }
 
         return *entity_it;
     }
 
-    void spawn_monster( entity::position_type where )
+    void spawn_monster(entity::position_type where)
     {
-        monsters_.insert( std::make_shared<monster>( "mob", where, 150, 1 ) );
+        monsters_.insert(std::make_shared<monster>("mob", where, 150, 1));
     }
 
-    void spawn_boss( entity::position_type where )
+    void spawn_boss(entity::position_type where)
     {
-        auto boss =
-            std::make_shared<monster>( "wonsz rzeczny",
-                                       where,
-                                       200,
-                                       5,
-                                       std::make_shared<still_strategy>() );
-        boss->set_shape( "~~~~O<" );
-        monsters_.insert( std::move( boss ) );
+        auto boss = std::make_shared<monster>(
+            "wonsz rzeczny",
+            where,
+            200,
+            5,
+            std::make_shared<still_strategy>()
+        );
+        boss->set_shape("~~~~O<");
+        monsters_.insert(std::move(boss));
     }
 
     [[nodiscard]] auto get_map() const -> std::vector<std::string>
@@ -119,8 +124,9 @@ public:
 private:
     players_type entities_;
     monsters_type monsters_;
-    location map_ { "locations/map1.txt",
-                    "locations/map1_collisions.txt" }; // todo
+    location map_{
+        "locations/map1.txt",
+        "locations/map1_collisions.txt"}; // todo
     std::string notice_;
 };
 

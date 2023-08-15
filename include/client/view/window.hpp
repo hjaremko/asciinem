@@ -10,32 +10,32 @@ namespace asciinem::client::view
 class window : public widget
 {
 public:
-    explicit window( console_window::pointer raw_window )
-        : raw_window_( std::move( raw_window ) )
+    explicit window(console_window::pointer raw_window)
+        : raw_window_(std::move(raw_window))
     {
     }
 
-    void add_widget( int y, int x, widget::pointer w ) override
+    void add_widget(int y, int x, widget::pointer w) override
     {
-        w->move( y, x );
-        widgets_.emplace_back( std::move( w ) );
+        w->move(y, x);
+        widgets_.emplace_back(std::move(w));
     }
 
-    void draw( game_state_cr state, const std::string& login ) override
+    void draw(game_state_cr state, const std::string& login) override
     {
-        for ( auto& w : widgets_ )
+        for (auto& w : widgets_)
         {
-            w->draw( state, login );
+            w->draw(state, login);
         }
     }
 
-    void move( int y, int x ) override
+    void move(int y, int x) override
     {
-        raw_window_->move( y, x );
+        raw_window_->move(y, x);
 
-        for ( auto& w : widgets_ )
+        for (auto& w : widgets_)
         {
-            w->move( y, x );
+            w->move(y, x);
         }
     }
 

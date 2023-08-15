@@ -9,10 +9,10 @@
 namespace asciinem::server
 {
 
-auto parse_command_line( int argc, char** argv ) -> cxxopts::ParseResult;
-auto get_log_level( const cxxopts::ParseResult& result )
+auto parse_command_line(int argc, char** argv) -> cxxopts::ParseResult;
+auto get_log_level(const cxxopts::ParseResult& result)
     -> spdlog::level::level_enum;
-auto get_port( const cxxopts::ParseResult& result ) -> network::types::port;
+auto get_port(const cxxopts::ParseResult& result) -> network::types::port;
 
 } // namespace asciinem::server
 

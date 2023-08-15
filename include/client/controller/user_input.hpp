@@ -25,48 +25,51 @@ enum class user_input
     INVALID
 };
 
-auto format_as(user_input i) { return fmt::underlying(i); }
-
-auto cast_to_user_input( int c ) -> user_input
+auto format_as(user_input i)
 {
-    switch ( c )
+    return fmt::underlying(i);
+}
+
+auto cast_to_user_input(int c) -> user_input
+{
+    switch (c)
     {
-    case 'w':
-        return user_input::UP;
-    case 's':
-        return user_input::DOWN;
-    case 'a':
-        return user_input::LEFT;
-    case 'd':
-        return user_input::RIGHT;
-    case 'f':
-        return user_input::FIGHT;
+        case 'w':
+            return user_input::UP;
+        case 's':
+            return user_input::DOWN;
+        case 'a':
+            return user_input::LEFT;
+        case 'd':
+            return user_input::RIGHT;
+        case 'f':
+            return user_input::FIGHT;
 
-    case '0':
-        return user_input::USE0;
-    case '1':
-        return user_input::USE1;
-    case '2':
-        return user_input::USE2;
-    case '3':
-        return user_input::USE3;
-    case '4':
-        return user_input::USE4;
-    case '5':
-        return user_input::USE5;
-    case '6':
-        return user_input::USE6;
-    case '7':
-        return user_input::USE7;
-    case '8':
-        return user_input::USE8;
-    case '9':
-        return user_input::USE9;
+        case '0':
+            return user_input::USE0;
+        case '1':
+            return user_input::USE1;
+        case '2':
+            return user_input::USE2;
+        case '3':
+            return user_input::USE3;
+        case '4':
+            return user_input::USE4;
+        case '5':
+            return user_input::USE5;
+        case '6':
+            return user_input::USE6;
+        case '7':
+            return user_input::USE7;
+        case '8':
+            return user_input::USE8;
+        case '9':
+            return user_input::USE9;
 
-    case 'q':
-        return user_input::QUIT;
-    default:
-        return user_input::INVALID;
+        case 'q':
+            return user_input::QUIT;
+        default:
+            return user_input::INVALID;
     }
 }
 

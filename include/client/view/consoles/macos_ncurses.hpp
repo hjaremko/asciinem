@@ -10,9 +10,9 @@ namespace asciinem::client::view::console
 
 struct macos_ncurses : public ncurses
 {
-    static void draw_border( raw_window_ptr win )
+    static void draw_border(raw_window_ptr win)
     {
-        ::wborder( win, '|', '|', '-', '-', '+', '+', '+', '+' );
+        ::wborder(win, '|', '|', '-', '-', '+', '+', '+', '+');
     }
 };
 

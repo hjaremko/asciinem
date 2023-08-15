@@ -17,18 +17,21 @@ public:
     [[maybe_unused]] explicit asio_server(
         types::port port,
         asio::io_context& io_context,
-        connection_manager::pointer manager );
+        connection_manager::pointer manager
+    );
 
 private:
     void start_accept();
-    void handle_accept( const asio_connection::pointer& new_connection,
-                        const asio::error_code& error );
+    void handle_accept(
+        const asio_connection::pointer& new_connection,
+        const asio::error_code& error
+    );
 
     types::port port_;
     asio::io_context& io_context_;
-    asio::ip::tcp::acceptor acceptor_ {
-        io_context_, asio::ip::tcp::endpoint( asio::ip::tcp::v4(), port_ )
-    };
+    asio::ip::tcp::acceptor acceptor_{
+        io_context_,
+        asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port_)};
     connection_manager::pointer manager_;
     id_pool id_pool_;
 };

@@ -13,20 +13,21 @@ template <int Interval>
 class clock : public subject
 {
 public:
-    clock() : thread_( &clock::running_function, this )
+    clock()
+        : thread_(&clock::running_function, this)
     {
     }
 
     ~clock() override
     {
-        running_.store( false );
+        running_.store(false);
         thread_.join();
     }
 
-    clock( const clock& ) = delete;
-    clock( clock&& ) noexcept = delete;
-    auto operator=( const clock& ) -> clock& = delete;
-    auto operator=( clock&& ) noexcept -> clock& = delete;
+    clock(const clock&) = delete;
+    clock(clock&&) noexcept = delete;
+    auto operator=(const clock&) -> clock& = delete;
+    auto operator=(clock&&) noexcept -> clock& = delete;
 
     void notify() override
     {
@@ -35,25 +36,24 @@ public:
 
     void stop()
     {
-        running_.store( false );
+        running_.store(false);
     }
 
 private:
     void running_function()
     {
-        spdlog::info( "Starting server clock..." );
+        spdlog::info("Starting server clock...");
 
-        while ( running_.load() )
+        while (running_.load())
         {
             notify();
-            std::this_thread::sleep_for(
-                std::chrono::milliseconds( Interval ) );
+            std::this_thread::sleep_for(std::chrono::milliseconds(Interval));
         }
 
-        spdlog::info( "Stopping server clock..." );
+        spdlog::info("Stopping server clock...");
     }
 
-    std::atomic_bool running_ { true };
+    std::atomic_bool running_{true};
     std::thread thread_;
 };
 

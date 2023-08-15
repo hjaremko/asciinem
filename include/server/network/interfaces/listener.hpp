@@ -12,10 +12,10 @@ public:
     using pointer = std::unique_ptr<listener>;
 
     listener() = default;
-    listener( const listener& ) = default;
-    listener( listener&& ) noexcept = default;
-    auto operator=( const listener& ) -> listener& = default;
-    auto operator=( listener&& ) noexcept -> listener& = default;
+    listener(const listener&) = default;
+    listener(listener&&) noexcept = default;
+    auto operator=(const listener&) -> listener& = default;
+    auto operator=(listener&&) noexcept -> listener& = default;
 
     virtual ~listener() = default;
 

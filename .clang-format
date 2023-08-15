@@ -1,36 +1,66 @@
 ---
+IndentWidth: 4
+ContinuationIndentWidth: 4
+Language: Cpp
+Standard: c++20
+ColumnLimit: 80
 AccessModifierOffset: -4
-AlignAfterOpenBracket: Align
-AlignTrailingComments: true
-AllowAllParametersOfDeclarationOnNextLine: true
-AllowAllArgumentsOnNextLine: true
+PointerAlignment: Left
+AlignAfterOpenBracket: BlockIndent
+AlignArrayOfStructures: None
+AlignEscapedNewlines: Right
+AlignOperands: DontAlign
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Empty
 AllowShortLoopsOnASingleLine: false
-AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+PenaltyReturnTypeOnItsOwnLine: 1000
+AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: Yes
 BinPackArguments: false
 BinPackParameters: false
-BreakBeforeBraces: Allman
-ColumnLimit: 80
-Cpp11BracedListStyle: false
-IncludeBlocks: Regroup
-IndentWidth: 4
-Language: Cpp
+BitFieldColonSpacing: Both
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: Always
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterObjCDeclaration: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterCaseLabel: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+  BeforeLambdaBody: true
+  SplitEmptyFunction: true
+BreakBeforeBraces: Custom
+BreakBeforeConceptDeclarations: Always
+BreakConstructorInitializers: BeforeComma
+BreakStringLiterals: true
+CompactNamespaces: false
+Cpp11BracedListStyle: true
+EmptyLineAfterAccessModifier: Never
+EmptyLineBeforeAccessModifier: LogicalBlock
+FixNamespaceComments: true
+IncludeBlocks: Preserve
+IndentAccessModifiers: false
+IndentCaseLabels: true
+IndentWrappedFunctionNames: false
+InsertBraces: true
+InsertNewlineAtEOF: true
+IntegerLiteralSeparator:
+  Binary: 4
+  Decimal: 3
 NamespaceIndentation: None
-PointerAlignment: Left
-SortUsingDeclarations: true
-SpaceAfterTemplateKeyword: true
-SpaceBeforeAssignmentOperators: true
-SpaceBeforeParens: ControlStatements
-SpacesInCStyleCastParentheses: true
-SpacesInContainerLiterals: true
-SpacesInParentheses: true
-SpacesInSquareBrackets: true
-SpaceBeforeCpp11BracedList: true
-Standard: Auto
-UseTab: Never
-
-...
+SeparateDefinitionBlocks: Leave
+SortIncludes: CaseSensitive
+BreakBeforeBinaryOperators: NonAssignment
+MaxEmptyLinesToKeep: 2

@@ -14,16 +14,16 @@ public:
     using pointer = std::shared_ptr<queue>;
 
     queue() = default;
-    queue( const queue& ) = default;
-    queue( queue&& ) noexcept = default;
-    auto operator=( const queue& ) -> queue& = default;
-    auto operator=( queue&& ) noexcept -> queue& = default;
+    queue(const queue&) = default;
+    queue(queue&&) noexcept = default;
+    auto operator=(const queue&) -> queue& = default;
+    auto operator=(queue&&) noexcept -> queue& = default;
 
     virtual ~queue() = default;
 
     virtual auto pop() -> types::msg = 0;
     virtual auto pop_wait() -> types::msg = 0;
-    virtual void push( types::msg ) = 0;
+    virtual void push(types::msg) = 0;
     virtual auto back() -> types::msg = 0;
     virtual auto front() -> types::msg = 0;
     virtual auto size() -> std::size_t = 0;

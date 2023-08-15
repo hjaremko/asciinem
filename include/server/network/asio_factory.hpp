@@ -16,10 +16,10 @@ namespace asciinem::server::network
 class asio_factory : public network_factory
 {
 public:
-    asio_factory( const asio_factory& ) = delete;
-    asio_factory( asio_factory&& ) = delete;
-    auto operator=( const asio_factory& ) -> asio_factory& = delete;
-    auto operator=( asio_factory&& ) noexcept -> asio_factory& = delete;
+    asio_factory(const asio_factory&) = delete;
+    asio_factory(asio_factory&&) = delete;
+    auto operator=(const asio_factory&) -> asio_factory& = delete;
+    auto operator=(asio_factory&&) noexcept -> asio_factory& = delete;
     ~asio_factory() override = default;
 
     static auto instance() -> asio_factory&
@@ -33,19 +33,21 @@ public:
         return std::make_shared<network::message_queue>();
     }
 
-    [[nodiscard]] auto
-    make_listener( types::port port, connection_manager::pointer manager ) const
-        -> listener::pointer override
+    [[nodiscard]] auto make_listener(
+        types::port port,
+        connection_manager::pointer manager
+    ) const -> listener::pointer override
     {
-        return std::make_unique<network::asio_listener>( port, manager );
+        return std::make_unique<network::asio_listener>(port, manager);
     }
 
-    [[nodiscard]] auto make_manager( queue::pointer dl,
-                                     queue::pointer ul,
-                                     subject::pointer clock ) const
-        -> connection_manager::pointer override
+    [[nodiscard]] auto make_manager(
+        queue::pointer dl,
+        queue::pointer ul,
+        subject::pointer clock
+    ) const -> connection_manager::pointer override
     {
-        return std::make_shared<asio_manager>( dl, ul, *clock );
+        return std::make_shared<asio_manager>(dl, ul, *clock);
     }
 
 private:
