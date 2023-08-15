@@ -31,7 +31,7 @@ public:
         int i = 0;
         for ( const auto& l : m )
         {
-            for ( int j = 0; j < l.size(); ++j )
+            for ( std::size_t j = 0; j < l.size(); ++j )
             {
                 auto c = l[ j ];
 
@@ -46,7 +46,7 @@ public:
                 }
 
                 raw_window_->print(
-                    map_pos.second + i, map_pos.first + j, std::string { c } );
+                    map_pos.second + i, map_pos.first + static_cast<int>(j), std::string { c } );
                 raw_window_->set_normal();
             }
             ++i;

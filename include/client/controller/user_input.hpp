@@ -25,6 +25,8 @@ enum class user_input
     INVALID
 };
 
+auto format_as(user_input i) { return fmt::underlying(i); }
+
 auto cast_to_user_input( int c ) -> user_input
 {
     switch ( c )

@@ -76,7 +76,7 @@ struct ncurses
 
     static void print( int y, int x, const std::string& str )
     {
-        mvprintw( y, x, str.c_str() );
+        mvprintw( y, x, "%s", str.c_str() );
     }
 
     static auto make_window( int y, int x, int height, int width )
@@ -136,7 +136,7 @@ struct ncurses
     static void
     print( raw_window_ptr win, int y, int x, const std::string& format )
     {
-        mvwprintw( win, y, x, format.c_str() );
+        mvwprintw( win, y, x, "%s", format.c_str() );
     }
 
     static void move( raw_window_ptr win, int y, int x )

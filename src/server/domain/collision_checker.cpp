@@ -36,8 +36,8 @@ auto collision_checker::check_collision( const player::position_type& p_pos,
     for ( auto f = 0; f < p_length; f++ )
     {
         if ( location.get_collision_map()
-                 .at( p_pos.second )      // NOLINT
-                 .at( p_pos.first + f ) ) // NOLINT
+                 .at( static_cast<std::size_t>( p_pos.second ) )      // NOLINT
+                 .at( static_cast<std::size_t>( p_pos.first + f )) ) // NOLINT
         {
             return true;
         }

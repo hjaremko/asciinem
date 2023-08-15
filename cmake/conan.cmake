@@ -12,15 +12,15 @@ macro(run_conan)
 
   conan_cmake_configure(
     REQUIRES
-    catch2/2.13.7
-    fmt/7.1.2
-    spdlog/1.8.1
-    asio/1.18.0
+    catch2/2.13.10
+    fmt/10.1.0
+    spdlog/1.12.0
+    asio/1.28.1
     ncurses/6.4
-    gtest/1.10.0
-    sqlite3/3.34.0
+    gtest/1.14.0
+    sqlite3/3.42.0
     cxxopts/2.2.1
-    cereal/1.3.0
+    cereal/1.3.2
 
     GENERATORS
     cmake_find_package
