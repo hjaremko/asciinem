@@ -46,7 +46,6 @@ inline auto create_network(
     const subject::pointer& clock
 )
 {
-
     auto dl = factory.make_queue();
     auto ul = factory.make_queue();
 

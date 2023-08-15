@@ -1,15 +1,29 @@
 #include "server/network/asio_factory.hpp"
-#include "server/network/clock.hpp"
-#include "server/network_service_mediator.hpp"
+// #include "server/network_service_mediator.hpp"
+// #include "server/network/clock.hpp"
 #include "server/util.hpp"
 
-#include <iostream>
+#include <asio/io_context.hpp>
+#include <asio/signal_set.hpp>
+
+#include <thread>
 
 using namespace asciinem;
 
 auto main(int argc, char** argv) -> int
 {
     using namespace asciinem::server;
+
+    asio::io_context io_context;
+    asio::signal_set signals(io_context, SIGINT, SIGTERM, SIGPIPE);
+
+    signals.async_wait(
+        [&io_context](const auto& /*ec*/, int signal)
+        {
+            spdlog::warn("Asciinem Server shutting down.");
+            io_context.stop();
+        }
+    );
 
     try
     {
@@ -20,28 +34,45 @@ auto main(int argc, char** argv) -> int
         spdlog::default_logger_raw()->set_level(log_level);
         spdlog::info("Asciinem Server starting!");
 
-        constexpr auto clock_interval = 10;
-        auto clock = network::make_clock<clock_interval>();
+        //        constexpr auto clock_interval = 10;
+        //        auto clock = network::make_clock<clock_interval>();
 
         auto network = network::create_network(
+            io_context,
             {port},
-            network::asio_factory::instance(),
-            clock
+            //            clock
         );
+        //
+        //        auto gm = domain::game_manager{};
+        //        auto gs = service::game_service{gm};
+        //
+        //        auto mediator = network_service_mediator{*clock, *network,
+        //        gs};
 
-        auto gm = domain::game_manager{};
-        auto gs = service::game_service{gm};
-
-        auto mediator = network_service_mediator{*clock, *network, gs};
-
-        std::cin.get();
-
-        spdlog::warn("Asciinem Server shutting down.");
+        //        std::cin.get();
     }
     catch (std::exception& e)
     {
         spdlog::error("Unexpected server error: {}", e.what());
     }
+
+    const auto cores = std::thread::hardware_concurrency();
+    spdlog::info("Starting on {} threads.", cores);
+
+
+    std::vector<std::jthread> threads;
+    threads.reserve(cores - 1);
+    for (auto i = 0u; i < cores - 1; ++i)
+    {
+        threads.emplace_back(
+            [&io_context]
+            {
+                io_context.run();
+            }
+        );
+    }
+
+    io_context.run();
 
     return 0;
 }
