@@ -13,10 +13,10 @@ target_link_libraries(
         ${PROJECT_NAME}
         PRIVATE project_options
         project_warnings
-        CONAN_PKG::fmt
-        CONAN_PKG::spdlog
-        CONAN_PKG::asio
-        CONAN_PKG::cxxopts
-        CONAN_PKG::cereal
-        CONAN_PKG::sqlite3
+        fmt::fmt
+        spdlog::spdlog
+        asio::asio
+        cxxopts::cxxopts
+        cereal::cereal
+        SQLite::SQLite
 )

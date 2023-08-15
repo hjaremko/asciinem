@@ -9,12 +9,12 @@ target_link_libraries(
         client_obj
         PRIVATE project_options
         project_warnings
-        CONAN_PKG::fmt
-        CONAN_PKG::spdlog
-        CONAN_PKG::asio
-        CONAN_PKG::sqlite3
-        CONAN_PKG::cxxopts
-        CONAN_PKG::cereal
-        CONAN_PKG::ncurses
+        fmt::fmt
+        spdlog::spdlog
+        asio::asio
+        SQLite::SQLite
+        cxxopts::cxxopts
+        cereal::cereal
+        ncurses::ncurses
         server_obj
 )

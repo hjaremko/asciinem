@@ -7,12 +7,12 @@ endif ()
 add_library(catch_main STATIC catch_main.cpp)
 target_link_libraries(
         catch_main PUBLIC
-        CONAN_PKG::catch2
-        CONAN_PKG::spdlog
-        CONAN_PKG::asio
-        CONAN_PKG::gtest
-        CONAN_PKG::sqlite3
-        CONAN_PKG::cereal
+        Catch2::Catch2
+        spdlog::spdlog
+        asio::asio
+        GTest::GTest
+        SQLite::SQLite
+        cereal::cereal
 )
 
 target_link_libraries(catch_main PRIVATE project_options)
