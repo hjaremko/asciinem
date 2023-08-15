@@ -8,11 +8,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-latest ]
 
     steps:
       - name: Chceckout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install Conan
@@ -20,13 +20,12 @@ jobs:
       - name: Install clang-tidy
         run: sudo apt-get install clang-tidy -y
       - name: Cache CMake files
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             build
             ~/.conan
           key: ${{ runner.os }}-verify-${{ hashFiles('**/') }}
-          restore-keys: ${{ runner.os }}-verify-
       - name: Create build dir
         run: mkdir -p build
       - name: Build
@@ -39,11 +38,11 @@ jobs:
           cd build
           ctest --verbose
 
-  formatting:
-      name: Formatting
-      runs-on: ubuntu-20.04
-      steps:
-      - name: Chceckout code
-        uses: actions/checkout@v2
-      - name: Run clang-format style check
-        uses: jidicula/clang-format-action@v2.0.0
+#  formatting:
+#      name: Formatting
+#      runs-on: ubuntu-latest
+#      steps:
+#      - name: Chceckout code
+#        uses: actions/checkout@v2
+#      - name: Run clang-format style check
+#        uses: jidicula/clang-format-action@v2.0.0

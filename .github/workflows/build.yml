@@ -8,23 +8,22 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-latest ]
 
     steps:
       - name: Chceckout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install Conan
         run: sudo pip install conan
       - name: Cache CMake files
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             build
             ~/.conan
           key: ${{ runner.os }}-run-${{ hashFiles('**/') }}
-          restore-keys: ${{ runner.os }}-run-
       - name: Create build dir
         run: mkdir -p build
       - name: Build

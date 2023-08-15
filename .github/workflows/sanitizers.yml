@@ -8,21 +8,20 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-latest ]
 
     steps:
       - name: Chceckout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install Conan
         run: sudo pip install conan
       - name: Cache CMake files
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: build
           key: ${{ runner.os }}-asan-${{ hashFiles('**/') }}
-          restore-keys: ${{ runner.os }}-asan-
       - name: Create build dir
         run: mkdir -p build
       - name: Load CMake
@@ -40,11 +39,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-latest ]
 
     steps:
       - name: Chceckout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install Conan
@@ -52,11 +51,10 @@ jobs:
       - name: Create build dir
         run: mkdir build
       - name: Cache CMake files
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: build
           key: ${{ runner.os }}-lsan-${{ hashFiles('*') }}
-          restore-keys: ${{ runner.os }}-lsan-
       - name: Load CMake
         run: |
           cd build
@@ -72,11 +70,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-latest ]
 
     steps:
       - name: Chceckout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install Conan
@@ -84,11 +82,10 @@ jobs:
       - name: Create build dir
         run: mkdir build
       - name: Cache CMake files
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: build
           key: ${{ runner.os }}-msan-${{ hashFiles('*') }}
-          restore-keys: ${{ runner.os }}-msan-
       - name: Load CMake
         run: |
           cd build
@@ -104,11 +101,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-latest ]
 
     steps:
       - name: Chceckout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install Conan
@@ -116,11 +113,10 @@ jobs:
       - name: Create build dir
         run: mkdir build
       - name: Cache CMake files
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: build
           key: ${{ runner.os }}-tsan-${{ hashFiles('*') }}
-          restore-keys: ${{ runner.os }}-tsan-
       - name: Load CMake
         run: |
           cd build
@@ -136,11 +132,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-latest ]
 
     steps:
       - name: Chceckout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Install Conan
@@ -148,11 +144,10 @@ jobs:
       - name: Create build dir
         run: mkdir build
       - name: Cache CMake files
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: build
           key: ${{ runner.os }}-ubsan-${{ hashFiles('*') }}
-          restore-keys: ${{ runner.os }}-ubsan-
       - name: Load CMake
         run: |
           cd build
