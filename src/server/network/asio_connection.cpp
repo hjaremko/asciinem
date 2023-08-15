@@ -85,12 +85,7 @@ void asio_connection::send_data( const types::msg& msg )
 
     spdlog::trace( "Sending '{}' to {} at {}", msg, id(), ip() );
 
-    asio::async_write(
-        socket_,
-        asio::buffer( msg + server_config::PACKET_DELIM ),
-        [ this_ptr = shared_from_this() ]( auto /*unused*/, auto /*unused*/ ) {
-            this_ptr->handle_write();
-        } );
+    asio::write( socket_, asio::buffer( msg + server_config::PACKET_DELIM ) );
 }
 
 auto asio_connection::socket() -> asio::ip::tcp::socket&

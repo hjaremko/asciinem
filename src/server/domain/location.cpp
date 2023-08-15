@@ -20,6 +20,9 @@ using namespace asciinem::server::domain;
 location::location( const std::string& map_filename,
                     const std::string& collision_map_filename )
 {
+    spdlog::debug( "Reading map file: {}", map_filename );
+    spdlog::debug( "Reading collision file: {}", collision_map_filename );
+
     try
     {
         if ( !does_exist( map_filename ) ||

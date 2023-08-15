@@ -141,6 +141,7 @@ public:
     {
         auto player = player_mapper_.find( login );
         current_state_.get_entities().insert( player );
+        spdlog::debug( "Player {} added to the game", login );
     }
 
     void remove_player( const std::string& login )

@@ -119,7 +119,8 @@ public:
 private:
     players_type entities_;
     monsters_type monsters_;
-    location map_ { "map1.txt", "map1_collisions.txt" };
+    location map_ { "locations/map1.txt",
+                    "locations/map1_collisions.txt" }; // todo
     std::string notice_;
 };
 
